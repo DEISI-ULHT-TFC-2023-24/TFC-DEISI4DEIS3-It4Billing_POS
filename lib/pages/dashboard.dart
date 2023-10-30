@@ -14,13 +14,13 @@ class _Dashboard extends State<Dashboard> {
 
   final List<Widget> _pages = [
     Container(
-      color: const Color(0xff002de9),
+      color: const Color(0xffffffff),
     ),
     Container(
-      color: Colors.cyanAccent,
+      color: const Color(0xffffffff),
     ),
     Container(
-      color: Colors.orange,
+      color: const Color(0xffffffff),
     ),
     const Profile(),
   ];
@@ -31,7 +31,7 @@ class _Dashboard extends State<Dashboard> {
       appBar: AppBar(
         backgroundColor: const Color(0xff00afe9),
         title: const Text(
-          "it4Billing",
+          "IT4Billing",
           textAlign: TextAlign.center,
         ),
       ),

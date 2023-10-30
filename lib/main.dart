@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Título Gestor de Janelas',
+      title: 'it4billing_pos',
       theme: ThemeData(primarySwatch: Colors.blue),
       home: const LoginPage(),
       debugShowCheckedModeBanner: false,
