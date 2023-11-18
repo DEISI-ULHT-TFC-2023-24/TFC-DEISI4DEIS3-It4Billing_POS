@@ -21,9 +21,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/vendas',  // Trocar depois quando funcionar bem
       routes: {
         '/loginPage': (context) => const LoginPage(),
-        '/vendas': (context) => Vendas(),
-        '/venda': (context) => const Venda(),
-        '/turno': (context) => const Turno(),
+        '/vendas': (context) => Vendas(),'/turno': (context) => const Turno(),
         '/recibos': (context) => const Recibos(),
 
       },

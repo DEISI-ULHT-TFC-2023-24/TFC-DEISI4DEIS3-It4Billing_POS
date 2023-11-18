@@ -21,27 +21,29 @@ class NavBar extends StatelessWidget {
   Widget buildHeader(BuildContext context) => Container(
         color: const Color(0xff00afe9),
         padding: EdgeInsets.only(
-          top: 24 + MediaQuery.of(context).padding.top,
-          bottom: 24,
+          top: 50 + MediaQuery.of(context).padding.top,
+          left: 20,
+          bottom: 50,
         ),
         child: const Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               'Id do dispositivo',
-              style: TextStyle(fontSize: 28, color: Colors.white),
+              style: TextStyle(fontSize: 18, color: Colors.white),
             ),
             Text(
               'Utilizador',
-              style: TextStyle(fontSize: 28, color: Colors.white),
+              style: TextStyle(fontSize: 12, color: Colors.white),
             ),
           ],
         ),
       );
 
   Widget buildMenuItems(BuildContext context) => Container(
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.all(12),
         child: Wrap(
-          runSpacing: 16,
+          runSpacing: 5,
           children: [
             ListTile(
               leading: const Icon(Icons.shopping_basket_outlined),
