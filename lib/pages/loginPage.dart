@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'dashboard.dart';
+import 'vendas/vendas.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -107,7 +107,7 @@ class __FormContentState extends State<_FormContent> {
                 return null;
               },
               decoration: const InputDecoration(
-                labelText: 'Email',
+                labelText: 'Link',
                 hintText: 'Enter your email',
                 prefixIcon: Icon(Icons.email_outlined),
                 border: OutlineInputBorder(),
@@ -173,7 +173,10 @@ class __FormContentState extends State<_FormContent> {
                 ),
                 onPressed: () {
                   if (_formKey.currentState?.validate() ?? false) {
-                    Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => const Dashboard()), (route) => false);
+                    Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(
+                            builder: (BuildContext context) => Vendas()),
+                        (route) => false);
                     //Navigator.push(context,
                     //  );
                   }
