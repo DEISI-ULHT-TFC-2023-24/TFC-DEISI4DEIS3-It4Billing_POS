@@ -1,39 +1,62 @@
 import 'package:flutter/material.dart';
-import 'package:it4billing_pos/navbar.dart';
-import 'package:it4billing_pos/pages/vendas/venda.dart';
+import 'package:it4billing_pos/pages/pedido.dart';
+import '../navbar.dart';
+import 'artigos.dart';
+import 'package:it4billing_pos/objetos/vendaObj.dart';
+import 'package:it4billing_pos/objetos/artigoObj.dart';
+import 'package:it4billing_pos/objetos/categoriaObj.dart';
+import 'package:it4billing_pos/pages/artigos.dart';
 
-import 'vendaObj.dart';
-import 'artigo.dart';
-import 'categoria.dart';
-
-class Vendas extends StatefulWidget {
-  Vendas({Key? key}) : super(key: key);
+class Pedidos extends StatefulWidget {
+  const Pedidos({Key? key}) : super(key: key);
 
   @override
-  State<Vendas> createState() => _Vendas();
+  State<Pedidos> createState() => _Pedidos();
 }
 
-class _Vendas extends State<Vendas> {
+class _Pedidos extends State<Pedidos> {
   List<VendaObj> vendas = [];
   List<Categoria> categorias = [
-    Categoria(nome: "Categoria 1", nomeCurto: "Cat 1"),
-    Categoria(nome: "Categoria 2", nomeCurto: "Cat 2"),
-    Categoria(nome: "Categoria 3", nomeCurto: "Cat 3"),
+    Categoria(nome: "Categoria 1", nomeCurto: "Cat 1", description: ''),
+    Categoria(nome: "Categoria 2", nomeCurto: "Cat 2", description: ''),
+    Categoria(nome: "Categoria 3", nomeCurto: "Cat 3", description: ''),
   ];
   List<Artigo> artigos = [];
 
   getcat() {
     artigos = [
       Artigo(
-          nome: "Artigo 1",
           referencia: "001",
-          unidade: "kg",
-          categoria: categorias[0]),
+          nome: "Artigo 1",
+          categoria: categorias[0],
+          barCod: '',
+          description: '',
+          productType: '',
+          unitPrice: 1,
+          idArticlesCategories: 1,
+          taxPrecentage: 1,
+          idTaxes: 1,
+          taxName: '',
+          taxDescription: '',
+          idRetention: 1,
+          retentionPercentage: 1,
+          retentionName: ''),
       Artigo(
+          referencia: "002",
           nome: "Artigo 2",
-          referencia: "011",
-          unidade: "un",
-          categoria: categorias[2])
+          categoria: categorias[2],
+          barCod: '',
+          description: '',
+          productType: '',
+          unitPrice: 2,
+          idArticlesCategories: 2,
+          taxPrecentage: 2,
+          idTaxes: 2,
+          taxName: '',
+          taxDescription: '',
+          idRetention: 2,
+          retentionPercentage: 2,
+          retentionName: ''),
     ];
   }
 
@@ -46,15 +69,19 @@ class _Vendas extends State<Vendas> {
       child: Scaffold(
         drawer: const NavBar(),
         appBar: AppBar(
-          title: const Text('Vendas'),
+          title: const Text('Pedidos'),
           backgroundColor: const Color(0xff00afe9),
         ),
         body: Column(
           children: [
             ElevatedButton(
               onPressed: () {
-
-                Navigator.push(context, MaterialPageRoute(builder: (context) => Venda(artigos: artigos,categorias: categorias,vendas: vendas,)));
+                Navigator.push(context,MaterialPageRoute(
+                        builder: (context) => Pedido(
+                              artigos: artigos,
+                              categorias: categorias,
+                              vendas: vendas,
+                            )));
 
                 // Adiciona um novo objeto à lista quando o botão é pressionado
                 //setState(() {
@@ -68,8 +95,7 @@ class _Vendas extends State<Vendas> {
                 itemCount: vendas.length,
                 itemBuilder: (context, index) {
                   return ElevatedButton(
-                      onPressed: () {},
-                      child: Text(vendas[index].nome));
+                      onPressed: () {}, child: Text(vendas[index].nome));
                 },
               ),
             ),

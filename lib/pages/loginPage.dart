@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'vendas/vendas.dart';
+import 'pedidos.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -175,7 +175,7 @@ class __FormContentState extends State<_FormContent> {
                   if (_formKey.currentState?.validate() ?? false) {
                     Navigator.of(context).pushAndRemoveUntil(
                         MaterialPageRoute(
-                            builder: (BuildContext context) => Vendas()),
+                            builder: (BuildContext context) => Pedidos()),
                         (route) => false);
                     //Navigator.push(context,
                     //  );

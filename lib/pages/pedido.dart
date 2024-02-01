@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
-import 'vendaObj.dart';
-import 'artigo.dart';
-import 'categoria.dart';
+import '../objetos/artigoObj.dart';
+import '../objetos/categoriaObj.dart';
+import '../objetos/vendaObj.dart';
 
-class Venda extends StatelessWidget {
+class Pedido extends StatelessWidget {
   List<VendaObj> vendas = [];
   List<Categoria> categorias = [];
   List<Artigo> artigos = [];
 
-  Venda({
+  Pedido({
     Key? key,
     required this.vendas,
     required this.categorias,

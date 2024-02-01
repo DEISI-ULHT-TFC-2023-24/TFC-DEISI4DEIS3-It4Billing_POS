@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:it4billing_pos/pages/turno.dart';
-import 'package:it4billing_pos/pages/vendas/vendas.dart';
+import 'package:it4billing_pos/pages/vendas.dart';
 
 class NavBar extends StatelessWidget {
   const NavBar({super.key});
@@ -29,12 +28,16 @@ class NavBar extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Id do dispositivo',
+              'Utilizador 01',
+              style: TextStyle(fontSize: 24, color: Colors.white),
+            ),
+            Text(
+              'Loja de Beja',
               style: TextStyle(fontSize: 18, color: Colors.white),
             ),
             Text(
-              'Utilizador',
-              style: TextStyle(fontSize: 12, color: Colors.white),
+              'POS 00',
+              style: TextStyle(fontSize: 18, color: Colors.white),
             ),
           ],
         ),
@@ -46,11 +49,21 @@ class NavBar extends StatelessWidget {
           runSpacing: 5,
           children: [
             ListTile(
-              leading: const Icon(Icons.shopping_basket_outlined),
-              title: const Text('Vendas'),
+              leading: const Icon(Icons.shopping_cart_outlined),
+              title: const Text('Pedidos'),
               onTap: () {
                 Navigator.popUntil(
-                    context, ModalRoute.withName('/vendas'));
+                    context, ModalRoute.withName('/pedidos'));
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.receipt_long),
+              title: const Text('Vendas concluidas'),
+              onTap: () {
+                Navigator.popUntil(
+                    context, ModalRoute.withName('/pedidos'));
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => const Vendas()),
+                );
               },
             ),
             ListTile(
@@ -58,17 +71,8 @@ class NavBar extends StatelessWidget {
               title: const Text('Turno'),
               onTap: () {
                 Navigator.popUntil(
-                    context, ModalRoute.withName('/vendas'));
+                    context, ModalRoute.withName('/pedidos'));
                 Navigator.pushNamed(context, '/turno');
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.receipt_long),
-              title: const Text('Recibos'),
-              onTap: () {
-                Navigator.popUntil(
-                    context, ModalRoute.withName('/vendas'));
-                Navigator.pushNamed(context, '/recibos');
               },
             ),
             ListTile(
@@ -76,8 +80,17 @@ class NavBar extends StatelessWidget {
               title: const Text('Artigos'),
               onTap: () {
                 Navigator.popUntil(
-                    context, ModalRoute.withName('/vendas'));
-                Navigator.pushNamed(context, '/recibos');
+                    context, ModalRoute.withName('/pedidos'));
+                Navigator.pushNamed(context, '/artigos');
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.label_outline),
+              title: const Text('Categorias'),
+              onTap: () {
+                Navigator.popUntil(
+                    context, ModalRoute.withName('/pedidos'));
+                Navigator.pushNamed(context, '/categorias');
               },
             ),
 
@@ -88,7 +101,7 @@ class NavBar extends StatelessWidget {
               title: const Text('Back office'),
               onTap: () {
                 Navigator.popUntil(
-                    context, ModalRoute.withName('/vendas'));
+                    context, ModalRoute.withName('/pedidos'));
                 Navigator.pushNamed(context, '/recibos');
               },
             ),
@@ -97,7 +110,7 @@ class NavBar extends StatelessWidget {
               title: const Text('Configurações'),
               onTap: () {
                 Navigator.popUntil(
-                    context, ModalRoute.withName('/vendas'));
+                    context, ModalRoute.withName('/pedidos'));
                 Navigator.pushNamed(context, '/recibos');
               },
             ),
@@ -106,7 +119,7 @@ class NavBar extends StatelessWidget {
               title: const Text('Suporte'),
               onTap: () {
                 Navigator.popUntil(
-                    context, ModalRoute.withName('/vendas'));
+                    context, ModalRoute.withName('/pedidos'));
                 Navigator.pushNamed(context, '/recibos');
               },
             ),
