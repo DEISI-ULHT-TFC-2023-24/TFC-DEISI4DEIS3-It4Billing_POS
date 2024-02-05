@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'pedidos.dart';
+import 'Pedidos/pedidos.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);

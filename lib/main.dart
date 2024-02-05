@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:it4billing_pos/pages/artigos.dart';
-import 'package:it4billing_pos/pages/categorias.dart';
+import 'package:it4billing_pos/pages/Pedidos/categorias.dart';
 import 'package:it4billing_pos/pages/loginPage.dart';
 import 'package:it4billing_pos/pages/vendas.dart';
 import 'package:it4billing_pos/pages/turno.dart';
-import 'package:it4billing_pos/pages/pedidos.dart';
+import 'package:it4billing_pos/pages/Pedidos/pedidos.dart';
 
 void main() {
   runApp(const MyApp());

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../navbar.dart';
+import '../../navbar.dart';
 
 class Categorias extends StatelessWidget {
   const Categorias({Key? key}) : super(key: key);

@@ -6,15 +6,17 @@ class Artigo {
   String barCod;
   String description;
   String productType;
-  int unitPrice; // Valor sem iva
 
-  int idArticlesCategories; // por tabela
+  double unitPrice; // Valor sem iva
+
+  int idArticlesCategories; // por tabela ???? acho que não
   Categoria categoria; // por objeto
 
-  int idTaxes; // ID da tabela taxes do it4billing
+  int idTaxes; // ID da tabela taxas do it4billing
   int taxPrecentage;
-  String taxName; // exemplo: taxa inerrmedia, isenta, taxa normal, ect...
+  String taxName; // exemplo: taxa inermedia, isenta, taxa normal, ect...
   String taxDescription; //para isenções de IVA, ou seja taxa de iva a zero
+
   int idRetention;
   int retentionPercentage;
   String retentionName;
