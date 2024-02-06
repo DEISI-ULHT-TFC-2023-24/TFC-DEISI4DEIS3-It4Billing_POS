@@ -5,8 +5,13 @@ class VendaObj {
   String nome;
   DateTime hora;
   List<Artigo> artigosPedido = [];
-  late String local; // DEVERÁ SER UM OBJETO ??
-  late Utilizador funcionario;
+  String local; // DEVERÁ SER UM OBJETO ??
+  Utilizador funcionario;
 
-  VendaObj({required this.nome, required this.hora});
+  VendaObj({
+    required this.nome,
+    required this.hora,
+    required this.local,
+    required this.funcionario,
+  });
 }

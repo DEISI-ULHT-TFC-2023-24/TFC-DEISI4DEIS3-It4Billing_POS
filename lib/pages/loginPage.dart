@@ -175,7 +175,7 @@ class __FormContentState extends State<_FormContent> {
                   if (_formKey.currentState?.validate() ?? false) {
                     Navigator.of(context).pushAndRemoveUntil(
                         MaterialPageRoute(
-                            builder: (BuildContext context) => Pedidos()),
+                            builder: (BuildContext context) => Pedidos(vendas: [],)),
                         (route) => false);
                     //Navigator.push(context,
                     //  );

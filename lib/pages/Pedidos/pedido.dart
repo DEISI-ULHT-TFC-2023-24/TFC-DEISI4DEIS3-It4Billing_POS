@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:it4billing_pos/objetos/utilizadorObj.dart';
+import 'package:it4billing_pos/pages/Pedidos/carrinho.dart';
 import '../../objetos/artigoObj.dart';
 import '../../objetos/categoriaObj.dart';
 import '../../objetos/vendaObj.dart';
@@ -63,27 +65,73 @@ class _Pedido extends State<Pedido> {
         ScanMode.BARCODE,
       );
 
-      // Aqui você pode lidar com o código de barras lido (por exemplo, pesquisar na lista de artigos)
       print("Código de barras lido: $barcode");
     } catch (e) {
-      // Lidar com erros ao escanear o código de barras
-      print("Erro ao escanear o código de barras: $e");
+      // Lidar com erros ao ler o código de barras
+      print("Erro ao ler o código de barras: $e");
     }
   }
 
+  VendaObj venda = VendaObj(nome: "Pedido 01", hora: DateTime.now(),funcionario: Utilizador('Utilizador001', 1234 ),local: 'mesa: 0069');
+
+  int nArtigos = 0;
+
+  void addItemToCart() {
+    setState(() {
+      nArtigos++;
+    });
+  }
+
+
   @override
   Widget build(BuildContext context) {
+    // mudar o nome do pedido para que seja incrementado por exemplo
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Pedido 01'), // Mudar
         backgroundColor: const Color(0xff00afe9),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.shopping_cart_outlined),
-            tooltip: 'Open shopping cart',
-            onPressed: () {
-              // handle the press
-            },
+          Stack(
+            children: [
+              IconButton(
+                icon: const Icon(Icons.shopping_cart_outlined),
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              Carrinho(
+                                artigos: widget.artigos,
+                                categorias: widget.categorias,
+                                vendas: widget.vendas,
+                                venda: venda,
+                              )));
+                },
+              ),
+              Positioned(
+                right: 6,
+                top: 6,
+                child: Container(
+                  padding: const EdgeInsets.all(2),
+                  decoration: BoxDecoration(
+                    color: Colors.red,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  constraints: const BoxConstraints(
+                    minWidth: 16,
+                    minHeight: 16,
+                  ),
+                  child: Text('$nArtigos',
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
           IconButton(
             icon: const Icon(Icons.more_vert),
@@ -175,13 +223,9 @@ class _Pedido extends State<Pedido> {
                             padding: const EdgeInsets.only(bottom: 10.0),
                             child: ElevatedButton(
                               onPressed: () {
-                                // Adicione a lógica desejada ao pressionar o botão do artigo
-                                print(
-                                    'Botão Pressionado: ${artigosFiltrados()[index].nome}'
-                                    '-'
-                                    '${artigosFiltrados()[index].unitPrice}'
-                                    ' '
-                                    '${artigosFiltrados()[index].taxPrecentage / 100 + 1}');
+                                venda.artigosPedido.add(artigosFiltrados()[index]);
+                                print('foi adicionado o artigo');
+                                addItemToCart();
                               },
                               style: ButtonStyle(
                                 side: MaterialStateProperty.all(
@@ -199,11 +243,13 @@ class _Pedido extends State<Pedido> {
                                 children: [
                                   Text(artigosFiltrados()[index].nome,
                                       style: const TextStyle(
-                                          color: Colors.black, fontSize: 16)),
+                                          color: Colors.black, fontSize: 16)
+                                  ),
                                   Text(
                                       'Preço: € ${(artigosFiltrados()[index].unitPrice * (artigosFiltrados()[index].taxPrecentage / 100 + 1)).toStringAsFixed(2)}',
                                       style: const TextStyle(
-                                          color: Colors.black, fontSize: 16)),
+                                          color: Colors.black, fontSize: 16)
+                                  ),
                                 ],
                               ),
                             ),

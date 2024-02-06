@@ -1,21 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:it4billing_pos/pages/Pedidos/pedido.dart';
 import '../../navbar.dart';
-import '../artigos.dart';
 import 'package:it4billing_pos/objetos/vendaObj.dart';
 import 'package:it4billing_pos/objetos/artigoObj.dart';
 import 'package:it4billing_pos/objetos/categoriaObj.dart';
-import 'package:it4billing_pos/pages/artigos.dart';
 
 class Pedidos extends StatefulWidget {
-  const Pedidos({Key? key}) : super(key: key);
+  late List<VendaObj> vendas = [];
+
+  Pedidos({
+    Key? key,
+    required this.vendas,
+  }) : super(key: key);
 
   @override
   State<Pedidos> createState() => _Pedidos();
 }
 
 class _Pedidos extends State<Pedidos> {
-  List<VendaObj> vendas = [];
 
   // contruir ainda a forma como tratar a info da base de dab«dos e perceber como vou receber
   // ainda a data para a base de dados
@@ -31,37 +34,41 @@ class _Pedidos extends State<Pedidos> {
   getcat() {
     artigos = [
       Artigo(
-          referencia: "001",
-          nome: "Artigo 1",
-          barCod: '',
-          description: '',
-          productType: '',
-          unitPrice: 4.06,
-          idArticlesCategories: 1,
-          categoria: categorias[1],
-          taxPrecentage: 23,
-          idTaxes: 1,
-          taxName: '',
-          taxDescription: '',
-          idRetention: 1,
-          retentionPercentage: 1,
-          retentionName: ''),
+        referencia: "001",
+        nome: "Artigo 1",
+        barCod: '',
+        description: '',
+        productType: '',
+        unitPrice: 4.06,
+        idArticlesCategories: 1,
+        categoria: categorias[1],
+        taxPrecentage: 23,
+        idTaxes: 1,
+        taxName: '',
+        taxDescription: '',
+        idRetention: 1,
+        retentionPercentage: 1,
+        retentionName: '',
+        stock: 56
+      ),
       Artigo(
-          referencia: "002",
-          nome: "Artigo 2",
-          barCod: '',
-          description: '',
-          productType: '',
-          unitPrice: 6.42,
-          idArticlesCategories: 2,
-          categoria: categorias[2],
-          taxPrecentage: 23,
-          idTaxes: 2,
-          taxName: '',
-          taxDescription: '',
-          idRetention: 2,
-          retentionPercentage: 2,
-          retentionName: ''),
+        referencia: "002",
+        nome: "Artigo 2",
+        barCod: '',
+        description: '',
+        productType: '',
+        unitPrice: 6.42,
+        idArticlesCategories: 2,
+        categoria: categorias[2],
+        taxPrecentage: 23,
+        idTaxes: 2,
+        taxName: '',
+        taxDescription: '',
+        idRetention: 2,
+        retentionPercentage: 2,
+        retentionName: '',
+        stock: 10
+      ),
     ];
   }
 
@@ -96,11 +103,11 @@ class _Pedidos extends State<Pedidos> {
                               builder: (context) => Pedido(
                                     artigos: artigos,
                                     categorias: categorias,
-                                    vendas: vendas,
+                                    vendas: widget.vendas,
                                   )));
                       // Adiciona um novo objeto à lista quando o botão é pressionado
                       setState(() {
-                        vendas.add(VendaObj(nome: "Pedido 01", hora: DateTime.now()));
+
                       });
                     },
                     style: ButtonStyle(
@@ -126,7 +133,7 @@ class _Pedidos extends State<Pedidos> {
             ),
             Expanded(
               child: ListView.builder(
-                itemCount: vendas.length,
+                itemCount: widget.vendas.length,
                 itemBuilder: (context, index) {
                   return Container(
                       margin: const EdgeInsets.symmetric(
@@ -152,9 +159,32 @@ class _Pedidos extends State<Pedidos> {
                               ),
                             ),
                           ),
-                          child: Text(vendas[index].nome,
-                              style: const TextStyle(
-                                  color: Colors.black, fontSize: 18))));
+                          child: Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(widget.vendas[index].local,
+                                      style: const TextStyle(
+                                          color: Colors.black, fontSize: 18)
+                                  ),
+                                  Text(DateFormat('HH:mm').format(widget.vendas[index].hora),
+                                      style: const TextStyle(
+                                          color: Colors.black, fontSize: 18)
+                                  ),
+                                ],
+                              ),
+                              Text('Funcionario: ${widget.vendas[index].funcionario.nome}',
+                                  style: const TextStyle(
+                                      color: Colors.black, fontSize: 18)
+                              ),
+                            ],
+                          ),
+
+
+                      )
+                  );
                 },
               ),
             ),

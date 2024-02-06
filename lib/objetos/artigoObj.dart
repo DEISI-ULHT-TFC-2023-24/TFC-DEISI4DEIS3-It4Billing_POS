@@ -21,6 +21,8 @@ class Artigo {
   int retentionPercentage;
   String retentionName;
 
+  int stock;
+
   Artigo({
       required this.referencia,
       required this.nome,
@@ -36,5 +38,7 @@ class Artigo {
       required this.taxDescription,
       required this.idRetention,
       required this.retentionPercentage,
-      required this.retentionName});
+      required this.retentionName,
+      required this.stock,
+  });
 }
