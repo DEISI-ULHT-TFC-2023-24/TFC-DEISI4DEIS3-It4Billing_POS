@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:it4billing_pos/pages/artigos.dart';
-import 'package:it4billing_pos/pages/Pedidos/categorias.dart';
+import 'package:it4billing_pos/pages/categorias.dart';
 import 'package:it4billing_pos/pages/loginPage.dart';
 import 'package:it4billing_pos/pages/vendas.dart';
 import 'package:it4billing_pos/pages/turno.dart';
@@ -23,10 +23,10 @@ class MyApp extends StatelessWidget {
       routes: {
         '/loginPage': (context) => const LoginPage(),
         '/pedidos': (context) => Pedidos(vendas: [],),
-        '/turno': (context) => const Turnos(),
-        '/vendas': (context) => const Vendas(),
-        '/artigos': (context) => const Artigos(),
-        '/categorias': (context) => const Categorias(),
+        '/turno': (context) => Turnos(vendas: [],),
+        '/vendas': (context) => Vendas(vendas: [],),
+        '/artigos': (context) =>  Artigos(vendas: [],),
+        '/categorias': (context) =>  Categorias(vendas:[],),
       },
       debugShowCheckedModeBanner: false,
     );

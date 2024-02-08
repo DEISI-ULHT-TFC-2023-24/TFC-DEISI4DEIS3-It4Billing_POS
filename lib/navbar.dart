@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:it4billing_pos/pages/vendas.dart';
 
 class NavBar extends StatelessWidget {
   const NavBar({super.key});
@@ -15,7 +14,7 @@ class NavBar extends StatelessWidget {
             ],
           ),
         ),
-      );
+  );
 
   Widget buildHeader(BuildContext context) => Container(
         color: const Color(0xff00afe9),
@@ -52,26 +51,29 @@ class NavBar extends StatelessWidget {
               leading: const Icon(Icons.shopping_cart_outlined),
               title: const Text('Pedidos'),
               onTap: () {
-                Navigator.popUntil(
-                    context, ModalRoute.withName('/pedidos'));
+                print(ModalRoute.of(context)?.settings.name);
+                if (ModalRoute.of(context)?.settings.name == '/pedidos') {
+                  Navigator.pop(context);
+                  print(99);
+                } else {
+                  Navigator.popUntil(context, ModalRoute.withName('/pedidos'));
+                  print(88);
+                }
               },
             ),
             ListTile(
               leading: const Icon(Icons.receipt_long),
               title: const Text('Vendas concluidas'),
               onTap: () {
-                Navigator.popUntil(
-                    context, ModalRoute.withName('/pedidos'));
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) => const Vendas()),
-                );
+                Navigator.popUntil(context, ModalRoute.withName('/pedidos'));
+                Navigator.pushNamed(context, '/vendas');
               },
             ),
             ListTile(
               leading: const Icon(Icons.access_time_outlined),
               title: const Text('Turno'),
               onTap: () {
-                Navigator.popUntil(
-                    context, ModalRoute.withName('/pedidos'));
+                Navigator.popUntil(context, ModalRoute.withName('/pedidos'));
                 Navigator.pushNamed(context, '/turno');
               },
             ),
@@ -79,8 +81,7 @@ class NavBar extends StatelessWidget {
               leading: const Icon(Icons.list_outlined),
               title: const Text('Artigos'),
               onTap: () {
-                Navigator.popUntil(
-                    context, ModalRoute.withName('/pedidos'));
+                Navigator.popUntil(context, ModalRoute.withName('/pedidos'));
                 Navigator.pushNamed(context, '/artigos');
               },
             ),
@@ -88,20 +89,16 @@ class NavBar extends StatelessWidget {
               leading: const Icon(Icons.label_outline),
               title: const Text('Categorias'),
               onTap: () {
-                Navigator.popUntil(
-                    context, ModalRoute.withName('/pedidos'));
+                Navigator.popUntil(context, ModalRoute.withName('/pedidos'));
                 Navigator.pushNamed(context, '/categorias');
               },
             ),
-
             const Divider(color: Colors.black54),
-
             ListTile(
               leading: const Icon(Icons.bar_chart_outlined),
               title: const Text('Back office'),
               onTap: () {
-                Navigator.popUntil(
-                    context, ModalRoute.withName('/pedidos'));
+                Navigator.popUntil(context, ModalRoute.withName('/pedidos'));
                 Navigator.pushNamed(context, '/recibos');
               },
             ),
@@ -109,8 +106,7 @@ class NavBar extends StatelessWidget {
               leading: const Icon(Icons.settings),
               title: const Text('Configurações'),
               onTap: () {
-                Navigator.popUntil(
-                    context, ModalRoute.withName('/pedidos'));
+                Navigator.popUntil(context, ModalRoute.withName('/pedidos'));
                 Navigator.pushNamed(context, '/recibos');
               },
             ),
@@ -118,12 +114,10 @@ class NavBar extends StatelessWidget {
               leading: const Icon(Icons.info_outline),
               title: const Text('Suporte'),
               onTap: () {
-                Navigator.popUntil(
-                    context, ModalRoute.withName('/pedidos'));
+                Navigator.popUntil(context, ModalRoute.withName('/pedidos'));
                 Navigator.pushNamed(context, '/recibos');
               },
             ),
-
           ],
         ),
       );

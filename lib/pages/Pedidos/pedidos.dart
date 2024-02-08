@@ -6,6 +6,11 @@ import 'package:it4billing_pos/objetos/vendaObj.dart';
 import 'package:it4billing_pos/objetos/artigoObj.dart';
 import 'package:it4billing_pos/objetos/categoriaObj.dart';
 
+import '../artigos.dart';
+import '../categorias.dart';
+import '../turno.dart';
+import '../vendas.dart';
+
 class Pedidos extends StatefulWidget {
   late List<VendaObj> vendas = [];
 
@@ -19,7 +24,6 @@ class Pedidos extends StatefulWidget {
 }
 
 class _Pedidos extends State<Pedidos> {
-
   // contruir ainda a forma como tratar a info da base de dab«dos e perceber como vou receber
   // ainda a data para a base de dados
 
@@ -34,41 +38,39 @@ class _Pedidos extends State<Pedidos> {
   getcat() {
     artigos = [
       Artigo(
-        referencia: "001",
-        nome: "Artigo 1",
-        barCod: '',
-        description: '',
-        productType: '',
-        unitPrice: 4.06,
-        idArticlesCategories: 1,
-        categoria: categorias[1],
-        taxPrecentage: 23,
-        idTaxes: 1,
-        taxName: '',
-        taxDescription: '',
-        idRetention: 1,
-        retentionPercentage: 1,
-        retentionName: '',
-        stock: 56
-      ),
+          referencia: "001",
+          nome: "Artigo 1",
+          barCod: '',
+          description: '',
+          productType: '',
+          unitPrice: 4.06,
+          idArticlesCategories: 1,
+          categoria: categorias[1],
+          taxPrecentage: 23,
+          idTaxes: 1,
+          taxName: '',
+          taxDescription: '',
+          idRetention: 1,
+          retentionPercentage: 1,
+          retentionName: '',
+          stock: 56),
       Artigo(
-        referencia: "002",
-        nome: "Artigo 2",
-        barCod: '',
-        description: '',
-        productType: '',
-        unitPrice: 6.42,
-        idArticlesCategories: 2,
-        categoria: categorias[2],
-        taxPrecentage: 23,
-        idTaxes: 2,
-        taxName: '',
-        taxDescription: '',
-        idRetention: 2,
-        retentionPercentage: 2,
-        retentionName: '',
-        stock: 10
-      ),
+          referencia: "002",
+          nome: "Artigo 2",
+          barCod: '',
+          description: '',
+          productType: '',
+          unitPrice: 6.42,
+          idArticlesCategories: 2,
+          categoria: categorias[2],
+          taxPrecentage: 23,
+          idTaxes: 2,
+          taxName: '',
+          taxDescription: '',
+          idRetention: 2,
+          retentionPercentage: 2,
+          retentionName: '',
+          stock: 10),
     ];
   }
 
@@ -76,10 +78,121 @@ class _Pedidos extends State<Pedidos> {
   // fazer tbm o ecra sub cat (no mesmo ecra )
   // tendo a lista do objetos tbm criada aqui  fazer a cena de selecionar e ai ter o botao que faz add na lista de vendas
 
+  Widget buildHeader(BuildContext context) => Container(
+        color: const Color(0xff00afe9),
+        padding: EdgeInsets.only(
+          top: 50 + MediaQuery.of(context).padding.top,
+          left: 20,
+          bottom: 50,
+        ),
+        child: const Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Utilizador 01',
+              style: TextStyle(fontSize: 24, color: Colors.white),
+            ),
+            Text(
+              'Loja de Beja',
+              style: TextStyle(fontSize: 18, color: Colors.white),
+            ),
+            Text(
+              'POS 00',
+              style: TextStyle(fontSize: 18, color: Colors.white),
+            ),
+          ],
+        ),
+      );
+
+  Widget buildMenuItems(BuildContext context) => Container(
+        padding: const EdgeInsets.all(12),
+        child: Wrap(
+          runSpacing: 5,
+          children: [
+            ListTile(
+              leading: const Icon(Icons.shopping_cart_outlined),
+              title: const Text('Pedidos'),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.receipt_long),
+              title: const Text('Vendas concluidas'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => Vendas(vendas: widget.vendas)));
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.access_time_outlined),
+              title: const Text('Turno'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => Turnos(vendas: widget.vendas)));
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.list_outlined),
+              title: const Text('Artigos'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => Artigos(vendas: widget.vendas)));
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.label_outline),
+              title: const Text('Categorias'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => Categorias(vendas: widget.vendas)));
+              },
+            ),
+
+            const Divider(color: Colors.black54),
+
+            ListTile(
+              leading: const Icon(Icons.bar_chart_outlined),
+              title: const Text('Back office'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.pushReplacementNamed(context, '/recibos');
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.settings),
+              title: const Text('Configurações'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.pushReplacementNamed(context,'/recibos');
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.info_outline),
+              title: const Text('Suporte'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.pushReplacementNamed(context,'/recibos');
+              },
+            ),
+          ],
+        ),
+      );
+
   @override
   Widget build(BuildContext context) => WillPopScope(
       child: Scaffold(
-        drawer: const NavBar(),
+        drawer: Drawer(
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                buildHeader(context),
+                buildMenuItems(context),
+              ],
+            ),
+          ),
+        ),
         appBar: AppBar(
           title: const Text('Pedidos'),
           backgroundColor: const Color(0xff00afe9),
@@ -106,9 +219,6 @@ class _Pedidos extends State<Pedidos> {
                                     vendas: widget.vendas,
                                   )));
                       // Adiciona um novo objeto à lista quando o botão é pressionado
-                      setState(() {
-
-                      });
                     },
                     style: ButtonStyle(
                       side: MaterialStateProperty.all(
@@ -139,52 +249,48 @@ class _Pedidos extends State<Pedidos> {
                       margin: const EdgeInsets.symmetric(
                           vertical: 10, horizontal: 50),
                       child: ElevatedButton(
-                          onPressed: () {
-                            // entrar dentro do pedido ainda aberto ex.vendas[index].nome
-                          },
-                          style: ButtonStyle(
-                            side: MaterialStateProperty.all(
-                                const BorderSide(color: Colors.black)),
-                            // Linha de borda preta
-                            backgroundColor:
-                                MaterialStateProperty.all(Colors.white),
-                            // Fundo white
-                            fixedSize:
-                                MaterialStateProperty.all(const Size(300, 80)),
-                            // Tamanho fixo de 270x80
-                            shape: MaterialStateProperty.all<
-                                RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
+                        onPressed: () {
+                          // entrar dentro do pedido ainda aberto ex.vendas[index].nome
+                        },
+                        style: ButtonStyle(
+                          side: MaterialStateProperty.all(
+                              const BorderSide(color: Colors.black)),
+                          // Linha de borda preta
+                          backgroundColor:
+                              MaterialStateProperty.all(Colors.white),
+                          // Fundo white
+                          fixedSize:
+                              MaterialStateProperty.all(const Size(300, 80)),
+                          // Tamanho fixo de 270x80
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
                             ),
                           ),
-                          child: Column(
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(widget.vendas[index].local,
-                                      style: const TextStyle(
-                                          color: Colors.black, fontSize: 18)
-                                  ),
-                                  Text(DateFormat('HH:mm').format(widget.vendas[index].hora),
-                                      style: const TextStyle(
-                                          color: Colors.black, fontSize: 18)
-                                  ),
-                                ],
-                              ),
-                              Text('Funcionario: ${widget.vendas[index].funcionario.nome}',
-                                  style: const TextStyle(
-                                      color: Colors.black, fontSize: 18)
-                              ),
-                            ],
-                          ),
-
-
-                      )
-                  );
+                        ),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(widget.vendas[index].local,
+                                    style: const TextStyle(
+                                        color: Colors.black, fontSize: 18)),
+                                Text(
+                                    DateFormat('HH:mm')
+                                        .format(widget.vendas[index].hora),
+                                    style: const TextStyle(
+                                        color: Colors.black, fontSize: 18)),
+                              ],
+                            ),
+                            Text(
+                                'Funcionario: ${widget.vendas[index].funcionario.nome}',
+                                style: const TextStyle(
+                                    color: Colors.black, fontSize: 18)),
+                          ],
+                        ),
+                      ));
                 },
               ),
             ),

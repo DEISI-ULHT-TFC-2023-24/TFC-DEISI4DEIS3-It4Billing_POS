@@ -110,13 +110,15 @@ class _Carrinho extends State<Carrinho> {
                         onPressed: () {
                           // Adicione sua lógica para o primeiro botão aqui
                           widget.vendas.add(VendaObj(nome: "Pedido 01", hora: DateTime.now(), funcionario: Utilizador('Utilizador001', 1234 ),local: 'mesa: 0069'));
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      Pedidos(vendas: widget.vendas)
-                              )
-                          );
+
+                          Navigator.of(context).push(MaterialPageRoute(builder: (context) => Pedidos(vendas: widget.vendas)));
+
+
+
+                          //Navigator.pushReplacement(
+                          //    context,
+                          //    MaterialPageRoute(builder: (context) =>Pedidos(vendas: widget.vendas))
+                          //);
                         },
                         style: ElevatedButton.styleFrom(
                           primary: Colors.grey,

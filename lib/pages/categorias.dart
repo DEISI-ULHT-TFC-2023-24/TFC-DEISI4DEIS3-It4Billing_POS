@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:it4billing_pos/pages/artigos.dart';
 import 'package:it4billing_pos/pages/turno.dart';
+import 'package:it4billing_pos/pages/vendas.dart';
 import '../navbar.dart';
 import '../objetos/vendaObj.dart';
 import 'Pedidos/pedidos.dart';
-import 'categorias.dart';
+import 'artigos.dart';
 
-class Vendas extends StatelessWidget {
+class Categorias extends StatelessWidget {
   List<VendaObj> vendas = [];
 
-  Vendas ({
+  Categorias({
     Key? key,
     required this.vendas,
   }) : super(key: key);
@@ -58,6 +58,7 @@ class Vendas extends StatelessWidget {
           title: const Text('Vendas concluidas'),
           onTap: () {
             Navigator.pop(context);
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => Vendas(vendas: vendas)));
           },
         ),
         ListTile(
@@ -81,7 +82,6 @@ class Vendas extends StatelessWidget {
           title: const Text('Categorias'),
           onTap: () {
             Navigator.pop(context);
-            Navigator.of(context).push(MaterialPageRoute(builder: (context) => Categorias(vendas: vendas)));
           },
         ),
 
@@ -91,7 +91,6 @@ class Vendas extends StatelessWidget {
           leading: const Icon(Icons.bar_chart_outlined),
           title: const Text('Back office'),
           onTap: () {
-            Navigator.pop(context);
             Navigator.pushReplacementNamed(context, '/recibos');
           },
         ),
@@ -99,7 +98,6 @@ class Vendas extends StatelessWidget {
           leading: const Icon(Icons.settings),
           title: const Text('Configurações'),
           onTap: () {
-            Navigator.pop(context);
             Navigator.pushReplacementNamed(context,'/recibos');
           },
         ),
@@ -107,7 +105,6 @@ class Vendas extends StatelessWidget {
           leading: const Icon(Icons.info_outline),
           title: const Text('Suporte'),
           onTap: () {
-            Navigator.pop(context);
             Navigator.pushReplacementNamed(context,'/recibos');
           },
         ),
@@ -117,28 +114,27 @@ class Vendas extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
-          drawer: Drawer(
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  buildHeader(context),
-                  buildMenuItems(context),
-                ],
-              ),
-            ),
-          ),
-          appBar: AppBar(
-            title: const Text('Vendas concluídas'),
-            backgroundColor: const Color(0xff00afe9),
-          ),
-          body: const Column(
-            children: [
-
+    return Scaffold(
+      drawer: Drawer(
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              buildHeader(context),
+              buildMenuItems(context),
             ],
           ),
+        ),
+      ),
+      appBar: AppBar(
+        title: const Text('Artigos'),
+        backgroundColor: const Color(0xff00afe9),
+      ),
+      body: const Column(
+        children: [
 
+        ],
+      ),
     );
   }
 }
