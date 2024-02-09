@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:it4billing_pos/pages/turno.dart';
 import 'package:it4billing_pos/pages/vendas.dart';
 import '../navbar.dart';
-import '../objetos/vendaObj.dart';
+import '../objetos/pedidoObj.dart';
 import 'Pedidos/pedidos.dart';
 import 'categorias.dart';
 
 class Artigos extends StatelessWidget {
-  List<VendaObj> vendas = [];
+  List<PedidoObj> pedidos = [];
 
   Artigos({
     Key? key,
-    required this.vendas,
+    required this.pedidos,
   }) : super(key: key);
 
   Widget buildHeader(BuildContext context) => Container(
@@ -50,7 +50,7 @@ class Artigos extends StatelessWidget {
           title: const Text('Pedidos'),
           onTap: () {
             Navigator.pop(context);
-            Navigator.of(context).push(MaterialPageRoute(builder: (context) => Pedidos(vendas: vendas)));
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => Pedidos(pedidos: pedidos)));
           },
         ),
         ListTile(
@@ -58,7 +58,7 @@ class Artigos extends StatelessWidget {
           title: const Text('Vendas concluidas'),
           onTap: () {
             Navigator.pop(context);
-            Navigator.of(context).push(MaterialPageRoute(builder: (context) => Vendas(vendas: vendas)));
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => Vendas(pedidos: pedidos)));
           },
         ),
         ListTile(
@@ -66,7 +66,7 @@ class Artigos extends StatelessWidget {
           title: const Text('Turno'),
           onTap: () {
             Navigator.pop(context);
-            Navigator.of(context).push(MaterialPageRoute(builder: (context) => Turnos(vendas: vendas)));
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => Turnos(pedidos: pedidos)));
           },
         ),
         ListTile(
@@ -81,7 +81,7 @@ class Artigos extends StatelessWidget {
           title: const Text('Categorias'),
           onTap: () {
             Navigator.pop(context);
-            Navigator.of(context).push(MaterialPageRoute(builder: (context) => Categorias(vendas: vendas)));
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => Categorias(pedidos: pedidos)));
           },
         ),
         const Divider(color: Colors.black54),

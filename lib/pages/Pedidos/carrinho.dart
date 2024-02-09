@@ -1,23 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:it4billing_pos/objetos/localObj.dart';
+import 'package:it4billing_pos/pages/Pedidos/escolhaLocal.dart';
 import 'package:it4billing_pos/pages/Pedidos/pedidos.dart';
 
 import '../../objetos/artigoObj.dart';
 import '../../objetos/categoriaObj.dart';
-import '../../objetos/utilizadorObj.dart';
-import '../../objetos/vendaObj.dart';
+import '../../objetos/pedidoObj.dart';
 
 class Carrinho extends StatefulWidget {
-  List<VendaObj> vendas = [];
+  List<PedidoObj> pedidos = [];
   List<Categoria> categorias = [];
   List<Artigo> artigos = [];
-  VendaObj venda;
+  PedidoObj pedido;
+  List<LocalObj> locais = [];
 
   Carrinho({
     Key? key,
-    required this.vendas,
+    required this.pedidos,
     required this.categorias,
     required this.artigos,
-    required this.venda,
+    required this.pedido,
+    required this.locais,
   }) : super(key: key);
 
   @override
@@ -38,8 +41,10 @@ class _Carrinho extends State<Carrinho> {
   @override
   void initState() {
     super.initState();
-    groupedItems = groupItems(widget.venda.artigosPedido);
+    groupedItems = groupItems(widget.pedido.artigosPedido);
   }
+
+
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -57,9 +62,9 @@ class _Carrinho extends State<Carrinho> {
                   Artigo item = groupedItems.keys.elementAt(index);
                   int quantity = groupedItems[item]!;
                   return Padding(
-                    padding: const EdgeInsets.only( left: 20, right: 20, bottom: 10.0),
-                    child:
-                    ElevatedButton(
+                    padding: const EdgeInsets.only(
+                        left: 20, right: 20, bottom: 10.0),
+                    child: ElevatedButton(
                       onPressed: () {
                         //entrar no artigo e quantidades e tal
                       },
@@ -68,28 +73,24 @@ class _Carrinho extends State<Carrinho> {
                             const BorderSide(color: Colors.white12)),
                         // Linha de borda preta
                         backgroundColor:
-                        MaterialStateProperty.all(Colors.white),
+                            MaterialStateProperty.all(Colors.white),
                         // Fundo white
-                        fixedSize: MaterialStateProperty.all(
-                            const Size(50, 60)),
+                        fixedSize:
+                            MaterialStateProperty.all(const Size(50, 60)),
                       ),
                       child: Row(
-                        mainAxisAlignment:
-                        MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(item.nome,
                               style: const TextStyle(
-                                  color: Colors.black, fontSize: 16)
-                          ),
+                                  color: Colors.black, fontSize: 16)),
+                          Text('x $quantity',
+                              style: const TextStyle(
+                                  color: Colors.black, fontSize: 16)),
                           Text(
-                              'x $quantity',
+                              '${((item.unitPrice * (item.taxPrecentage / 100 + 1)) * quantity).toStringAsFixed(2)} €',
                               style: const TextStyle(
-                                  color: Colors.black, fontSize: 16)
-                          ),
-                          Text('€ ${((item.unitPrice*(item.taxPrecentage/100+1))* quantity).toStringAsFixed(2)}',
-                              style: const TextStyle(
-                                  color: Colors.black, fontSize: 16)
-                          ),
+                                  color: Colors.black, fontSize: 16)),
                         ],
                       ),
                     ),
@@ -97,7 +98,22 @@ class _Carrinho extends State<Carrinho> {
                 },
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 30),
+            Padding(
+              padding: const EdgeInsets.only(left: 45, right: 45),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text('Total',
+                      style: TextStyle(color: Colors.black, fontSize: 22, fontWeight: FontWeight.bold,)),
+
+                  Text('${widget.pedido.calcularValorTotal().toStringAsFixed(2)} €',
+                      style:
+                          const TextStyle(color: Colors.black, fontSize: 22, fontWeight: FontWeight.bold,)),
+                ],
+              ),
+            ),
+            const SizedBox(height: 30),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -109,16 +125,16 @@ class _Carrinho extends State<Carrinho> {
                       child: ElevatedButton(
                         onPressed: () {
                           // Adicione sua lógica para o primeiro botão aqui
-                          widget.vendas.add(VendaObj(nome: "Pedido 01", hora: DateTime.now(), funcionario: Utilizador('Utilizador001', 1234 ),local: 'mesa: 0069'));
-
-                          Navigator.of(context).push(MaterialPageRoute(builder: (context) => Pedidos(vendas: widget.vendas)));
-
-
-
-                          //Navigator.pushReplacement(
-                          //    context,
-                          //    MaterialPageRoute(builder: (context) =>Pedidos(vendas: widget.vendas))
-                          //);
+                          if (widget.pedido.local.nome == '') {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => Local(pedidos: widget.pedidos, locais: widget.locais, pedido: widget.pedido,))
+                            );
+                          } else {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) =>
+                                    Pedidos(pedidos: widget.pedidos)));
+                          }
                         },
                         style: ElevatedButton.styleFrom(
                           primary: Colors.grey,
@@ -138,7 +154,7 @@ class _Carrinho extends State<Carrinho> {
                     ),
                   ),
                 ),
-                const SizedBox(width: 30), // Espaço entre os botões
+                const SizedBox(width: 20), // Espaço entre os botões
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.only(right: 20.0, bottom: 30),

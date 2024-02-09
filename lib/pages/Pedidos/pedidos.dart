@@ -2,21 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:it4billing_pos/pages/Pedidos/pedido.dart';
 import '../../navbar.dart';
-import 'package:it4billing_pos/objetos/vendaObj.dart';
+import 'package:it4billing_pos/objetos/pedidoObj.dart';
 import 'package:it4billing_pos/objetos/artigoObj.dart';
 import 'package:it4billing_pos/objetos/categoriaObj.dart';
 
+import '../../objetos/localObj.dart';
 import '../artigos.dart';
 import '../categorias.dart';
 import '../turno.dart';
 import '../vendas.dart';
 
 class Pedidos extends StatefulWidget {
-  late List<VendaObj> vendas = [];
+  late List<PedidoObj> pedidos = [];
 
   Pedidos({
     Key? key,
-    required this.vendas,
+    required this.pedidos,
   }) : super(key: key);
 
   @override
@@ -24,7 +25,7 @@ class Pedidos extends StatefulWidget {
 }
 
 class _Pedidos extends State<Pedidos> {
-  // contruir ainda a forma como tratar a info da base de dab«dos e perceber como vou receber
+  // contruir ainda a forma como tratar a info da base de dados e perceber como vou receber API's e etc..
   // ainda a data para a base de dados
 
   List<Categoria> categorias = [
@@ -34,6 +35,11 @@ class _Pedidos extends State<Pedidos> {
     Categoria(nome: "Categoria 3", nomeCurto: "Cat 3", description: ''),
   ];
   List<Artigo> artigos = [];
+  List<LocalObj> locais = [
+    LocalObj('Local 1'),
+    LocalObj('Local 2'),
+    LocalObj('Local 3'),
+  ];
 
   getcat() {
     artigos = [
@@ -121,7 +127,8 @@ class _Pedidos extends State<Pedidos> {
               title: const Text('Vendas concluidas'),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) => Vendas(vendas: widget.vendas)));
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => Vendas(pedidos: widget.pedidos)));
               },
             ),
             ListTile(
@@ -129,7 +136,8 @@ class _Pedidos extends State<Pedidos> {
               title: const Text('Turno'),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) => Turnos(vendas: widget.vendas)));
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => Turnos(pedidos: widget.pedidos)));
               },
             ),
             ListTile(
@@ -137,7 +145,8 @@ class _Pedidos extends State<Pedidos> {
               title: const Text('Artigos'),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) => Artigos(vendas: widget.vendas)));
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => Artigos(pedidos: widget.pedidos)));
               },
             ),
             ListTile(
@@ -145,12 +154,11 @@ class _Pedidos extends State<Pedidos> {
               title: const Text('Categorias'),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) => Categorias(vendas: widget.vendas)));
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => Categorias(pedidos: widget.pedidos)));
               },
             ),
-
             const Divider(color: Colors.black54),
-
             ListTile(
               leading: const Icon(Icons.bar_chart_outlined),
               title: const Text('Back office'),
@@ -164,7 +172,7 @@ class _Pedidos extends State<Pedidos> {
               title: const Text('Configurações'),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.pushReplacementNamed(context,'/recibos');
+                Navigator.pushReplacementNamed(context, '/recibos');
               },
             ),
             ListTile(
@@ -172,7 +180,7 @@ class _Pedidos extends State<Pedidos> {
               title: const Text('Suporte'),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.pushReplacementNamed(context,'/recibos');
+                Navigator.pushReplacementNamed(context, '/recibos');
               },
             ),
           ],
@@ -216,7 +224,8 @@ class _Pedidos extends State<Pedidos> {
                               builder: (context) => Pedido(
                                     artigos: artigos,
                                     categorias: categorias,
-                                    vendas: widget.vendas,
+                                    pedidos: widget.pedidos,
+                                    locais: locais
                                   )));
                       // Adiciona um novo objeto à lista quando o botão é pressionado
                     },
@@ -243,7 +252,7 @@ class _Pedidos extends State<Pedidos> {
             ),
             Expanded(
               child: ListView.builder(
-                itemCount: widget.vendas.length,
+                itemCount: widget.pedidos.length,
                 itemBuilder: (context, index) {
                   return Container(
                       margin: const EdgeInsets.symmetric(
@@ -269,28 +278,50 @@ class _Pedidos extends State<Pedidos> {
                             ),
                           ),
                         ),
-                        child: Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(widget.vendas[index].local,
+                        child:
+
+
+                        Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center, // Centraliza verticalmente
+                            //crossAxisAlignment: CrossAxisAlignment.center, // Centraliza horizontalmente
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween, // Alinha a Row horizontalmente ao centro
+                                children: [
+                                  Text(
+                                    widget.pedidos[index].local.nome,
                                     style: const TextStyle(
-                                        color: Colors.black, fontSize: 18)),
-                                Text(
-                                    DateFormat('HH:mm')
-                                        .format(widget.vendas[index].hora),
+                                      color: Colors.black,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Text(
+                                    'Total: ${widget.pedidos[index].total.toStringAsFixed(2)} €',
                                     style: const TextStyle(
-                                        color: Colors.black, fontSize: 18)),
-                              ],
-                            ),
-                            Text(
-                                'Funcionario: ${widget.vendas[index].funcionario.nome}',
+                                      color: Colors.black,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                ],
+                              ),
+
+                              Text(
+                                'Funcionario: ${widget.pedidos[index].funcionario.nome}',
                                 style: const TextStyle(
-                                    color: Colors.black, fontSize: 18)),
-                          ],
+                                  color: Colors.black,
+                                  fontSize: 18,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ));
+
+
+
+                      )
+                  );
                 },
               ),
             ),

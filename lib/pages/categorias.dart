@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:it4billing_pos/pages/turno.dart';
 import 'package:it4billing_pos/pages/vendas.dart';
 import '../navbar.dart';
-import '../objetos/vendaObj.dart';
+import '../objetos/pedidoObj.dart';
 import 'Pedidos/pedidos.dart';
 import 'artigos.dart';
 
 class Categorias extends StatelessWidget {
-  List<VendaObj> vendas = [];
+  List<PedidoObj> pedidos = [];
 
   Categorias({
     Key? key,
-    required this.vendas,
+    required this.pedidos,
   }) : super(key: key);
 
   Widget buildHeader(BuildContext context) => Container(
@@ -50,7 +50,7 @@ class Categorias extends StatelessWidget {
           title: const Text('Pedidos'),
           onTap: () {
             Navigator.pop(context);
-            Navigator.of(context).push(MaterialPageRoute(builder: (context) => Pedidos(vendas: vendas)));
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => Pedidos(pedidos: pedidos)));
           },
         ),
         ListTile(
@@ -58,7 +58,7 @@ class Categorias extends StatelessWidget {
           title: const Text('Vendas concluidas'),
           onTap: () {
             Navigator.pop(context);
-            Navigator.of(context).push(MaterialPageRoute(builder: (context) => Vendas(vendas: vendas)));
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => Vendas(pedidos: pedidos)));
           },
         ),
         ListTile(
@@ -66,7 +66,7 @@ class Categorias extends StatelessWidget {
           title: const Text('Turno'),
           onTap: () {
             Navigator.pop(context);
-            Navigator.of(context).push(MaterialPageRoute(builder: (context) => Turnos(vendas: vendas)));
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => Turnos(pedidos: pedidos)));
           },
         ),
         ListTile(
@@ -74,7 +74,7 @@ class Categorias extends StatelessWidget {
           title: const Text('Artigos'),
           onTap: () {
             Navigator.pop(context);
-            Navigator.of(context).push(MaterialPageRoute(builder: (context) => Artigos(vendas: vendas)));
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => Artigos(pedidos: pedidos)));
           },
         ),
         ListTile(

@@ -22,11 +22,11 @@ class MyApp extends StatelessWidget {
       initialRoute: '/pedidos',  // Trocar depois quando funcionar bem
       routes: {
         '/loginPage': (context) => const LoginPage(),
-        '/pedidos': (context) => Pedidos(vendas: [],),
-        '/turno': (context) => Turnos(vendas: [],),
-        '/vendas': (context) => Vendas(vendas: [],),
-        '/artigos': (context) =>  Artigos(vendas: [],),
-        '/categorias': (context) =>  Categorias(vendas:[],),
+        '/pedidos': (context) => Pedidos(pedidos: [],),
+        '/turno': (context) => Turnos(pedidos: [],),
+        '/vendas': (context) => Vendas(pedidos: [],),
+        '/artigos': (context) =>  Artigos(pedidos: [],),
+        '/categorias': (context) =>  Categorias(pedidos:[],),
       },
       debugShowCheckedModeBanner: false,
     );
