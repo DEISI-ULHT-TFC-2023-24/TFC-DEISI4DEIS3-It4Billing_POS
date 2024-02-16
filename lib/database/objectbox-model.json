@@ -1,0 +1,249 @@
+{
+  "_note1": "KEEP THIS FILE! Check it into a version control system (VCS) like git.",
+  "_note2": "ObjectBox manages crucial IDs for your object model. See docs for details.",
+  "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
+  "entities": [
+    {
+      "id": "1:3191427397601551436",
+      "lastPropertyId": "18:9118405432975613389",
+      "name": "Artigo",
+      "properties": [
+        {
+          "id": "1:8100061187814830515",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:7490721058486202145",
+          "name": "referencia",
+          "type": 9
+        },
+        {
+          "id": "3:1985335769611045271",
+          "name": "nome",
+          "type": 9
+        },
+        {
+          "id": "4:5596711480341129763",
+          "name": "barCod",
+          "type": 9
+        },
+        {
+          "id": "5:6861233568490127938",
+          "name": "description",
+          "type": 9
+        },
+        {
+          "id": "6:7435185830802118236",
+          "name": "productType",
+          "type": 9
+        },
+        {
+          "id": "7:3406409228919577783",
+          "name": "price",
+          "type": 8
+        },
+        {
+          "id": "8:8034174130524508962",
+          "name": "unitPrice",
+          "type": 8
+        },
+        {
+          "id": "10:3448841899088094757",
+          "name": "idTaxes",
+          "type": 6
+        },
+        {
+          "id": "11:6668496038161365638",
+          "name": "taxPrecentage",
+          "type": 6
+        },
+        {
+          "id": "12:3321413912172968322",
+          "name": "taxName",
+          "type": 9
+        },
+        {
+          "id": "13:8101927225884580375",
+          "name": "taxDescription",
+          "type": 9
+        },
+        {
+          "id": "14:4929507131458561628",
+          "name": "idRetention",
+          "type": 6
+        },
+        {
+          "id": "15:1155123289016320138",
+          "name": "retentionPercentage",
+          "type": 6
+        },
+        {
+          "id": "16:1431144779497111513",
+          "name": "retentionName",
+          "type": 9
+        },
+        {
+          "id": "17:581257936241306090",
+          "name": "stock",
+          "type": 6
+        },
+        {
+          "id": "18:9118405432975613389",
+          "name": "observacoes",
+          "type": 9
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "2:5583956632136704967",
+      "lastPropertyId": "4:1855846717063499664",
+      "name": "Categoria",
+      "properties": [
+        {
+          "id": "1:4968895184744523969",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:5186778276475480054",
+          "name": "nome",
+          "type": 9
+        },
+        {
+          "id": "3:248064170236266345",
+          "name": "nomeCurto",
+          "type": 9
+        },
+        {
+          "id": "4:1855846717063499664",
+          "name": "description",
+          "type": 9
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "3:3291211985064249028",
+      "lastPropertyId": "2:8603684169517755335",
+      "name": "LocalObj",
+      "properties": [
+        {
+          "id": "1:6946334239615026495",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:8603684169517755335",
+          "name": "nome",
+          "type": 9
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "4:7104298556461174362",
+      "lastPropertyId": "5:7515691703509998257",
+      "name": "PedidoObj",
+      "properties": [
+        {
+          "id": "1:5758938227539770021",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:1012013142213818343",
+          "name": "nome",
+          "type": 9
+        },
+        {
+          "id": "3:4287944465857653243",
+          "name": "hora",
+          "type": 10
+        },
+        {
+          "id": "4:7039800546900743210",
+          "name": "total",
+          "type": 8
+        },
+        {
+          "id": "5:7515691703509998257",
+          "name": "nrArtigos",
+          "type": 6
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "5:6422666133805705485",
+      "lastPropertyId": "3:2484477567318182640",
+      "name": "Utilizador",
+      "properties": [
+        {
+          "id": "1:2874757383010796151",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:381916233866981134",
+          "name": "nome",
+          "type": 9
+        },
+        {
+          "id": "3:2484477567318182640",
+          "name": "pin",
+          "type": 6
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "6:4772283387577696936",
+      "lastPropertyId": "4:7628756088963777523",
+      "name": "Note",
+      "properties": [
+        {
+          "id": "1:3408471008171598888",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:4620978447039160973",
+          "name": "text",
+          "type": 9
+        },
+        {
+          "id": "3:1523034204437704542",
+          "name": "comment",
+          "type": 9
+        },
+        {
+          "id": "4:7628756088963777523",
+          "name": "date",
+          "type": 10
+        }
+      ],
+      "relations": []
+    }
+  ],
+  "lastEntityId": "6:4772283387577696936",
+  "lastIndexId": "0:0",
+  "lastRelationId": "0:0",
+  "lastSequenceId": "0:0",
+  "modelVersion": 5,
+  "modelVersionParserMinimum": 5,
+  "retiredEntityUids": [],
+  "retiredIndexUids": [],
+  "retiredPropertyUids": [
+    5920608008104397494
+  ],
+  "retiredRelationUids": [],
+  "version": 1
+}

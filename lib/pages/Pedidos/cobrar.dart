@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:it4billing_pos/objetos/localObj.dart';
+import 'package:it4billing_pos/pages/Pedidos/concluirPedido.dart';
 import 'package:it4billing_pos/pages/Pedidos/editCarrinho.dart';
 import 'package:it4billing_pos/pages/Pedidos/escolhaLocal.dart';
 import 'package:it4billing_pos/pages/Pedidos/pedidos.dart';
@@ -43,7 +44,7 @@ class _Cobrar extends State<Cobrar> {
     _dinheiroRecebidoController.text =
         widget.pedido.calcularValorTotal().toStringAsFixed(2);
     _trocoController.text =
-        (double.parse(_dinheiroRecebidoController.text) - widget.pedido.calcularValorTotal()).toStringAsFixed(2);
+        (double.parse(_dinheiroRecebidoController.text) - double.parse(widget.pedido.calcularValorTotal().toStringAsFixed(2))).toStringAsFixed(2);
     _focusNode.addListener(_onFocusChanged);
 
   }
@@ -68,7 +69,7 @@ class _Cobrar extends State<Cobrar> {
 
   bool _toggleVisibility(){
     bool isVisible = false;
-    if ((double.parse(_dinheiroRecebidoController.text) - widget.pedido.calcularValorTotal()) >= 0){
+    if ((double.parse(_dinheiroRecebidoController.text) - double.parse(widget.pedido.calcularValorTotal().toStringAsFixed(2))) >= 0){
       isVisible = true;
     }
     return isVisible;
@@ -197,7 +198,19 @@ class _Cobrar extends State<Cobrar> {
                               height: 50,
                               child: ElevatedButton(
                                 onPressed: () {
-                                  // Entrar no artigo e quantidades e tal
+                                  // Entrar no final da compra ..... outra vez clh grava aamerdas ....+
+
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => ConcluirPedido(
+                                            pedidos: widget.pedidos,
+                                            locais: widget.locais,
+                                            pedido: widget.pedido,
+                                            categorias: widget.categorias,
+                                            artigos: widget.artigos,
+                                            troco: _trocoController.text,
+                                          )));
                                 },
                                 style: ElevatedButton.styleFrom(
                                   primary: Colors.white,

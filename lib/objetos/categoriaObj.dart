@@ -1,4 +1,5 @@
 class Categoria {
+  int id = 0;
   String nome;
   String nomeCurto;
   String description;

@@ -4,6 +4,7 @@ import 'utilizadorObj.dart';
 import 'artigoObj.dart';
 
 class PedidoObj {
+  int id = 0;
   String nome;
   DateTime hora;
   List<Artigo> artigosPedido = [];

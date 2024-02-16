@@ -1,4 +1,5 @@
 class Utilizador {
+  int id = 0;
   String nome;
   int pin;
 

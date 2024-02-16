@@ -1,6 +1,7 @@
 import 'categoriaObj.dart';
 
 class Artigo {
+  int id = 0;
   String referencia;
   String nome;
   String barCod;
@@ -11,7 +12,7 @@ class Artigo {
 
   double unitPrice; // Valor sem iva
 
-  int idArticlesCategories; // por tabela ???? acho que não
+  //int idArticlesCategories; // por tabela ???? acho que não
   Categoria categoria; // por objeto
 
   int idTaxes; // ID da tabela taxas do it4billing
@@ -33,7 +34,7 @@ class Artigo {
       required this.description,
       required this.productType,
       required this.unitPrice,
-      required this.idArticlesCategories,
+      //required this.idArticlesCategories,
       required this.categoria,
       required this.idTaxes,
       required this.taxPrecentage,
