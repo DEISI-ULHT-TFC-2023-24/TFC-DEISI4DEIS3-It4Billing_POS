@@ -1,32 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/animation.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:it4billing_pos/objetos/utilizadorObj.dart';
 import 'package:it4billing_pos/pages/Pedidos/carrinho.dart';
+import 'package:it4billing_pos/pages/Pedidos/pedidos.dart';
 import '../../objetos/artigoObj.dart';
 import '../../objetos/categoriaObj.dart';
 import '../../objetos/localObj.dart';
 import '../../objetos/pedidoObj.dart';
 
-class Pedido extends StatefulWidget {
+class PedidoAberto extends StatefulWidget {
   List<PedidoObj> pedidos = [];
   List<Categoria> categorias = [];
   List<Artigo> artigos = [];
   List<LocalObj> locais = [];
+  PedidoObj pedido;
 
-  Pedido({
+  PedidoAberto({
     Key? key,
+    required this.pedido,
     required this.pedidos,
     required this.categorias,
     required this.artigos,
-    required this.locais,
   }) : super(key: key);
 
   @override
-  _Pedido createState() => _Pedido();
+  _PedidoAberto createState() => _PedidoAberto();
 }
 
-class _Pedido extends State<Pedido> with TickerProviderStateMixin {
+class _PedidoAberto extends State<PedidoAberto> with TickerProviderStateMixin {
   Categoria categoriaSelecionada = Categoria(
     nome: 'Todos os artigos',
     description: '',
@@ -36,13 +39,14 @@ class _Pedido extends State<Pedido> with TickerProviderStateMixin {
   late TextEditingController searchController;
   bool showSearch = false;
   late AnimationController _controller;
+  int nrArtigosInicial = 0;
 
   @override
   void initState() {
     super.initState();
+    updateNrArtigos();
 
-    pedido.nrArtigos =
-        pedido.artigosPedido.length; //atualiza o contador do carrinho
+    nrArtigosInicial = widget.pedido.nrArtigos;
 
     searchController = TextEditingController();
     _controller = AnimationController(
@@ -85,35 +89,56 @@ class _Pedido extends State<Pedido> with TickerProviderStateMixin {
     }
   }
 
-  // aqui é criado o objeto venda para enviar para o carrinho
-  // mudar o nome do pedido para que seja incrementado por exemplo
-  PedidoObj pedido = PedidoObj(
-      nome: "Pedido 01",
-      hora: DateTime.now(),
-      funcionario: Utilizador('User 01', 1234),
-      total: 0);
-
   // estudar a parte de voltar a entrar dentro do pedido
   // como vou carregar toda a info ??devo adicionar mais variaveis ao pedido por exemplo
   // o numero de artigos dentro do carrinho para que eu possa logo carregar esse valor
 
+  void updateNrArtigos() {
+    setState(() {
+      widget.pedido.nrArtigos = widget.pedido.artigosPedido.length;
+    });
+  }
+
   void addItemToCart() {
     setState(() {
-      pedido.nrArtigos++;
+      //widget.pedido.nrArtigos++;
+      updateNrArtigos();
       _controller.forward(from: 0.0).then((_) {
         _controller.reverse();
       });
     });
   }
 
+  void _removerObjeto(BuildContext context) {
+
+    print(nrArtigosInicial);
+    print('${widget.pedido.nrArtigos}');
+    // Remover os últimos artigos da lista
+    for (int i = nrArtigosInicial; i < widget.pedido.nrArtigos; i++) {
+      print('removeu o ultimo obeto $i');
+      widget.pedido.artigosPedido.removeLast();
+
+    }
+    updateNrArtigos();
+    // Navegar de volta à tela anterior
+    Navigator.pop(context);
+  }
+
   @override
   Widget build(BuildContext context) {
-    pedido.nome = "Pedido ${widget.pedidos.length + 1}";
+    // mudar o nome do pedido para que seja incrementado por exemplo
 
-    return Scaffold(
+    return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            home: Scaffold(
               appBar: AppBar(
-            title: Text(pedido.nome),
-            // Mudar fazer aparecer o nome do pedido
+                title: Text(widget.pedido.nome),
+                leading: IconButton(
+                  icon: Icon(Icons.arrow_back),
+                  onPressed: () {
+                    _removerObjeto(context);
+                  },
+                ),
             backgroundColor: const Color(0xff00afe9),
             actions: [
               Stack(
@@ -129,7 +154,11 @@ class _Pedido extends State<Pedido> with TickerProviderStateMixin {
                       child: const Icon(Icons.shopping_cart_outlined),
                     ),
                     onPressed: () {
-                      pedido.total = 0;
+                      for (Artigo artigo in widget.pedido.artigosPedido) {
+                        print('Nome: ${artigo.nome} '
+                            'Preço: ${artigo.price}');
+                      }
+                      widget.pedido.total = 0;
                       Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -137,7 +166,7 @@ class _Pedido extends State<Pedido> with TickerProviderStateMixin {
                                     artigos: widget.artigos,
                                     categorias: widget.categorias,
                                     pedidos: widget.pedidos,
-                                    pedido: pedido,
+                                    pedido: widget.pedido,
                                     locais: widget.locais,
                                   )));
                     },
@@ -154,7 +183,7 @@ class _Pedido extends State<Pedido> with TickerProviderStateMixin {
                                       artigos: widget.artigos,
                                       categorias: widget.categorias,
                                       pedidos: widget.pedidos,
-                                      pedido: pedido,
+                                      pedido: widget.pedido,
                                       locais: widget.locais,
                                     )));
                       },
@@ -176,7 +205,7 @@ class _Pedido extends State<Pedido> with TickerProviderStateMixin {
                             minHeight: 16,
                           ),
                           child: Text(
-                            '${pedido.nrArtigos}',
+                            '${widget.pedido.nrArtigos}',
                             textAlign: TextAlign.center,
                             style: const TextStyle(
                               fontSize: 12,
@@ -192,9 +221,22 @@ class _Pedido extends State<Pedido> with TickerProviderStateMixin {
               PopupMenuButton<String>(
                 onSelected: (value) {
                   // Aqui você pode adicionar a lógica para lidar com as opções selecionadas
-                  print('Opção selecionada: ${pedido.nome}');
+                  print('Opção selecionada: ${widget.pedido.nome}');
+                  if (value == 'Eliminar pedido') {
+                    widget.pedidos.remove(widget.pedido);
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) =>
+                            Pedidos(pedidos: widget.pedidos)));
+                  }
                 },
                 itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+                  const PopupMenuItem<String>(
+                    value: 'Eliminar pedido',
+                    child: ListTile(
+                      leading: Icon(Icons.delete_outline),
+                      title: Text('Eliminar pedido'),
+                    ),
+                  ),
                   const PopupMenuItem<String>(
                     value: 'Sincronizar',
                     child: ListTile(
@@ -208,7 +250,7 @@ class _Pedido extends State<Pedido> with TickerProviderStateMixin {
           ),
               body: Column(
                 children: [
-                  Row(
+              Row(
                 children: [
                   Expanded(
                     child: showSearch
@@ -273,7 +315,7 @@ class _Pedido extends State<Pedido> with TickerProviderStateMixin {
                   ),
                 ],
               ),
-                  Expanded(
+              Expanded(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20.0),
                   child: artigosFiltrados().isEmpty
@@ -287,7 +329,7 @@ class _Pedido extends State<Pedido> with TickerProviderStateMixin {
                               padding: const EdgeInsets.only(bottom: 10.0),
                               child: ElevatedButton(
                                 onPressed: () {
-                                  pedido.artigosPedido
+                                  widget.pedido.artigosPedido
                                       .add(artigosFiltrados()[index]);
                                   print('foi adicionado o artigo');
                                   addItemToCart();
@@ -328,9 +370,8 @@ class _Pedido extends State<Pedido> with TickerProviderStateMixin {
                         ),
                 ),
               ),
-                ],
-              ),
-
-    );
+            ],
+          ),
+        ));
   }
 }

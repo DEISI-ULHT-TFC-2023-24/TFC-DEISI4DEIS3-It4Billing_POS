@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:it4billing_pos/pages/turno.dart';
 import 'package:it4billing_pos/pages/vendas.dart';
-import '../navbar.dart';
 import '../objetos/pedidoObj.dart';
 import 'Pedidos/pedidos.dart';
 import 'artigos.dart';

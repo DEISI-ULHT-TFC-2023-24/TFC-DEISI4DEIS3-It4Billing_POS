@@ -1,7 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:it4billing_pos/pages/Pedidos/pedido.dart';
-import '../../navbar.dart';
+import 'package:it4billing_pos/pages/Pedidos/pedidoAberto.dart';
 import 'package:it4billing_pos/objetos/pedidoObj.dart';
 import 'package:it4billing_pos/objetos/artigoObj.dart';
 import 'package:it4billing_pos/objetos/categoriaObj.dart';
@@ -14,11 +15,17 @@ import '../vendas.dart';
 
 class Pedidos extends StatefulWidget {
   late List<PedidoObj> pedidos = [];
+  List<String> metodosPagamento = ['DINHEIRO','MULTIBANCO','MB WAY'];
+
 
   Pedidos({
     Key? key,
     required this.pedidos,
   }) : super(key: key);
+
+  List<String> getMetodosPagamento(){
+    return metodosPagamento;
+  }
 
   @override
   State<Pedidos> createState() => _Pedidos();
@@ -27,6 +34,10 @@ class Pedidos extends StatefulWidget {
 class _Pedidos extends State<Pedidos> {
   // contruir ainda a forma como tratar a info da base de dados e perceber como vou receber API's e etc..
   // ainda a data para a base de dados
+
+
+
+
 
   List<Categoria> categorias = [
     Categoria(nome: 'Todos os artigos', description: '', nomeCurto: ''),
@@ -77,8 +88,26 @@ class _Pedidos extends State<Pedidos> {
           retentionPercentage: 2,
           retentionName: '',
           stock: 10),
+      Artigo(
+          referencia: "003",
+          nome: "Artigo 3 com um nome grande PARA TESTES",
+          barCod: '',
+          description: '',
+          productType: '',
+          unitPrice: 1,
+          idArticlesCategories: 2,
+          categoria: categorias[3],
+          taxPrecentage: 23,
+          idTaxes: 2,
+          taxName: '',
+          taxDescription: '',
+          idRetention: 2,
+          retentionPercentage: 2,
+          retentionName: '',
+          stock: 10),
     ];
   }
+
 
   // criar lista com cat teste para enviar para a proxima pagina e ai fazer os objetos consuante o numero de coisas
   // fazer tbm o ecra sub cat (no mesmo ecra )
@@ -259,7 +288,18 @@ class _Pedidos extends State<Pedidos> {
                           vertical: 10, horizontal: 50),
                       child: ElevatedButton(
                         onPressed: () {
-                          // entrar dentro do pedido ainda aberto ex.vendas[index].nome
+                          // entrar dentro do pedido ainda aberto
+                          print(widget.pedidos[index].nrArtigos);
+                          getcat();
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => PedidoAberto(
+                                      artigos: artigos,
+                                      categorias: categorias,
+                                      pedidos: widget.pedidos,
+                                      pedido: widget.pedidos[index],
+                                  )));
                         },
                         style: ButtonStyle(
                           side: MaterialStateProperty.all(
@@ -342,7 +382,9 @@ class _Pedidos extends State<Pedidos> {
                   onPressed: () => Navigator.pop(context, false),
                   child: const Text('CANCELAR')),
               TextButton(
-                  onPressed: () => Navigator.pop(context, true),
+                  onPressed: () {
+                    exit(0);
+                  },
                   child: const Text('SIM'))
             ],
           ));

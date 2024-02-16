@@ -7,6 +7,8 @@ class Artigo {
   String description;
   String productType;
 
+  late double price; //valor com iva
+
   double unitPrice; // Valor sem iva
 
   int idArticlesCategories; // por tabela ???? acho que não
@@ -22,6 +24,7 @@ class Artigo {
   String retentionName;
 
   int stock;
+  String observacoes = '';
 
   Artigo({
       required this.referencia,
@@ -40,5 +43,12 @@ class Artigo {
       required this.retentionPercentage,
       required this.retentionName,
       required this.stock,
-  });
+  }){
+    calcolarPrice();
+  }
+
+
+  void calcolarPrice(){
+    price = double.parse((unitPrice * (taxPrecentage / 100 + 1)).toStringAsFixed(2));
+  }
 }

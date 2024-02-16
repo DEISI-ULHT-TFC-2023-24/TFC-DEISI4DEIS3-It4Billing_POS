@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:it4billing_pos/objetos/localObj.dart';
+import 'package:it4billing_pos/pages/Pedidos/editCarrinho.dart';
 import 'package:it4billing_pos/pages/Pedidos/escolhaLocal.dart';
 import 'package:it4billing_pos/pages/Pedidos/pedidos.dart';
 
 import '../../objetos/artigoObj.dart';
 import '../../objetos/categoriaObj.dart';
 import '../../objetos/pedidoObj.dart';
+import 'cobrar.dart';
 
 class Carrinho extends StatefulWidget {
-  List<PedidoObj> pedidos = [];
-  List<Categoria> categorias = [];
-  List<Artigo> artigos = [];
-  PedidoObj pedido;
-  List<LocalObj> locais = [];
+  late List<PedidoObj> pedidos = [];
+  late List<Categoria> categorias = [];
+  late List<Artigo> artigos = [];
+  late PedidoObj pedido;
+  late List<LocalObj> locais = [];
 
   Carrinho({
     Key? key,
@@ -28,7 +31,7 @@ class Carrinho extends StatefulWidget {
 }
 
 class _Carrinho extends State<Carrinho> {
-  late Map<Artigo, int> groupedItems;
+  late Map<Artigo, int> artigosAgrupados;
 
   Map<Artigo, int> groupItems(List<Artigo> items) {
     Map<Artigo, int> artigosAgrupados = {};
@@ -41,32 +44,87 @@ class _Carrinho extends State<Carrinho> {
   @override
   void initState() {
     super.initState();
-    groupedItems = groupItems(widget.pedido.artigosPedido);
+    artigosAgrupados = groupItems(widget.pedido.artigosPedido);
   }
-
-
 
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
-          title: const Text('Pedido 01'),
+          title: Text(widget.pedido.nome),
           backgroundColor: const Color(0xff00afe9),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.person_add_outlined),
+              tooltip: 'Open shopping cart',
+              onPressed: () {
+                // handle the press
+              },
+            ),
+            PopupMenuButton<String>(
+              onSelected: (value) {
+                // Aqui você pode adicionar a lógica para lidar com as opções selecionadas
+                print('Opção selecionada: ${widget.pedido.nome}');
+                if (value == 'Eliminar pedido') {
+                  widget.pedidos.remove(widget.pedido);
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => Pedidos(pedidos: widget.pedidos)));
+                }
+              },
+              itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+                const PopupMenuItem<String>(
+                  value: 'Mover artigo',
+                  child: ListTile(
+                    leading: Icon(Icons.move_up),
+                    title: Text('Mover artigo'),
+                  ),
+                ),
+                const PopupMenuItem<String>(
+                  value: 'Eliminar pedido',
+                  child: ListTile(
+                    leading: Icon(Icons.delete_outline),
+                    title: Text('Eliminar pedido'),
+                  ),
+                ),
+                const PopupMenuItem<String>(
+                  value: 'Sincronizar',
+                  child: ListTile(
+                    leading: Icon(Icons.sync),
+                    title: Text('Sincronizar'),
+                  ),
+                ),
+
+              ],
+            ),
+          ],
         ),
         body: Column(
           children: [
             const SizedBox(height: 20),
             Expanded(
               child: ListView.builder(
-                itemCount: groupedItems.length,
+                itemCount: artigosAgrupados.length,
                 itemBuilder: (context, index) {
-                  Artigo item = groupedItems.keys.elementAt(index);
-                  int quantity = groupedItems[item]!;
+                  Artigo artigo = artigosAgrupados.keys.elementAt(index);
+                  int quantidade = artigosAgrupados[artigo]!;
+                  double valor = artigo.price;
                   return Padding(
                     padding: const EdgeInsets.only(
                         left: 20, right: 20, bottom: 10.0),
                     child: ElevatedButton(
                       onPressed: () {
                         //entrar no artigo e quantidades e tal
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => EditCarrinho(
+                                  artigo: artigo,
+                                  quantidade: quantidade,
+                                  pedido: widget.pedido,
+                                  artigos: widget.artigos,
+                                  categorias: widget.categorias,
+                                  pedidos: widget.pedidos,
+                                  locais: widget.locais,
+                                )));
                       },
                       style: ButtonStyle(
                         side: MaterialStateProperty.all(
@@ -81,14 +139,22 @@ class _Carrinho extends State<Carrinho> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(item.nome,
-                              style: const TextStyle(
-                                  color: Colors.black, fontSize: 16)),
-                          Text('x $quantity',
-                              style: const TextStyle(
-                                  color: Colors.black, fontSize: 16)),
-                          Text(
-                              '${((item.unitPrice * (item.taxPrecentage / 100 + 1)) * quantity).toStringAsFixed(2)} €',
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                  artigo.nome.length > 10
+                                      ? artigo.nome.substring(0, 20)
+                                      : artigo.nome,
+                                  style: const TextStyle(
+                                      color: Colors.black, fontSize: 16)),
+                              const SizedBox(width: 10),
+                              Text('x $quantidade',
+                                  style: const TextStyle(
+                                      color: Colors.black, fontSize: 16)),
+                            ],
+                          ),
+                          Text('${(valor * quantidade).toStringAsFixed(2)} €',
                               style: const TextStyle(
                                   color: Colors.black, fontSize: 16)),
                         ],
@@ -105,11 +171,18 @@ class _Carrinho extends State<Carrinho> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const Text('Total',
-                      style: TextStyle(color: Colors.black, fontSize: 22, fontWeight: FontWeight.bold,)),
-
-                  Text('${widget.pedido.calcularValorTotal().toStringAsFixed(2)} €',
-                      style:
-                          const TextStyle(color: Colors.black, fontSize: 22, fontWeight: FontWeight.bold,)),
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      )),
+                  Text(
+                      '${widget.pedido.calcularValorTotal().toStringAsFixed(2)} €',
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      )),
                 ],
               ),
             ),
@@ -124,16 +197,31 @@ class _Carrinho extends State<Carrinho> {
                       height: 50,
                       child: ElevatedButton(
                         onPressed: () {
-                          // Adicione sua lógica para o primeiro botão aqui
-                          if (widget.pedido.local.nome == '') {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => Local(pedidos: widget.pedidos, locais: widget.locais, pedido: widget.pedido,))
-                            );
+                          if (widget.pedido.artigosPedido.isNotEmpty) {
+                            if (widget.pedido.local.nome == '') {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Local(
+                                            pedidos: widget.pedidos,
+                                            locais: widget.locais,
+                                            pedido: widget.pedido,
+                                          )));
+                            } else {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) =>
+                                      Pedidos(pedidos: widget.pedidos)));
+                            }
                           } else {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) =>
-                                    Pedidos(pedidos: widget.pedidos)));
+                            Fluttertoast.showToast(
+                              msg: "Adicionar artigos primeiro",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.CENTER,
+                              timeInSecForIosWeb: 1,
+                              backgroundColor: Colors.grey,
+                              textColor: Colors.white,
+                              fontSize: 16.0,
+                            );
                           }
                         },
                         style: ElevatedButton.styleFrom(
@@ -162,7 +250,32 @@ class _Carrinho extends State<Carrinho> {
                       height: 50,
                       child: ElevatedButton(
                         onPressed: () {
-                          // Adicione sua lógica para o segundo botão aqui
+                          if (widget.pedido.artigosPedido.isNotEmpty) {
+                            // fazer a navegação para a proxima pag a de cobrança.
+
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Cobrar(
+                                      pedidos: widget.pedidos,
+                                      locais: widget.locais,
+                                      pedido: widget.pedido,
+                                      categorias: widget.categorias,
+                                      artigos: widget.artigos,
+                                    )));
+
+                          } else {
+                            Fluttertoast.showToast(
+                              msg: "Adicionar artigos primeiro",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.CENTER,
+                              timeInSecForIosWeb: 1,
+                              backgroundColor: Colors.grey,
+                              textColor: Colors.white,
+                              fontSize: 16.0,
+                            );
+                          }
+
                         },
                         style: ElevatedButton.styleFrom(
                           primary: const Color(0xff00afe9),
