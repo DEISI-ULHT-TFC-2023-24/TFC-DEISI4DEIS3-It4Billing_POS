@@ -47,11 +47,7 @@ class _ConcluirPedido extends State<ConcluirPedido> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: (){
-        FocusScope.of(context).unfocus();
-      },
-      child: Scaffold(
+    return Scaffold(
         appBar: AppBar(
           title: Text(widget.pedido.nome),
           backgroundColor: const Color(0xff00afe9),
@@ -69,52 +65,85 @@ class _ConcluirPedido extends State<ConcluirPedido> {
           child: Column(
             children: [
               const SizedBox(height: 30),
-              Padding(
-                padding: const EdgeInsets.only(left: 45, right: 45),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text('Total',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                        )),
-                    Text(
-                        '${widget.pedido.calcularValorTotal().toStringAsFixed(2)} €',
-                        style: const TextStyle(
-                          color: Colors.black,
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                        )
-                    ),
-                    const Text('Troco',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                        )),
-                    Text(
-                        '${widget.troco} €',
-                        style: const TextStyle(
-                          color: Colors.black,
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                        )
-                    ),
-                  ],
+              Center(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 45, right: 45),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text('Total pago',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                          )),
+                      const SizedBox(height: 10),
+                      Text(
+                          '${widget.pedido.calcularValorTotal().toStringAsFixed(2)} €',
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                          )),
+                      const SizedBox(height: 30),
+                      const Text('Troco',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                          )),
+                      const SizedBox(height: 10),
+                      Text('${widget.troco} €',
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                          )),
+                    ],
+                  ),
                 ),
               ),
               const SizedBox(height: 30),
-
-              const SizedBox(height: 30),
-
             ],
+          ),
+        ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.only(bottom: 30, left: 80, right: 80),
+        child: SizedBox(
+          width: double.infinity, // Largura total da tela
+          child: ElevatedButton(
+            onPressed: () {
+              // acrescentar a lógica de pagamento, impressora, enviar e-mail, etc.
+              widget.pedidos.remove(widget.pedido);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Pedidos(
+                    pedidos: widget.pedidos,
+                  ),
+                ),
+              );
+            },
+            style: ElevatedButton.styleFrom(
+              primary: const Color(0xff00afe9),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+                side: const BorderSide(color: Colors.black),
+              ),
+            ),
+            child: const Padding(
+              padding: EdgeInsets.symmetric(vertical: 15.0),
+              child: Text(
+                'CONCLUIR VENDA',
+                style: TextStyle(color: Colors.white, fontSize: 18),
+              ),
+            ),
           ),
         ),
       ),
 
     );
+
   }
 
 

@@ -1,8 +1,10 @@
 import 'package:it4billing_pos/objetos/localObj.dart';
 
+import '../database/objectbox.g.dart';
 import 'utilizadorObj.dart';
 import 'artigoObj.dart';
 
+@Entity()
 class PedidoObj {
   int id = 0;
   String nome;
