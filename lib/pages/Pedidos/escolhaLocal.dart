@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:it4billing_pos/main.dart';
 import 'package:it4billing_pos/objetos/localObj.dart';
 import 'package:it4billing_pos/pages/Pedidos/pedidos.dart';
 
@@ -41,7 +42,14 @@ class Local extends StatelessWidget {
                       onPressed: () {
                         // Lógica para lidar com a seleção do local
                         pedido.local = local;
-                        pedidos.add(pedido);
+
+                        //pedidos.add(pedido);
+                        database.addPedido(pedido);
+
+
+                        ///verificar o que esta a acontecer
+
+
                         Navigator.of(context).pop();
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) =>

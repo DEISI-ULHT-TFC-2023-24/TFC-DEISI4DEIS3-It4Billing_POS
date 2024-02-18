@@ -1,5 +1,7 @@
 import 'categoriaObj.dart';
+import '../database/objectbox.g.dart';
 
+@Entity()
 class Artigo {
   int id = 0;
   String referencia;

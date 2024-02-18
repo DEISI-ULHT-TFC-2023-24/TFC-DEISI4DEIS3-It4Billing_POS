@@ -1,26 +1,33 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:it4billing_pos/database/objectbox_database.dart';
 import 'package:it4billing_pos/pages/Pedidos/pedido.dart';
 import 'package:it4billing_pos/pages/Pedidos/pedidoAberto.dart';
 import 'package:it4billing_pos/objetos/pedidoObj.dart';
 import 'package:it4billing_pos/objetos/artigoObj.dart';
 import 'package:it4billing_pos/objetos/categoriaObj.dart';
 
+import '../../main.dart';
 import '../../objetos/localObj.dart';
 import '../artigos.dart';
 import '../categorias.dart';
 import '../turno.dart';
 import '../vendas.dart';
 
+
+
 class Pedidos extends StatefulWidget {
-  late List<PedidoObj> pedidos = [];
+  List<PedidoObj> pedidos = [];
+  //final ObjectBoxDatabase database;
+  //List<PedidoObj> pedidos = database.getAllPedidos();
   List<String> metodosPagamento = ['DINHEIRO','MULTIBANCO','MB WAY'];
 
 
   Pedidos({
     Key? key,
     required this.pedidos,
+    //required this.database, //tentar perceber se não é preciso
   }) : super(key: key);
 
   List<String> getMetodosPagamento(){
@@ -154,7 +161,7 @@ class _Pedidos extends State<Pedidos> {
               onTap: () {
                 Navigator.pop(context);
                 Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => Vendas(pedidos: widget.pedidos)));
+                    builder: (context) => Vendas(pedidos: database.getAllPedidos())));
               },
             ),
             ListTile(
@@ -163,7 +170,7 @@ class _Pedidos extends State<Pedidos> {
               onTap: () {
                 Navigator.pop(context);
                 Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => Turnos(pedidos: widget.pedidos)));
+                    builder: (context) => Turnos(pedidos: database.getAllPedidos())));
               },
             ),
             ListTile(
@@ -172,7 +179,7 @@ class _Pedidos extends State<Pedidos> {
               onTap: () {
                 Navigator.pop(context);
                 Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => Artigos(pedidos: widget.pedidos)));
+                    builder: (context) => Artigos(pedidos: database.getAllPedidos())));
               },
             ),
             ListTile(
@@ -181,7 +188,7 @@ class _Pedidos extends State<Pedidos> {
               onTap: () {
                 Navigator.pop(context);
                 Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => Categorias(pedidos: widget.pedidos)));
+                    builder: (context) => Categorias(pedidos: database.getAllPedidos())));
               },
             ),
             const Divider(color: Colors.black54),
@@ -212,6 +219,27 @@ class _Pedidos extends State<Pedidos> {
           ],
         ),
       );
+
+  Future<bool?> showMyDialog(BuildContext context) => showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Quer sair da aplicação?"),
+        actions: [
+          TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: const Text('CANCELAR')),
+          TextButton(
+              onPressed: () {
+                exit(0);
+              },
+              child: const Text('SIM'))
+        ],
+      ));
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) => WillPopScope(
@@ -315,10 +343,7 @@ class _Pedidos extends State<Pedidos> {
                             ),
                           ),
                         ),
-                        child:
-
-
-                        Center(
+                        child: Center(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center, // Centraliza verticalmente
                             //crossAxisAlignment: CrossAxisAlignment.center, // Centraliza horizontalmente
@@ -354,9 +379,6 @@ class _Pedidos extends State<Pedidos> {
                             ],
                           ),
                         ),
-
-
-
                       )
                   );
                 },
@@ -370,19 +392,5 @@ class _Pedidos extends State<Pedidos> {
         return shouldPop ?? false;
       });
 
-  Future<bool?> showMyDialog(BuildContext context) => showDialog<bool>(
-      context: context,
-      builder: (context) => AlertDialog(
-            title: const Text("Quer sair da aplicação?"),
-            actions: [
-              TextButton(
-                  onPressed: () => Navigator.pop(context, false),
-                  child: const Text('CANCELAR')),
-              TextButton(
-                  onPressed: () {
-                    exit(0);
-                  },
-                  child: const Text('SIM'))
-            ],
-          ));
+
 }

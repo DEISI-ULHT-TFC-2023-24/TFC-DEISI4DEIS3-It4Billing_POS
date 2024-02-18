@@ -1,3 +1,6 @@
+import '../database/objectbox.g.dart';
+
+@Entity()
 class Categoria {
   int id = 0;
   String nome;

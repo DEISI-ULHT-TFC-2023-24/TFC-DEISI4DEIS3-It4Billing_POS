@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:it4billing_pos/objetos/localObj.dart';
-import 'package:it4billing_pos/pages/Pedidos/editCarrinho.dart';
-import 'package:it4billing_pos/pages/Pedidos/escolhaLocal.dart';
 import 'package:it4billing_pos/pages/Pedidos/pedidos.dart';
 
 import '../../objetos/artigoObj.dart';
@@ -39,11 +37,6 @@ class _ConcluirPedido extends State<ConcluirPedido> {
     super.initState();
 
   }
-
-
-
-
-
 
   @override
   Widget build(BuildContext context) {

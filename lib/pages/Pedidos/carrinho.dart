@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:it4billing_pos/main.dart';
 import 'package:it4billing_pos/objetos/localObj.dart';
 import 'package:it4billing_pos/pages/Pedidos/editCarrinho.dart';
 import 'package:it4billing_pos/pages/Pedidos/escolhaLocal.dart';
@@ -65,9 +66,9 @@ class _Carrinho extends State<Carrinho> {
                 // Aqui você pode adicionar a lógica para lidar com as opções selecionadas
                 print('Opção selecionada: ${widget.pedido.nome}');
                 if (value == 'Eliminar pedido') {
-                  widget.pedidos.remove(widget.pedido);
+                  database.removePedido(widget.pedido.id);
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => Pedidos(pedidos: widget.pedidos)));
+                      builder: (context) => Pedidos(pedidos: database.getAllPedidos())));
                 }
               },
               itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[

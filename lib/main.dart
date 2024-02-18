@@ -5,8 +5,18 @@ import 'package:it4billing_pos/pages/loginPage.dart';
 import 'package:it4billing_pos/pages/vendas.dart';
 import 'package:it4billing_pos/pages/turno.dart';
 import 'package:it4billing_pos/pages/Pedidos/pedidos.dart';
+import 'dart:async';
+import 'database/objectbox_database.dart';
 
-void main() {
+late ObjectBoxDatabase database;
+
+Future<void> main() async {
+  // This is required so ObjectBox can get the application directory
+  // to store the database in.
+  WidgetsFlutterBinding.ensureInitialized();
+
+  database = await ObjectBoxDatabase.create();
+
   runApp(const MyApp());
 }
 

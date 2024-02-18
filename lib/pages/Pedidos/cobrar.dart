@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:it4billing_pos/objetos/localObj.dart';
 import 'package:it4billing_pos/pages/Pedidos/concluirPedido.dart';
-import 'package:it4billing_pos/pages/Pedidos/editCarrinho.dart';
-import 'package:it4billing_pos/pages/Pedidos/escolhaLocal.dart';
 import 'package:it4billing_pos/pages/Pedidos/pedidos.dart';
 
 import '../../objetos/artigoObj.dart';
@@ -194,7 +191,7 @@ class _Cobrar extends State<Cobrar> {
                           return Padding(
                             padding: const EdgeInsets.only(
                                 left: 40, right: 40, bottom: 10.0),
-                            child: Container(
+                            child: SizedBox(
                               height: 50,
                               child: ElevatedButton(
                                 onPressed: () {
@@ -246,7 +243,4 @@ class _Cobrar extends State<Cobrar> {
 
     );
   }
-
-
-
 }
