@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:it4billing_pos/database/objectbox_database.dart';
+import 'package:it4billing_pos/objetos/utilizadorObj.dart';
 import 'package:it4billing_pos/pages/Pedidos/pedido.dart';
 import 'package:it4billing_pos/pages/Pedidos/pedidoAberto.dart';
 import 'package:it4billing_pos/objetos/pedidoObj.dart';
@@ -15,22 +16,19 @@ import '../categorias.dart';
 import '../turno.dart';
 import '../vendas.dart';
 
-
-
 class Pedidos extends StatefulWidget {
-  List<PedidoObj> pedidos = [];
+  //List<PedidoObj> pedidos = [];
+
   //final ObjectBoxDatabase database;
-  //List<PedidoObj> pedidos = database.getAllPedidos();
-  List<String> metodosPagamento = ['DINHEIRO','MULTIBANCO','MB WAY'];
+  List<PedidoObj> pedidos = database.getAllPedidos();
 
 
-  Pedidos({
-    Key? key,
-    required this.pedidos,
-    //required this.database, //tentar perceber se não é preciso
-  }) : super(key: key);
 
-  List<String> getMetodosPagamento(){
+  List<String> metodosPagamento = ['DINHEIRO', 'MULTIBANCO', 'MB WAY'];
+
+  Pedidos({Key? key,}) : super(key: key);
+
+  List<String> getMetodosPagamento() {
     return metodosPagamento;
   }
 
@@ -42,76 +40,67 @@ class _Pedidos extends State<Pedidos> {
   // contruir ainda a forma como tratar a info da base de dados e perceber como vou receber API's e etc..
   // ainda a data para a base de dados
 
-
-
-
-
   List<Categoria> categorias = [
     Categoria(nome: 'Todos os artigos', description: '', nomeCurto: ''),
     Categoria(nome: "Categoria 1", nomeCurto: "Cat 1", description: ''),
     Categoria(nome: "Categoria 2", nomeCurto: "Cat 2", description: ''),
     Categoria(nome: "Categoria 3", nomeCurto: "Cat 3", description: ''),
   ];
-  List<Artigo> artigos = [];
-  List<LocalObj> locais = [
-    LocalObj('Local 1'),
-    LocalObj('Local 2'),
-    LocalObj('Local 3'),
+  List<Artigo> artigos = [
+    Artigo(
+        referencia: "001",
+        nome: "Artigo 1",
+        barCod: '',
+        description: '',
+        productType: '',
+        unitPrice: 4.06,
+        taxPrecentage: 23,
+        idTaxes: 1,
+        taxName: '',
+        taxDescription: '',
+        idRetention: 1,
+        retentionPercentage: 1,
+        retentionName: '',
+        stock: 56),
+    Artigo(
+        referencia: "002",
+        nome: "Artigo 2",
+        barCod: '',
+        description: '',
+        productType: '',
+        unitPrice: 6.42,
+        taxPrecentage: 23,
+        idTaxes: 2,
+        taxName: '',
+        taxDescription: '',
+        idRetention: 2,
+        retentionPercentage: 2,
+        retentionName: '',
+        stock: 10),
+    Artigo(
+        referencia: "003",
+        nome: "Artigo 3 com um nome grande PARA TESTES",
+        barCod: '',
+        description: '',
+        productType: '',
+        unitPrice: 1,
+        taxPrecentage: 23,
+        idTaxes: 2,
+        taxName: '',
+        taxDescription: '',
+        idRetention: 2,
+        retentionPercentage: 2,
+        retentionName: '',
+        stock: 10),
   ];
 
-  getcat() {
-    artigos = [
-      Artigo(
-          referencia: "001",
-          nome: "Artigo 1",
-          barCod: '',
-          description: '',
-          productType: '',
-          unitPrice: 4.06,
-          categoria: categorias[1],
-          taxPrecentage: 23,
-          idTaxes: 1,
-          taxName: '',
-          taxDescription: '',
-          idRetention: 1,
-          retentionPercentage: 1,
-          retentionName: '',
-          stock: 56),
-      Artigo(
-          referencia: "002",
-          nome: "Artigo 2",
-          barCod: '',
-          description: '',
-          productType: '',
-          unitPrice: 6.42,
-          categoria: categorias[2],
-          taxPrecentage: 23,
-          idTaxes: 2,
-          taxName: '',
-          taxDescription: '',
-          idRetention: 2,
-          retentionPercentage: 2,
-          retentionName: '',
-          stock: 10),
-      Artigo(
-          referencia: "003",
-          nome: "Artigo 3 com um nome grande PARA TESTES",
-          barCod: '',
-          description: '',
-          productType: '',
-          unitPrice: 1,
-          categoria: categorias[3],
-          taxPrecentage: 23,
-          idTaxes: 2,
-          taxName: '',
-          taxDescription: '',
-          idRetention: 2,
-          retentionPercentage: 2,
-          retentionName: '',
-          stock: 10),
-    ];
-  }
 
+  getcat() {
+    artigos[0].categoria = categorias[1];
+    artigos[1].categoria = categorias[2];
+    artigos[2].categoria = categorias[3];
+
+  }
 
   // criar lista com cat teste para enviar para a proxima pagina e ai fazer os objetos consuante o numero de coisas
   // fazer tbm o ecra sub cat (no mesmo ecra )
@@ -161,7 +150,8 @@ class _Pedidos extends State<Pedidos> {
               onTap: () {
                 Navigator.pop(context);
                 Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => Vendas(pedidos: database.getAllPedidos())));
+                    builder: (context) =>
+                        Vendas()));
               },
             ),
             ListTile(
@@ -170,7 +160,8 @@ class _Pedidos extends State<Pedidos> {
               onTap: () {
                 Navigator.pop(context);
                 Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => Turnos(pedidos: database.getAllPedidos())));
+                    builder: (context) =>
+                        Turnos()));
               },
             ),
             ListTile(
@@ -179,7 +170,8 @@ class _Pedidos extends State<Pedidos> {
               onTap: () {
                 Navigator.pop(context);
                 Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => Artigos(pedidos: database.getAllPedidos())));
+                    builder: (context) =>
+                        Artigos()));
               },
             ),
             ListTile(
@@ -188,7 +180,8 @@ class _Pedidos extends State<Pedidos> {
               onTap: () {
                 Navigator.pop(context);
                 Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => Categorias(pedidos: database.getAllPedidos())));
+                    builder: (context) =>
+                        Categorias()));
               },
             ),
             const Divider(color: Colors.black54),
@@ -223,22 +216,34 @@ class _Pedidos extends State<Pedidos> {
   Future<bool?> showMyDialog(BuildContext context) => showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text("Quer sair da aplicação?"),
-        actions: [
-          TextButton(
-              onPressed: () => Navigator.pop(context, false),
-              child: const Text('CANCELAR')),
-          TextButton(
-              onPressed: () {
-                exit(0);
-              },
-              child: const Text('SIM'))
-        ],
-      ));
+            title: const Text("Quer sair da aplicação?"),
+            actions: [
+              TextButton(
+                  onPressed: () => Navigator.pop(context, false),
+                  child: const Text('CANCELAR')),
+              TextButton(
+                  onPressed: () {
+                    exit(0);
+                  },
+                  child: const Text('SIM'))
+            ],
+          ));
+
+  void carregarPedidos() {
+    widget.pedidos = database.getAllPedidos();
+  }
+  void carregarLocais() {
+    if (database.getAllLocal().length == 0){
+      database.putDemoLocais();
+    }
+  }
 
   @override
   void initState() {
     super.initState();
+    print('Tamanho da lista de pedidos depois d vir do carrinho ${database.getAllPedidos().length}');
+    carregarPedidos();
+    carregarLocais();
   }
 
   @override
@@ -261,6 +266,13 @@ class _Pedidos extends State<Pedidos> {
         ),
         body: Column(
           children: [
+
+            ElevatedButton(
+                onPressed: () {
+                  database.removeAll();
+                },
+                child: const Text('Limpar a lista')),
+
             Padding(
               padding: EdgeInsets.only(
                 top: 20 + MediaQuery.of(context).padding.top,
@@ -276,11 +288,12 @@ class _Pedidos extends State<Pedidos> {
                           context,
                           MaterialPageRoute(
                               builder: (context) => Pedido(
-                                    artigos: artigos,
-                                    categorias: categorias,
-                                    pedidos: widget.pedidos,
-                                    locais: locais
-                                  )));
+                                  artigos: artigos,
+                                  categorias: categorias,
+                                  pedidos: widget.pedidos,
+                                  )
+                          )
+                      );
                       // Adiciona um novo objeto à lista quando o botão é pressionado
                     },
                     style: ButtonStyle(
@@ -290,7 +303,7 @@ class _Pedidos extends State<Pedidos> {
                       backgroundColor: MaterialStateProperty.all(Colors.white),
                       // Fundo transparente
                       fixedSize:
-                          MaterialStateProperty.all(const Size(8000, 80)),
+                          MaterialStateProperty.all(const Size(800, 80)),
                       // Tamanho fixo de 270x80
                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                         RoundedRectangleBorder(
@@ -320,11 +333,11 @@ class _Pedidos extends State<Pedidos> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => PedidoAberto(
-                                      artigos: artigos,
-                                      categorias: categorias,
-                                      pedidos: widget.pedidos,
-                                      pedido: widget.pedidos[index],
-                                  )));
+                                        artigos: artigos,
+                                        categorias: categorias,
+                                        pedidos: widget.pedidos,
+                                        pedido: widget.pedidos[index],
+                                      )));
                         },
                         style: ButtonStyle(
                           side: MaterialStateProperty.all(
@@ -345,14 +358,17 @@ class _Pedidos extends State<Pedidos> {
                         ),
                         child: Center(
                           child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center, // Centraliza verticalmente
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            // Centraliza verticalmente
                             //crossAxisAlignment: CrossAxisAlignment.center, // Centraliza horizontalmente
                             children: [
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween, // Alinha a Row horizontalmente ao centro
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                // Alinha a Row horizontalmente ao centro
                                 children: [
                                   Text(
-                                    widget.pedidos[index].local.nome,
+                                    database.getLocal(widget.pedidos[index].localId)!.nome,
                                     style: const TextStyle(
                                       color: Colors.black,
                                       fontSize: 18,
@@ -368,9 +384,8 @@ class _Pedidos extends State<Pedidos> {
                                   ),
                                 ],
                               ),
-
                               Text(
-                                'Funcionario: ${widget.pedidos[index].funcionario.nome}',
+                                'Funcionario: ${database.getUtilizador(widget.pedidos[index].utilizadorId)?.nome}',
                                 style: const TextStyle(
                                   color: Colors.black,
                                   fontSize: 18,
@@ -379,8 +394,7 @@ class _Pedidos extends State<Pedidos> {
                             ],
                           ),
                         ),
-                      )
-                  );
+                      ));
                 },
               ),
             ),
@@ -391,6 +405,4 @@ class _Pedidos extends State<Pedidos> {
         final shouldPop = await showMyDialog(context);
         return shouldPop ?? false;
       });
-
-
 }

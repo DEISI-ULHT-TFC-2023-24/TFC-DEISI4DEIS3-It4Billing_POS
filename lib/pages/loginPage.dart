@@ -30,11 +30,19 @@ class _LoginPageState extends State<LoginPage> {
                       children: [
                         Expanded(child: _Logo()),
                         Expanded(
-                          child: Center(child: _FormContent()),
+                          child: Scrollbar(
+                            child: SingleChildScrollView(
+                              child: _FormContent(),
+                            ),
+                          ),
                         ),
                       ],
                     ),
-                  )));
+
+
+            )
+        )
+    );
   }
 }
 
@@ -76,9 +84,11 @@ class _FormContent extends StatefulWidget {
 
 class __FormContentState extends State<_FormContent> {
   bool _isPasswordVisible = false;
-  bool _rememberMe = false;
+  bool _showConfirmation = false;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -94,21 +104,20 @@ class __FormContentState extends State<_FormContent> {
               validator: (value) {
                 // add email validation
                 if (value == null || value.isEmpty) {
-                  return 'Please enter some text';
+                  return 'PIntroduza um URL válido';
                 }
-
                 bool emailValid = RegExp(
                         r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
                     .hasMatch(value);
                 if (!emailValid) {
-                  return 'Please enter a valid email';
+                  return 'Introduza um URL válido';
                 }
 
                 return null;
               },
               decoration: const InputDecoration(
-                labelText: 'Link',
-                hintText: 'Enter your email',
+                labelText: 'URL',
+                hintText: 'Introduza o URL',
                 prefixIcon: Icon(Icons.email_outlined),
                 border: OutlineInputBorder(),
               ),
@@ -128,7 +137,7 @@ class __FormContentState extends State<_FormContent> {
               obscureText: !_isPasswordVisible,
               decoration: InputDecoration(
                   labelText: 'Password',
-                  hintText: 'Enter your password',
+                  hintText: 'Enter password',
                   prefixIcon: const Icon(Icons.lock_outline_rounded),
                   border: const OutlineInputBorder(),
                   suffixIcon: IconButton(
@@ -143,51 +152,45 @@ class __FormContentState extends State<_FormContent> {
                   )),
             ),
             _gap(),
-            CheckboxListTile(
-              value: _rememberMe,
-              onChanged: (value) {
-                if (value == null) return;
-                setState(() {
-                  _rememberMe = value;
-                });
-              },
-              title: const Text('Remember me'),
-              controlAffinity: ListTileControlAffinity.leading,
-              dense: true,
-              contentPadding: const EdgeInsets.all(0),
-            ),
-            _gap(),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(4)),
-                ),
-                child: const Padding(
-                  padding: EdgeInsets.all(10.0),
-                  child: Text(
-                    'Sign in',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            Center(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                    ),
+                    child: const Padding(
+                      padding: EdgeInsets.all(10.0),
+                      child: Text(
+                        'Entrar',
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    onPressed: () {
+                      if (_formKey.currentState?.validate() ?? false) {
+                        setState(() {
+                          _showConfirmation = true;
+                        });
+                          Navigator.of(context).pushAndRemoveUntil(
+                              MaterialPageRoute(
+                                  builder: (BuildContext context) => Pedidos()),
+                                  (route) => false);
+                      }
+                    },
                   ),
-                ),
-                onPressed: () {
-                  if (_formKey.currentState?.validate() ?? false) {
-                    Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(
-                            builder: (BuildContext context) => Pedidos(pedidos: [],)),
-                        (route) => false);
-                    //Navigator.push(context,
-                    //  );
-                  }
-                },
+                  if (_showConfirmation) const Icon(Icons.check, color: Colors.green),
+                ],
               ),
             ),
+
           ],
         ),
       ),
     );
   }
 
-  Widget _gap() => const SizedBox(height: 16);
+  Widget _gap() => const SizedBox(height: 20);
 }

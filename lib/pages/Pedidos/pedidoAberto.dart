@@ -167,7 +167,6 @@ class _PedidoAberto extends State<PedidoAberto> with TickerProviderStateMixin {
                                     categorias: widget.categorias,
                                     pedidos: widget.pedidos,
                                     pedido: widget.pedido,
-                                    locais: widget.locais,
                                   )));
                     },
                   ),
@@ -184,7 +183,6 @@ class _PedidoAberto extends State<PedidoAberto> with TickerProviderStateMixin {
                                       categorias: widget.categorias,
                                       pedidos: widget.pedidos,
                                       pedido: widget.pedido,
-                                      locais: widget.locais,
                                     )));
                       },
                       child: ScaleTransition(
@@ -226,7 +224,7 @@ class _PedidoAberto extends State<PedidoAberto> with TickerProviderStateMixin {
                     widget.pedidos.remove(widget.pedido);
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) =>
-                            Pedidos(pedidos: widget.pedidos)));
+                            Pedidos()));
                   }
                 },
                 itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[

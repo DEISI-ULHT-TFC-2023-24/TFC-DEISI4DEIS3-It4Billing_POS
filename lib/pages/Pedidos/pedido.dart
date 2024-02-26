@@ -3,6 +3,7 @@ import 'package:flutter/animation.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:it4billing_pos/objetos/utilizadorObj.dart';
 import 'package:it4billing_pos/pages/Pedidos/carrinho.dart';
+import '../../main.dart';
 import '../../objetos/artigoObj.dart';
 import '../../objetos/categoriaObj.dart';
 import '../../objetos/localObj.dart';
@@ -12,14 +13,12 @@ class Pedido extends StatefulWidget {
   List<PedidoObj> pedidos = [];
   List<Categoria> categorias = [];
   List<Artigo> artigos = [];
-  List<LocalObj> locais = [];
 
   Pedido({
     Key? key,
     required this.pedidos,
     required this.categorias,
     required this.artigos,
-    required this.locais,
   }) : super(key: key);
 
   @override
@@ -90,8 +89,8 @@ class _Pedido extends State<Pedido> with TickerProviderStateMixin {
   PedidoObj pedido = PedidoObj(
       nome: "Pedido 01",
       hora: DateTime.now(),
-      funcionario: Utilizador('User 01', 1234),
-      total: 0);
+      utilizadorId: 0,
+      total: 0, localId: -1);
 
   // estudar a parte de voltar a entrar dentro do pedido
   // como vou carregar toda a info ??devo adicionar mais variaveis ao pedido por exemplo
@@ -104,6 +103,17 @@ class _Pedido extends State<Pedido> with TickerProviderStateMixin {
         _controller.reverse();
       });
     });
+  }
+
+  void addUserAoPedido() {
+    //database.removeAlUtilizadores();
+    if (database.getAllUtilizadores().length == 0){
+      database.putDemoUsers();
+    }
+    /// isto vai ser alterrado porque tenho de ter o utilizador da seção
+    pedido.utilizadorId = database.getAllUtilizadores()[0].id;  ///este zer0 tera de ser mudado ele escolhe qual é o utilizador
+
+    //print(pedido.utilizadorId);
   }
 
   @override
@@ -130,6 +140,7 @@ class _Pedido extends State<Pedido> with TickerProviderStateMixin {
                     ),
                     onPressed: () {
                       pedido.total = 0;
+                      addUserAoPedido();
                       Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -138,7 +149,6 @@ class _Pedido extends State<Pedido> with TickerProviderStateMixin {
                                     categorias: widget.categorias,
                                     pedidos: widget.pedidos,
                                     pedido: pedido,
-                                    locais: widget.locais,
                                   )));
                     },
                   ),
@@ -155,7 +165,6 @@ class _Pedido extends State<Pedido> with TickerProviderStateMixin {
                                       categorias: widget.categorias,
                                       pedidos: widget.pedidos,
                                       pedido: pedido,
-                                      locais: widget.locais,
                                     )));
                       },
                       child: ScaleTransition(

@@ -12,7 +12,6 @@ class Cobrar extends StatefulWidget {
   late List<Categoria> categorias = [];
   late List<Artigo> artigos = [];
   late PedidoObj pedido;
-  late List<LocalObj> locais = [];
 
   Cobrar({
     Key? key,
@@ -20,7 +19,6 @@ class Cobrar extends StatefulWidget {
     required this.categorias,
     required this.artigos,
     required this.pedido,
-    required this.locais,
   }) : super(key: key);
 
   @override
@@ -28,7 +26,7 @@ class Cobrar extends StatefulWidget {
 }
 
 class _Cobrar extends State<Cobrar> {
-  List<String> metodos = Pedidos(pedidos: const []).getMetodosPagamento();
+  List<String> metodos = Pedidos().getMetodosPagamento();
   final FocusNode _focusNode = FocusNode();
 
   // Controladores dos campos de texto
@@ -202,7 +200,6 @@ class _Cobrar extends State<Cobrar> {
                                       MaterialPageRoute(
                                           builder: (context) => ConcluirPedido(
                                             pedidos: widget.pedidos,
-                                            locais: widget.locais,
                                             pedido: widget.pedido,
                                             categorias: widget.categorias,
                                             artigos: widget.artigos,

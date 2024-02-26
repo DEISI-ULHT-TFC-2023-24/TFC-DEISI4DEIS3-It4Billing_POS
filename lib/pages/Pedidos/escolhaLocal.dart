@@ -7,13 +7,12 @@ import '../../objetos/pedidoObj.dart';
 
 class Local extends StatelessWidget {
   List<PedidoObj> pedidos = [];
-  List<LocalObj> locais = [];
+  List<LocalObj> locais = database.getAllLocal();
   PedidoObj pedido;
 
   Local({
     Key? key,
     required this.pedidos,
-    required this.locais,
     required this.pedido,
   }) : super(key: key);
 
@@ -41,7 +40,7 @@ class Local extends StatelessWidget {
                     ElevatedButton(
                       onPressed: () {
                         // Lógica para lidar com a seleção do local
-                        pedido.local = local;
+                        pedido.localId = local.id;
 
                         //pedidos.add(pedido);
                         database.addPedido(pedido);
@@ -53,7 +52,7 @@ class Local extends StatelessWidget {
                         Navigator.of(context).pop();
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) =>
-                                Pedidos(pedidos: pedidos)));// Fechar a página
+                                Pedidos()));// Fechar a página
                       },
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all<Color>(Colors.white),

@@ -16,7 +16,6 @@ class Carrinho extends StatefulWidget {
   late List<Categoria> categorias = [];
   late List<Artigo> artigos = [];
   late PedidoObj pedido;
-  late List<LocalObj> locais = [];
 
   Carrinho({
     Key? key,
@@ -24,7 +23,6 @@ class Carrinho extends StatefulWidget {
     required this.categorias,
     required this.artigos,
     required this.pedido,
-    required this.locais,
   }) : super(key: key);
 
   @override
@@ -68,7 +66,7 @@ class _Carrinho extends State<Carrinho> {
                 if (value == 'Eliminar pedido') {
                   database.removePedido(widget.pedido.id);
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => Pedidos(pedidos: database.getAllPedidos())));
+                      builder: (context) => Pedidos()));
                 }
               },
               itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
@@ -124,7 +122,6 @@ class _Carrinho extends State<Carrinho> {
                                   artigos: widget.artigos,
                                   categorias: widget.categorias,
                                   pedidos: widget.pedidos,
-                                  locais: widget.locais,
                                 )));
                       },
                       style: ButtonStyle(
@@ -199,19 +196,26 @@ class _Carrinho extends State<Carrinho> {
                       child: ElevatedButton(
                         onPressed: () {
                           if (widget.pedido.artigosPedido.isNotEmpty) {
-                            if (widget.pedido.local.nome == '') {
+                            if (widget.pedido.localId == -1) {
+
+                              print('Lista de locais: ${database.getAllLocal().length}');
+                              database.getAllLocal().forEach((element) {
+                                print(element.nome);
+                              });
+
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => Local(
-                                            pedidos: widget.pedidos,
-                                            locais: widget.locais,
-                                            pedido: widget.pedido,
-                                          )));
+                                          pedidos: widget.pedidos,
+                                          pedido: widget.pedido,
+                                      )
+                                  )
+                              );
                             } else {
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (context) =>
-                                      Pedidos(pedidos: widget.pedidos)));
+                                      Pedidos()));
                             }
                           } else {
                             Fluttertoast.showToast(
@@ -259,7 +263,6 @@ class _Carrinho extends State<Carrinho> {
                                 MaterialPageRoute(
                                     builder: (context) => Cobrar(
                                       pedidos: widget.pedidos,
-                                      locais: widget.locais,
                                       pedido: widget.pedido,
                                       categorias: widget.categorias,
                                       artigos: widget.artigos,

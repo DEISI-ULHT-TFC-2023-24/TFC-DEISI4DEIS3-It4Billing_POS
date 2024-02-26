@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:it4billing_pos/pages/artigos.dart';
 import 'package:it4billing_pos/pages/categorias.dart';
-import 'package:it4billing_pos/pages/loginPage.dart';
+import 'package:it4billing_pos/pages/setupPOSPage.dart';
+import 'package:it4billing_pos/pages/setupPage.dart';
 import 'package:it4billing_pos/pages/vendas.dart';
 import 'package:it4billing_pos/pages/turno.dart';
 import 'package:it4billing_pos/pages/Pedidos/pedidos.dart';
@@ -29,14 +30,15 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'it4billing_pos',
       theme: ThemeData(primarySwatch: Colors.blue),
-      initialRoute: '/pedidos',  // Trocar depois quando funcionar bem
+      initialRoute: '/loginPage',  // Trocar depois quando funcionar bem
       routes: {
-        '/loginPage': (context) => const LoginPage(),
-        '/pedidos': (context) => Pedidos(pedidos: [],),
-        '/turno': (context) => Turnos(pedidos: [],),
-        '/vendas': (context) => Vendas(pedidos: [],),
-        '/artigos': (context) =>  Artigos(pedidos: [],),
-        '/categorias': (context) =>  Categorias(pedidos:[],),
+        '/loginPage': (context) => const SetupPage(),
+        '/docPage' : (context) => const SetupPOSPage(), // para test
+        '/pedidos': (context) => Pedidos(),
+        '/turno': (context) => Turnos(),
+        '/vendas': (context) => Vendas(),
+        '/artigos': (context) =>  Artigos(),
+        '/categorias': (context) =>  Categorias(),
       },
       debugShowCheckedModeBanner: false,
     );

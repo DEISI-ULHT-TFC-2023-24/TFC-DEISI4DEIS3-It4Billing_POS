@@ -169,7 +169,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
       id: const obx_int.IdUid(4, 7104298556461174362),
       name: 'PedidoObj',
-      lastPropertyId: const obx_int.IdUid(5, 7515691703509998257),
+      lastPropertyId: const obx_int.IdUid(7, 2429853234783222043),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
@@ -196,9 +196,24 @@ final _entities = <obx_int.ModelEntity>[
             id: const obx_int.IdUid(5, 7515691703509998257),
             name: 'nrArtigos',
             type: 6,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(6, 7552558037840988166),
+            name: 'utilizadorId',
+            type: 6,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(7, 2429853234783222043),
+            name: 'localId',
+            type: 6,
             flags: 0)
       ],
-      relations: <obx_int.ModelRelation>[],
+      relations: <obx_int.ModelRelation>[
+        obx_int.ModelRelation(
+            id: const obx_int.IdUid(1, 7466652304049170735),
+            name: 'artigosPedido',
+            targetId: const obx_int.IdUid(1, 3191427397601551436))
+      ],
       backlinks: <obx_int.ModelBacklink>[]),
   obx_int.ModelEntity(
       id: const obx_int.IdUid(5, 6422666133805705485),
@@ -220,35 +235,6 @@ final _entities = <obx_int.ModelEntity>[
             id: const obx_int.IdUid(3, 2484477567318182640),
             name: 'pin',
             type: 6,
-            flags: 0)
-      ],
-      relations: <obx_int.ModelRelation>[],
-      backlinks: <obx_int.ModelBacklink>[]),
-  obx_int.ModelEntity(
-      id: const obx_int.IdUid(6, 4772283387577696936),
-      name: 'Note',
-      lastPropertyId: const obx_int.IdUid(4, 7628756088963777523),
-      flags: 0,
-      properties: <obx_int.ModelProperty>[
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(1, 3408471008171598888),
-            name: 'id',
-            type: 6,
-            flags: 1),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(2, 4620978447039160973),
-            name: 'text',
-            type: 9,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(3, 1523034204437704542),
-            name: 'comment',
-            type: 9,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(4, 7628756088963777523),
-            name: 'date',
-            type: 10,
             flags: 0)
       ],
       relations: <obx_int.ModelRelation>[],
@@ -292,11 +278,17 @@ obx_int.ModelDefinition getObjectBoxModel() {
       entities: _entities,
       lastEntityId: const obx_int.IdUid(6, 4772283387577696936),
       lastIndexId: const obx_int.IdUid(0, 0),
-      lastRelationId: const obx_int.IdUid(0, 0),
+      lastRelationId: const obx_int.IdUid(1, 7466652304049170735),
       lastSequenceId: const obx_int.IdUid(0, 0),
-      retiredEntityUids: const [],
+      retiredEntityUids: const [4772283387577696936],
       retiredIndexUids: const [],
-      retiredPropertyUids: const [5920608008104397494],
+      retiredPropertyUids: const [
+        5920608008104397494,
+        3408471008171598888,
+        4620978447039160973,
+        1523034204437704542,
+        7628756088963777523
+      ],
       retiredRelationUids: const [],
       modelVersion: 5,
       modelVersionParserMinimum: 5,
@@ -391,7 +383,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
               idRetention: idRetentionParam,
               retentionPercentage: retentionPercentageParam,
               retentionName: retentionNameParam,
-              stock: stockParam, categoria: Categoria(nome: 'nome', nomeCurto: 'nomeCurto', description: 'description'))
+              stock: stockParam)
             ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0)
             ..price =
                 const fb.Float64Reader().vTableGet(buffer, rootOffset, 16, 0)
@@ -467,19 +459,24 @@ obx_int.ModelDefinition getObjectBoxModel() {
     PedidoObj: obx_int.EntityDefinition<PedidoObj>(
         model: _entities[3],
         toOneRelations: (PedidoObj object) => [],
-        toManyRelations: (PedidoObj object) => {},
+        toManyRelations: (PedidoObj object) => {
+              obx_int.RelInfo<PedidoObj>.toMany(1, object.id):
+                  object.artigosPedido
+            },
         getId: (PedidoObj object) => object.id,
         setId: (PedidoObj object, int id) {
           object.id = id;
         },
         objectToFB: (PedidoObj object, fb.Builder fbb) {
           final nomeOffset = fbb.writeString(object.nome);
-          fbb.startTable(6);
+          fbb.startTable(8);
           fbb.addInt64(0, object.id);
           fbb.addOffset(1, nomeOffset);
           fbb.addInt64(2, object.hora.millisecondsSinceEpoch);
           fbb.addFloat64(3, object.total);
           fbb.addInt64(4, object.nrArtigos);
+          fbb.addInt64(5, object.utilizadorId);
+          fbb.addInt64(6, object.localId);
           fbb.finish(fbb.endTable());
           return object.id;
         },
@@ -490,14 +487,25 @@ obx_int.ModelDefinition getObjectBoxModel() {
               .vTableGet(buffer, rootOffset, 6, '');
           final horaParam = DateTime.fromMillisecondsSinceEpoch(
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 8, 0));
+          final utilizadorIdParam =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 14, 0);
+          final localIdParam =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 16, 0);
           final totalParam =
               const fb.Float64Reader().vTableGet(buffer, rootOffset, 10, 0);
           final object = PedidoObj(
-              nome: nomeParam, hora: horaParam, total: totalParam, funcionario: Utilizador('nome', 1234))
+              nome: nomeParam,
+              hora: horaParam,
+              utilizadorId: utilizadorIdParam,
+              localId: localIdParam,
+              total: totalParam)
             ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0)
             ..nrArtigos =
                 const fb.Int64Reader().vTableGet(buffer, rootOffset, 12, 0);
-
+          obx_int.InternalToManyAccess.setRelInfo<PedidoObj>(
+              object.artigosPedido,
+              store,
+              obx_int.RelInfo<PedidoObj>.toMany(1, object.id));
           return object;
         }),
     Utilizador: obx_int.EntityDefinition<Utilizador>(
@@ -528,8 +536,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
             ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
 
           return object;
-        }),
-
+        })
   };
 
   return obx_int.ModelDefinition(model, bindings);
@@ -657,6 +664,18 @@ class PedidoObj_ {
   /// see [PedidoObj.nrArtigos]
   static final nrArtigos =
       obx.QueryIntegerProperty<PedidoObj>(_entities[3].properties[4]);
+
+  /// see [PedidoObj.utilizadorId]
+  static final utilizadorId =
+      obx.QueryIntegerProperty<PedidoObj>(_entities[3].properties[5]);
+
+  /// see [PedidoObj.localId]
+  static final localId =
+      obx.QueryIntegerProperty<PedidoObj>(_entities[3].properties[6]);
+
+  /// see [PedidoObj.artigosPedido]
+  static final artigosPedido =
+      obx.QueryRelationToMany<PedidoObj, Artigo>(_entities[3].relations[0]);
 }
 
 /// [Utilizador] entity fields to define ObjectBox queries.
@@ -673,5 +692,3 @@ class Utilizador_ {
   static final pin =
       obx.QueryIntegerProperty<Utilizador>(_entities[4].properties[2]);
 }
-
-

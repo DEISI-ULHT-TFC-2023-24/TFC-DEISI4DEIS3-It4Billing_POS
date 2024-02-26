@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:it4billing_pos/pages/artigos.dart';
 import 'package:it4billing_pos/pages/turno.dart';
+import '../main.dart';
 import '../objetos/pedidoObj.dart';
 import 'Pedidos/pedidos.dart';
 import 'categorias.dart';
 
 class Vendas extends StatelessWidget {
-  List<PedidoObj> pedidos = [];
+  List<PedidoObj> pedidos = database.getAllPedidos();
 
-  Vendas ({
-    Key? key,
-    required this.pedidos,
-  }) : super(key: key);
+  Vendas ({Key? key }) : super(key: key);
 
   Widget buildHeader(BuildContext context) => Container(
     color: const Color(0xff00afe9),
@@ -49,7 +47,7 @@ class Vendas extends StatelessWidget {
           title: const Text('Pedidos'),
           onTap: () {
             Navigator.pop(context);
-            Navigator.of(context).push(MaterialPageRoute(builder: (context) => Pedidos(pedidos: pedidos)));
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => Pedidos()));
           },
         ),
         ListTile(
@@ -64,7 +62,7 @@ class Vendas extends StatelessWidget {
           title: const Text('Turno'),
           onTap: () {
             Navigator.pop(context);
-            Navigator.of(context).push(MaterialPageRoute(builder: (context) => Turnos(pedidos: pedidos)));
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => Turnos()));
           },
         ),
         ListTile(
@@ -72,7 +70,7 @@ class Vendas extends StatelessWidget {
           title: const Text('Artigos'),
           onTap: () {
             Navigator.pop(context);
-            Navigator.of(context).push(MaterialPageRoute(builder: (context) => Artigos(pedidos: pedidos)));
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => Artigos()));
           },
         ),
         ListTile(
@@ -80,7 +78,7 @@ class Vendas extends StatelessWidget {
           title: const Text('Categorias'),
           onTap: () {
             Navigator.pop(context);
-            Navigator.of(context).push(MaterialPageRoute(builder: (context) => Categorias(pedidos: pedidos)));
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => Categorias()));
           },
         ),
 

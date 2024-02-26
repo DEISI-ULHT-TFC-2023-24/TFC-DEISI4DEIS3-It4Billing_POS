@@ -1,5 +1,7 @@
-import 'categoriaObj.dart';
+import 'package:objectbox/objectbox.dart';
 import '../database/objectbox.g.dart';
+import 'categoriaObj.dart';
+
 
 @Entity()
 class Artigo {
@@ -15,7 +17,7 @@ class Artigo {
   double unitPrice; // Valor sem iva
 
   //int idArticlesCategories; // por tabela ???? acho que não
-  Categoria categoria; // por objeto
+  late Categoria categoria; // por objeto
 
   int idTaxes; // ID da tabela taxas do it4billing
   int taxPrecentage;
@@ -36,8 +38,6 @@ class Artigo {
       required this.description,
       required this.productType,
       required this.unitPrice,
-      //required this.idArticlesCategories,
-      required this.categoria,
       required this.idTaxes,
       required this.taxPrecentage,
       required this.taxName,

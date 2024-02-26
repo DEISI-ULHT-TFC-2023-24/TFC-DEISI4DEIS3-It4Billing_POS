@@ -147,7 +147,7 @@
     },
     {
       "id": "4:7104298556461174362",
-      "lastPropertyId": "5:7515691703509998257",
+      "lastPropertyId": "7:2429853234783222043",
       "name": "PedidoObj",
       "properties": [
         {
@@ -175,9 +175,25 @@
           "id": "5:7515691703509998257",
           "name": "nrArtigos",
           "type": 6
+        },
+        {
+          "id": "6:7552558037840988166",
+          "name": "utilizadorId",
+          "type": 6
+        },
+        {
+          "id": "7:2429853234783222043",
+          "name": "localId",
+          "type": 6
         }
       ],
-      "relations": []
+      "relations": [
+        {
+          "id": "1:7466652304049170735",
+          "name": "artigosPedido",
+          "targetId": "1:3191427397601551436"
+        }
+      ]
     },
     {
       "id": "5:6422666133805705485",
@@ -202,47 +218,24 @@
         }
       ],
       "relations": []
-    },
-    {
-      "id": "6:4772283387577696936",
-      "lastPropertyId": "4:7628756088963777523",
-      "name": "Note",
-      "properties": [
-        {
-          "id": "1:3408471008171598888",
-          "name": "id",
-          "type": 6,
-          "flags": 1
-        },
-        {
-          "id": "2:4620978447039160973",
-          "name": "text",
-          "type": 9
-        },
-        {
-          "id": "3:1523034204437704542",
-          "name": "comment",
-          "type": 9
-        },
-        {
-          "id": "4:7628756088963777523",
-          "name": "date",
-          "type": 10
-        }
-      ],
-      "relations": []
     }
   ],
   "lastEntityId": "6:4772283387577696936",
   "lastIndexId": "0:0",
-  "lastRelationId": "0:0",
+  "lastRelationId": "1:7466652304049170735",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
   "modelVersionParserMinimum": 5,
-  "retiredEntityUids": [],
+  "retiredEntityUids": [
+    4772283387577696936
+  ],
   "retiredIndexUids": [],
   "retiredPropertyUids": [
-    5920608008104397494
+    5920608008104397494,
+    3408471008171598888,
+    4620978447039160973,
+    1523034204437704542,
+    7628756088963777523
   ],
   "retiredRelationUids": [],
   "version": 1

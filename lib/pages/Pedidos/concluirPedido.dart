@@ -12,7 +12,6 @@ class ConcluirPedido extends StatefulWidget {
   late List<Categoria> categorias = [];
   late List<Artigo> artigos = [];
   late PedidoObj pedido;
-  late List<LocalObj> locais = [];
   late String troco;
 
   ConcluirPedido({
@@ -21,7 +20,6 @@ class ConcluirPedido extends StatefulWidget {
     required this.categorias,
     required this.artigos,
     required this.pedido,
-    required this.locais,
     required this.troco,
   }) : super(key: key);
 
@@ -111,9 +109,7 @@ class _ConcluirPedido extends State<ConcluirPedido> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => Pedidos(
-                    pedidos: widget.pedidos,
-                  ),
+                  builder: (context) => Pedidos(),
                 ),
               );
             },

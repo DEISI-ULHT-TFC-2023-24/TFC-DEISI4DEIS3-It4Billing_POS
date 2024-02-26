@@ -13,7 +13,6 @@ class EditCarrinho extends StatefulWidget {
   List<Categoria> categorias = [];
   List<Artigo> artigos = [];
   PedidoObj pedido;
-  List<LocalObj> locais = [];
 
   EditCarrinho({
     Key? key,
@@ -23,7 +22,6 @@ class EditCarrinho extends StatefulWidget {
     required this.categorias,
     required this.artigos,
     required this.pedido,
-    required this.locais,
   }) : super(key: key);
 
   @override
@@ -269,8 +267,7 @@ class _EditCarrinhoState extends State<EditCarrinho> {
                                 pedidos: widget.pedidos,
                                 categorias: widget.categorias,
                                 artigos: widget.artigos,
-                                pedido: widget.pedido,
-                                locais: widget.locais),
+                                pedido: widget.pedido,),
                           ));
                         },
                         style: ElevatedButton.styleFrom(
@@ -312,8 +309,7 @@ class _EditCarrinhoState extends State<EditCarrinho> {
                                 pedidos: widget.pedidos,
                                 categorias: widget.categorias,
                                 artigos: widget.artigos,
-                                pedido: widget.pedido,
-                                locais: widget.locais),
+                                pedido: widget.pedido,),
                           ));
 
                         },
