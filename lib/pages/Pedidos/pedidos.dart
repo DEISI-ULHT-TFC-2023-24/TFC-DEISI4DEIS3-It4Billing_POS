@@ -17,9 +17,7 @@ import '../turno.dart';
 import '../vendas.dart';
 
 class Pedidos extends StatefulWidget {
-  //List<PedidoObj> pedidos = [];
 
-  //final ObjectBoxDatabase database;
   List<PedidoObj> pedidos = database.getAllPedidos();
 
 
@@ -40,71 +38,10 @@ class _Pedidos extends State<Pedidos> {
   // contruir ainda a forma como tratar a info da base de dados e perceber como vou receber API's e etc..
   // ainda a data para a base de dados
 
-  List<Categoria> categorias = [
-    Categoria(nome: 'Todos os artigos', description: '', nomeCurto: ''),
-    Categoria(nome: "Categoria 1", nomeCurto: "Cat 1", description: ''),
-    Categoria(nome: "Categoria 2", nomeCurto: "Cat 2", description: ''),
-    Categoria(nome: "Categoria 3", nomeCurto: "Cat 3", description: ''),
-  ];
-  List<Artigo> artigos = [
-    Artigo(
-        referencia: "001",
-        nome: "Artigo 1",
-        barCod: '',
-        description: '',
-        productType: '',
-        unitPrice: 4.06,
-        taxPrecentage: 23,
-        idTaxes: 1,
-        taxName: '',
-        taxDescription: '',
-        idRetention: 1,
-        retentionPercentage: 1,
-        retentionName: '',
-        stock: 56),
-    Artigo(
-        referencia: "002",
-        nome: "Artigo 2",
-        barCod: '',
-        description: '',
-        productType: '',
-        unitPrice: 6.42,
-        taxPrecentage: 23,
-        idTaxes: 2,
-        taxName: '',
-        taxDescription: '',
-        idRetention: 2,
-        retentionPercentage: 2,
-        retentionName: '',
-        stock: 10),
-    Artigo(
-        referencia: "003",
-        nome: "Artigo 3 com um nome grande PARA TESTES",
-        barCod: '',
-        description: '',
-        productType: '',
-        unitPrice: 1,
-        taxPrecentage: 23,
-        idTaxes: 2,
-        taxName: '',
-        taxDescription: '',
-        idRetention: 2,
-        retentionPercentage: 2,
-        retentionName: '',
-        stock: 10),
-  ];
-
-
   getcat() {
-    artigos[0].categoria = categorias[1];
-    artigos[1].categoria = categorias[2];
-    artigos[2].categoria = categorias[3];
 
   }
 
-  // criar lista com cat teste para enviar para a proxima pagina e ai fazer os objetos consuante o numero de coisas
-  // fazer tbm o ecra sub cat (no mesmo ecra )
-  // tendo a lista do objetos tbm criada aqui  fazer a cena de selecionar e ai ter o botao que faz add na lista de vendas
 
   Widget buildHeader(BuildContext context) => Container(
         color: const Color(0xff00afe9),
@@ -233,10 +170,21 @@ class _Pedidos extends State<Pedidos> {
     widget.pedidos = database.getAllPedidos();
   }
   void carregarLocais() {
-    if (database.getAllLocal().length == 0){
+    if (database.getAllLocal().isEmpty){
       database.putDemoLocais();
     }
   }
+  void carregarCategorias() {
+    if (database.getAllCategorias().isEmpty){
+      database.putDemoCategorias();
+    }
+  }
+  void carregarArtigos() {
+    if (database.getAllArtigos().isEmpty){
+      database.putDemoArtigos();
+    }
+  }
+
 
   @override
   void initState() {
@@ -244,6 +192,10 @@ class _Pedidos extends State<Pedidos> {
     print('Tamanho da lista de pedidos depois d vir do carrinho ${database.getAllPedidos().length}');
     carregarPedidos();
     carregarLocais();
+    carregarCategorias();
+    print('Tamanho da lista de Categorias: ${database.getAllCategorias().length}');
+    carregarArtigos();
+    print('Tamanho da lista de Artigos: ${database.getAllArtigos().length}');
   }
 
   @override
@@ -270,6 +222,8 @@ class _Pedidos extends State<Pedidos> {
             ElevatedButton(
                 onPressed: () {
                   database.removeAll();
+                  database.removeAllArtigos();
+                  database.removeAllCategorias();
                 },
                 child: const Text('Limpar a lista')),
 
@@ -288,8 +242,7 @@ class _Pedidos extends State<Pedidos> {
                           context,
                           MaterialPageRoute(
                               builder: (context) => Pedido(
-                                  artigos: artigos,
-                                  categorias: categorias,
+                                  categorias: database.getAllCategorias(),
                                   pedidos: widget.pedidos,
                                   )
                           )
@@ -333,8 +286,8 @@ class _Pedidos extends State<Pedidos> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => PedidoAberto(
-                                        artigos: artigos,
-                                        categorias: categorias,
+                                        artigos: database.getAllArtigos(),
+                                        categorias: database.getAllCategorias(),
                                         pedidos: widget.pedidos,
                                         pedido: widget.pedidos[index],
                                       )));

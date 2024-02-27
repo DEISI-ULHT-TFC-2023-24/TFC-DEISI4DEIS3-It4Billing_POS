@@ -5,7 +5,7 @@
   "entities": [
     {
       "id": "1:3191427397601551436",
-      "lastPropertyId": "18:9118405432975613389",
+      "lastPropertyId": "19:6647574119315711060",
       "name": "Artigo",
       "properties": [
         {
@@ -93,6 +93,11 @@
           "id": "18:9118405432975613389",
           "name": "observacoes",
           "type": 9
+        },
+        {
+          "id": "19:6647574119315711060",
+          "name": "idArticlesCategories",
+          "type": 6
         }
       ],
       "relations": []
@@ -218,9 +223,88 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "7:760885638717546983",
+      "lastPropertyId": "14:6556494904146860720",
+      "name": "Setup",
+      "properties": [
+        {
+          "id": "1:2792818346677926916",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:260075754396814068",
+          "name": "url",
+          "type": 9
+        },
+        {
+          "id": "3:7585348376496159755",
+          "name": "password",
+          "type": 9
+        },
+        {
+          "id": "4:4707725486126072595",
+          "name": "lojaID",
+          "type": 6
+        },
+        {
+          "id": "5:2668378425142982470",
+          "name": "nomeLoja",
+          "type": 9
+        },
+        {
+          "id": "6:4142978399308346823",
+          "name": "posID",
+          "type": 6
+        },
+        {
+          "id": "7:1262283674318796450",
+          "name": "pos",
+          "type": 9
+        },
+        {
+          "id": "8:6054098541531560331",
+          "name": "utilizadorID",
+          "type": 6
+        },
+        {
+          "id": "9:5566946018571818589",
+          "name": "faturacaoID",
+          "type": 6
+        },
+        {
+          "id": "10:1809128679097544643",
+          "name": "faturacao",
+          "type": 9
+        },
+        {
+          "id": "11:1330753141360703355",
+          "name": "reembolsoID",
+          "type": 6
+        },
+        {
+          "id": "12:2708372927138612788",
+          "name": "reembolso",
+          "type": 9
+        },
+        {
+          "id": "13:3672436035991890288",
+          "name": "contaCorrenteID",
+          "type": 6
+        },
+        {
+          "id": "14:6556494904146860720",
+          "name": "contaCorrente",
+          "type": 9
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "6:4772283387577696936",
+  "lastEntityId": "7:760885638717546983",
   "lastIndexId": "0:0",
   "lastRelationId": "1:7466652304049170735",
   "lastSequenceId": "0:0",

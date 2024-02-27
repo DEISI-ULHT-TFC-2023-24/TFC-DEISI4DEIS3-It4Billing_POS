@@ -12,13 +12,12 @@ import '../../objetos/pedidoObj.dart';
 class Pedido extends StatefulWidget {
   List<PedidoObj> pedidos = [];
   List<Categoria> categorias = [];
-  List<Artigo> artigos = [];
+  List<Artigo> artigos = database.getAllArtigos();
 
   Pedido({
     Key? key,
     required this.pedidos,
     required this.categorias,
-    required this.artigos,
   }) : super(key: key);
 
   @override
@@ -60,7 +59,7 @@ class _Pedido extends State<Pedido> with TickerProviderStateMixin {
     } else {
       return widget.artigos
           .where((artigo) =>
-              artigo.categoria.nome == categoriaSelecionada.nome &&
+              database.getCategorias(artigo.idArticlesCategories)?.nome == categoriaSelecionada.nome &&
               artigo.nome
                   .toLowerCase()
                   .contains(searchController.text.toLowerCase()))

@@ -5,6 +5,7 @@ import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:it4billing_pos/objetos/utilizadorObj.dart';
 import 'package:it4billing_pos/pages/Pedidos/carrinho.dart';
 import 'package:it4billing_pos/pages/Pedidos/pedidos.dart';
+import '../../main.dart';
 import '../../objetos/artigoObj.dart';
 import '../../objetos/categoriaObj.dart';
 import '../../objetos/localObj.dart';
@@ -65,7 +66,7 @@ class _PedidoAberto extends State<PedidoAberto> with TickerProviderStateMixin {
     } else {
       return widget.artigos
           .where((artigo) =>
-              artigo.categoria.nome == categoriaSelecionada.nome &&
+              database.getArtigo(artigo.idArticlesCategories)?.nome == categoriaSelecionada.nome &&
               artigo.nome
                   .toLowerCase()
                   .contains(searchController.text.toLowerCase()))

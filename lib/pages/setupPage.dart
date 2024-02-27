@@ -57,7 +57,7 @@ class _Logo extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.all(16.0),
           child: Text(
-            "Welcome!",
+            "Bem vindo!",
             textAlign: TextAlign.center,
             style: isSmallScreen
                 ? Theme.of(context).textTheme.headline5
@@ -84,12 +84,7 @@ class __FormContentState extends State<_FormContent> {
   bool _showConfirmation = false;
   String? _selectedStore;
   String? _selectedPos;
-  final List<String> _stores = [
-    'Selecione a loja',
-    'Loja 1',
-    'Loja 2',
-    'Loja 3'
-  ];
+  final List<String> _stores = ['Selecione a loja', 'Loja 1', 'Loja 2', 'Loja 3'];
   final List<String> _poss = ['Selecione o POS', 'POS 1', 'POS 2', 'POS 3'];
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -137,14 +132,14 @@ class __FormContentState extends State<_FormContent> {
                 }
 
                 if (value.length < 6) {
-                  return 'Password must be at least 6 characters';
+                  return 'A palavra-passe deve ter pelo menos 6 caracteres';
                 }
                 return null;
               },
               obscureText: !_isPasswordVisible,
               decoration: InputDecoration(
-                  labelText: 'Password',
-                  hintText: 'Enter password',
+                  labelText: 'Palavra-passe',
+                  hintText: 'Introduzir a palavra-passe',
                   prefixIcon: const Icon(Icons.lock_outline_rounded),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
@@ -161,39 +156,39 @@ class __FormContentState extends State<_FormContent> {
                   )),
             ),
             _gap(),
-            Center(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      primary: const Color(0xff00afe9),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        side: const BorderSide(color: Colors.black),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                    height: 50,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: const Color(0xff00afe9),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          side: const BorderSide(color: Colors.black),
+                        ),
                       ),
-                    ),
-                    child: const Padding(
-                      padding: EdgeInsets.all(10.0),
-                      child: Text(
-                        'Conectar',
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
+                      child: const Padding(
+                        padding: EdgeInsets.all(10.0),
+                        child: Text(
+                          'Conectar',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
                       ),
+                      onPressed: () {
+                        if (_formKey.currentState?.validate() ?? false) {
+                          setState(() {
+                            _showConfirmation = true;
+                          });
+                        }
+                      },
                     ),
-                    onPressed: () {
-                      if (_formKey.currentState?.validate() ?? false) {
-                        setState(() {
-                          _showConfirmation = true;
-                        });
-                      }
-                    },
                   ),
-                  const SizedBox(width: 20),
-                  if (_showConfirmation)
-                    const Icon(Icons.check_circle, color: Colors.green),
-                ],
-              ),
+                if (_showConfirmation)
+                  const Row(children: [SizedBox(width: 20), Icon(Icons.check_circle, color: Colors.green),],)
+              ],
             ),
             if (_showConfirmation)
             Column(
@@ -251,31 +246,43 @@ class __FormContentState extends State<_FormContent> {
                   ],
                 ),
                 _gap(),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    primary: const Color(0xff00afe9),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      side: const BorderSide(color: Colors.black),
+                SizedBox(
+                  height: 50,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      primary: const Color(0xff00afe9),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        side: const BorderSide(color: Colors.black),
+                      ),
                     ),
-                  ),
-                  onPressed: () {
-                    if (_selectedStore != null &&
-                        _selectedStore != 'Selecione a loja' &&
-                        _selectedPos != null &&
-                        _selectedPos != 'Selecione o POS') {
-                      // Lógica para confirmar seleção da loja e do POS
+                    onPressed: () {
+                      if (_selectedStore != null &&
+                          _selectedStore != 'Selecione a loja' &&
+                          _selectedPos != null &&
+                          _selectedPos != 'Selecione o POS') {
+                        // Lógica para confirmar seleção da loja e do POS
 
-                      Navigator.of(context).pushAndRemoveUntil(
-                          MaterialPageRoute(
-                              builder: (BuildContext context) =>
-                                  const SetupPOSPage()),
-                          (route) => false);
-                    }
-                  },
-                  child: const Text('Entrar',
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                        Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                const SetupPOSPage()),
+                                (route) => false);
+                      } else {
+                        // Exibir mensagem de erro.
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Por favor, selecione a loja e o POS.'),
+                            duration: Duration(seconds: 3),
+                          ),
+                        );
+                      }
+
+                    },
+                    child: const Text('Entrar',
+                        style:
+                        TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                  ),
                 ),
               ],
             ),

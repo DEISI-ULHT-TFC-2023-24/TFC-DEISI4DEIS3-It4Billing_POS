@@ -55,21 +55,21 @@ class __FormContentState extends State<_FormContent> {
 
   final List<String> _invoices = [
     'Documento da faturação',
-    'Loja 1',
-    'Loja 2',
-    'Loja 3'
+    'F 1',
+    'F 2',
+    'F 3'
   ];
   final List<String> _refunds = [
     'Documento do reembolso',
-    'POS 1',
-    'POS 2',
-    'POS 3'
+    'R 1',
+    'R 2',
+    'R 3'
   ];
   final List<String> _cunrrentAccount = [
     'Documento da conta corrente',
-    'POS 1',
-    'POS 2',
-    'POS 3'
+    'Cc 1',
+    'Cc 2',
+    'Cc 3'
   ];
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -92,62 +92,54 @@ class __FormContentState extends State<_FormContent> {
               hint: const Text('Documento da faturação'),
               decoration: InputDecoration(
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  )
-              ),
+                borderRadius: BorderRadius.circular(12),
+              )),
               onChanged: (newValue) {
                 setState(() {
                   _selectedDocInvoice = newValue!;
                 });
               },
-              items:
-                  _invoices.map<DropdownMenuItem<String>>((String? value) {
+              items: _invoices.map<DropdownMenuItem<String>>((String? value) {
                 return DropdownMenuItem<String>(
                   value: value,
                   child: Text(value!),
                 );
               }).toList(),
             ),
-
             _gap(),
             const Text('Selecione o documento para o reembolso:'),
             _gap(),
-
             DropdownButtonFormField<String>(
               isExpanded: true,
               value: _selectedDocRefund,
               hint: const Text('Documento do reembolso'),
               decoration: InputDecoration(
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  )
-              ),
+                borderRadius: BorderRadius.circular(12),
+              )),
               onChanged: (newValue) {
                 setState(() {
                   _selectedDocRefund = newValue!;
-                });},
-              items: _refunds
-                  .map<DropdownMenuItem<String>>((String? value) {return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value!),
-              );}).toList(),
+                });
+              },
+              items: _refunds.map<DropdownMenuItem<String>>((String? value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value!),
+                );
+              }).toList(),
             ),
-
             _gap(),
             const Text('Selecione o documento para a conta corrente:'),
             _gap(),
-
             DropdownButtonFormField<String>(
               isExpanded: true,
               value: _selectedDocCurrentAccount,
-              hint: const Text(
-                  'Documento da conta corrente'),
+              hint: const Text('Documento da conta corrente'),
               decoration: InputDecoration(
-
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  )
-              ),
+                borderRadius: BorderRadius.circular(12),
+              )),
               onChanged: (newValue) {
                 setState(() {
                   _selectedDocCurrentAccount = newValue!;
@@ -161,38 +153,48 @@ class __FormContentState extends State<_FormContent> {
                 );
               }).toList(),
             ),
-
             _gap(),
-
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                primary: const Color(0xff00afe9),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  side: const BorderSide(color: Colors.black),
+            SizedBox(
+              height: 50,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  primary: const Color(0xff00afe9),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    side: const BorderSide(color: Colors.black),
+                  ),
                 ),
+                onPressed: () {
+                  if (_selectedDocInvoice != null &&
+                      _selectedDocInvoice != 'Documento da faturação' &&
+                      _selectedDocRefund != null &&
+                      _selectedDocRefund != 'Documento do reembolso' &&
+                      _selectedDocCurrentAccount != null &&
+                      _selectedDocCurrentAccount != 'Documento da conta corrente') {
+                    // Lógica para confirmar seleção os docs.
+
+
+                    /// tem de guardar o tipo de doc na bd local
+
+
+                    Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                const LoginPage()),
+                        (route) => false);
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Por favor, selecione todos os documentos.'),
+                        duration: Duration(seconds: 3),
+                      ),
+                    );
+                  }
+                },
+                child: const Text('Confirmar Seleções', style: TextStyle(
+                    fontSize: 16, fontWeight: FontWeight.bold)),
               ),
-              onPressed: () {
-                if (_selectedDocInvoice != null &&
-                    _selectedDocInvoice !=
-                        'Documento da faturação' &&
-                    _selectedDocRefund != null &&
-                    _selectedDocRefund !=
-                        'Documento do reembolso' &&
-                    _selectedDocCurrentAccount != null &&
-                    _selectedDocCurrentAccount !=
-                        'Documento da conta corrente') {
-                  // Lógica para confirmar seleção os docs.
-
-                  Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(
-                          builder: (BuildContext context) => const LoginPage()),
-                      (route) => false);
-                }
-              },
-              child: const Text('Confirmar Seleções'),
             ),
-
           ],
         ),
       ),

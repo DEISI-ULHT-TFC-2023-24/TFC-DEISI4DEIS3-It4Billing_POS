@@ -16,8 +16,8 @@ class Artigo {
 
   double unitPrice; // Valor sem iva
 
-  //int idArticlesCategories; // por tabela ???? acho que não
-  late Categoria categoria; // por objeto
+  int idArticlesCategories;
+  //Categoria categoria; // por objeto
 
   int idTaxes; // ID da tabela taxas do it4billing
   int taxPrecentage;
@@ -46,6 +46,7 @@ class Artigo {
       required this.retentionPercentage,
       required this.retentionName,
       required this.stock,
+      required this.idArticlesCategories,
   }){
     calcolarPrice();
   }

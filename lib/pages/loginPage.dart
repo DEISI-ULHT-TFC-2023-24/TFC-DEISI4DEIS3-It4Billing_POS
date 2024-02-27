@@ -61,6 +61,9 @@ class _Logo extends StatelessWidget {
           padding: const EdgeInsets.all(16.0),
           child: Text(
             "Welcome!",
+
+            /// colocar a loja e o Nº do POS
+
             textAlign: TextAlign.center,
             style: isSmallScreen
                 ? Theme.of(context).textTheme.headline5
@@ -102,42 +105,19 @@ class __FormContentState extends State<_FormContent> {
           children: [
             TextFormField(
               validator: (value) {
-                // add email validation
                 if (value == null || value.isEmpty) {
-                  return 'PIntroduza um URL válido';
-                }
-                bool emailValid = RegExp(
-                        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                    .hasMatch(value);
-                if (!emailValid) {
-                  return 'Introduza um URL válido';
+                  return 'Introduzir o PIN';
                 }
 
-                return null;
-              },
-              decoration: const InputDecoration(
-                labelText: 'URL',
-                hintText: 'Introduza o URL',
-                prefixIcon: Icon(Icons.email_outlined),
-                border: OutlineInputBorder(),
-              ),
-            ),
-            _gap(),
-            TextFormField(
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter some text';
-                }
-
-                if (value.length < 6) {
-                  return 'Password must be at least 6 characters';
+                if (value.length < 4 || value.length > 4) {                      // if (value.length != 4) {
+                  return 'A PIN deve ter 4 caracteres';
                 }
                 return null;
               },
               obscureText: !_isPasswordVisible,
               decoration: InputDecoration(
-                  labelText: 'Password',
-                  hintText: 'Enter password',
+                  labelText: 'PIN',
+                  hintText: 'Introduzir o PIN',
                   prefixIcon: const Icon(Icons.lock_outline_rounded),
                   border: const OutlineInputBorder(),
                   suffixIcon: IconButton(
@@ -152,45 +132,43 @@ class __FormContentState extends State<_FormContent> {
                   )),
             ),
             _gap(),
-            Center(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(4),
-                      ),
+            SizedBox(
+                height: 50,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: const Color(0xff00afe9),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      side: const BorderSide(color: Colors.black),
                     ),
-                    child: const Padding(
-                      padding: EdgeInsets.all(10.0),
-                      child: Text(
-                        'Entrar',
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    onPressed: () {
-                      if (_formKey.currentState?.validate() ?? false) {
-                        setState(() {
-                          _showConfirmation = true;
-                        });
-                          Navigator.of(context).pushAndRemoveUntil(
-                              MaterialPageRoute(
-                                  builder: (BuildContext context) => Pedidos()),
-                                  (route) => false);
-                      }
-                    },
                   ),
-                  if (_showConfirmation) const Icon(Icons.check, color: Colors.green),
-                ],
-              ),
-            ),
+                  child: const Padding(
+                    padding: EdgeInsets.all(10.0),
+                    child: Text(
+                      'Entrar',
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  onPressed: () {
+                    if (_formKey.currentState?.validate() ?? false) {
+                      setState(() {
+                        _showConfirmation = true;
+                      });
 
+                      /// Tenho de fazer a verificação do pin com os empregados registados
+
+                      Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(
+                              builder: (BuildContext context) => Pedidos()),
+                              (route) => false);
+                    }
+                  },
+                ),
+            ),
           ],
         ),
       ),
     );
   }
-
   Widget _gap() => const SizedBox(height: 20);
 }

@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'it4billing_pos',
       theme: ThemeData(primarySwatch: Colors.blue),
-      initialRoute: '/loginPage',  // Trocar depois quando funcionar bem
+      initialRoute: '/pedidos',  // Trocar depois quando funcionar bem
       routes: {
         '/loginPage': (context) => const SetupPage(),
         '/docPage' : (context) => const SetupPOSPage(), // para test
