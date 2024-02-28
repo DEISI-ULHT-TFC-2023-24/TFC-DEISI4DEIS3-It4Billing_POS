@@ -73,7 +73,7 @@ class ObjectBoxDatabase {
       Categoria(nome: "Categoria 2", nomeCurto: "Cat 2", description: ''),
       Categoria(nome: "Categoria 3", nomeCurto: "Cat 3", description: ''),
     ];
-    _categoriasBox.putManyAsync(categorias);
+    _categoriasBox.putMany(categorias);
   }
 
   void putDemoArtigos() {
@@ -85,7 +85,6 @@ class ObjectBoxDatabase {
         idCategorias.add(database.getAllCategorias()[i].id);
       }
       List<Artigo> artigos = [
-
         Artigo(
             referencia: "001",
             nome: "Artigo 1",
@@ -100,7 +99,7 @@ class ObjectBoxDatabase {
             idRetention: 1,
             retentionPercentage: 1,
             retentionName: '',
-            stock: 56,
+            stock: 24,
             idArticlesCategories: idCategorias[1]),
         Artigo(
             referencia: "002",
@@ -132,11 +131,28 @@ class ObjectBoxDatabase {
             idRetention: 2,
             retentionPercentage: 2,
             retentionName: '',
-            stock: 10,
+            stock: 12,
             idArticlesCategories: idCategorias[3]),
+        Artigo(
+            referencia: "004",
+            nome: "Artigo 4",
+            barCod: '',
+            description: '',
+            productType: '',
+            unitPrice: 4.06,
+            taxPrecentage: 23,
+            idTaxes: 1,
+            taxName: '',
+            taxDescription: '',
+            idRetention: 1,
+            retentionPercentage: 1,
+            retentionName: '',
+            stock: 6,
+            idArticlesCategories: idCategorias[2]),
       ];
       print('estive aqui');
-      _artigosBox.putManyAsync(artigos);
+      _artigosBox.putMany(artigos);
+
     }
 
   }
@@ -220,7 +236,7 @@ class ObjectBoxDatabase {
   }
 
   ///---------------------------------------------------------
-  // Funções para adicionar e manipular Categorias
+  // Funções para adicionar e manipular Artigos
   Future<void> addArtigos(Artigo artigo) async {
     await _artigosBox.put(artigo);
   }

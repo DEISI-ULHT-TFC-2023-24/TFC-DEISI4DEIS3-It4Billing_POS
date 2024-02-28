@@ -17,7 +17,6 @@ class Artigo {
   double unitPrice; // Valor sem iva
 
   int idArticlesCategories;
-  //Categoria categoria; // por objeto
 
   int idTaxes; // ID da tabela taxas do it4billing
   int taxPrecentage;
@@ -50,7 +49,6 @@ class Artigo {
   }){
     calcolarPrice();
   }
-
 
   void calcolarPrice(){
     price = double.parse((unitPrice * (taxPrecentage / 100 + 1)).toStringAsFixed(2));

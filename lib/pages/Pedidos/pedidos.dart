@@ -20,8 +20,6 @@ class Pedidos extends StatefulWidget {
 
   List<PedidoObj> pedidos = database.getAllPedidos();
 
-
-
   List<String> metodosPagamento = ['DINHEIRO', 'MULTIBANCO', 'MB WAY'];
 
   Pedidos({Key? key,}) : super(key: key);
@@ -37,10 +35,6 @@ class Pedidos extends StatefulWidget {
 class _Pedidos extends State<Pedidos> {
   // contruir ainda a forma como tratar a info da base de dados e perceber como vou receber API's e etc..
   // ainda a data para a base de dados
-
-  getcat() {
-
-  }
 
 
   Widget buildHeader(BuildContext context) => Container(
@@ -179,10 +173,31 @@ class _Pedidos extends State<Pedidos> {
       database.putDemoCategorias();
     }
   }
+
+
+  Future<void> carregarArtigosEAtualizarNrArtigosCategorias() async {
+    List<Categoria> allCategorias = await database.getAllCategorias();
+    List<Artigo> allArtigos = database.getAllArtigos();
+
+    for (Categoria categoria in allCategorias) {
+      int nrArtigosCategoria = 0;
+      for (Artigo artigo in allArtigos) {
+        if (categoria.id == artigo.idArticlesCategories) {
+          nrArtigosCategoria++;
+        }
+      }
+      categoria.nrArtigos = nrArtigosCategoria;
+      await database.addCategorias(categoria);
+    }
+  }
+
+
   void carregarArtigos() {
     if (database.getAllArtigos().isEmpty){
       database.putDemoArtigos();
+      carregarArtigosEAtualizarNrArtigosCategorias();
     }
+
   }
 
 
@@ -237,7 +252,6 @@ class _Pedidos extends State<Pedidos> {
                       const EdgeInsets.symmetric(vertical: 10, horizontal: 50),
                   child: ElevatedButton(
                     onPressed: () {
-                      getcat();
                       Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -281,7 +295,6 @@ class _Pedidos extends State<Pedidos> {
                         onPressed: () {
                           // entrar dentro do pedido ainda aberto
                           print(widget.pedidos[index].nrArtigos);
-                          getcat();
                           Navigator.push(
                               context,
                               MaterialPageRoute(

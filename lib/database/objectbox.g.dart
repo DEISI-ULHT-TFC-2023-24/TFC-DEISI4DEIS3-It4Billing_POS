@@ -127,7 +127,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
       id: const obx_int.IdUid(2, 5583956632136704967),
       name: 'Categoria',
-      lastPropertyId: const obx_int.IdUid(4, 1855846717063499664),
+      lastPropertyId: const obx_int.IdUid(5, 2143340461393527343),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
@@ -149,6 +149,11 @@ final _entities = <obx_int.ModelEntity>[
             id: const obx_int.IdUid(4, 1855846717063499664),
             name: 'description',
             type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(5, 2143340461393527343),
+            name: 'nrArtigos',
+            type: 6,
             flags: 0)
       ],
       relations: <obx_int.ModelRelation>[],
@@ -493,11 +498,12 @@ obx_int.ModelDefinition getObjectBoxModel() {
           final nomeOffset = fbb.writeString(object.nome);
           final nomeCurtoOffset = fbb.writeString(object.nomeCurto);
           final descriptionOffset = fbb.writeString(object.description);
-          fbb.startTable(5);
+          fbb.startTable(6);
           fbb.addInt64(0, object.id);
           fbb.addOffset(1, nomeOffset);
           fbb.addOffset(2, nomeCurtoOffset);
           fbb.addOffset(3, descriptionOffset);
+          fbb.addInt64(4, object.nrArtigos);
           fbb.finish(fbb.endTable());
           return object.id;
         },
@@ -515,7 +521,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
               nome: nomeParam,
               nomeCurto: nomeCurtoParam,
               description: descriptionParam)
-            ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
+            ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0)
+            ..nrArtigos =
+                const fb.Int64Reader().vTableGet(buffer, rootOffset, 12, 0);
 
           return object;
         }),
@@ -791,6 +799,10 @@ class Categoria_ {
   /// see [Categoria.description]
   static final description =
       obx.QueryStringProperty<Categoria>(_entities[1].properties[3]);
+
+  /// see [Categoria.nrArtigos]
+  static final nrArtigos =
+      obx.QueryIntegerProperty<Categoria>(_entities[1].properties[4]);
 }
 
 /// [LocalObj] entity fields to define ObjectBox queries.

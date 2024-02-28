@@ -59,7 +59,8 @@ class _Pedido extends State<Pedido> with TickerProviderStateMixin {
     } else {
       return widget.artigos
           .where((artigo) =>
-              database.getCategorias(artigo.idArticlesCategories)?.nome == categoriaSelecionada.nome &&
+              database.getCategorias(artigo.idArticlesCategories)?.nome ==
+                  categoriaSelecionada.nome &&
               artigo.nome
                   .toLowerCase()
                   .contains(searchController.text.toLowerCase()))
@@ -89,7 +90,8 @@ class _Pedido extends State<Pedido> with TickerProviderStateMixin {
       nome: "Pedido 01",
       hora: DateTime.now(),
       utilizadorId: 0,
-      total: 0, localId: -1);
+      total: 0,
+      localId: -1);
 
   // estudar a parte de voltar a entrar dentro do pedido
   // como vou carregar toda a info ??devo adicionar mais variaveis ao pedido por exemplo
@@ -106,11 +108,14 @@ class _Pedido extends State<Pedido> with TickerProviderStateMixin {
 
   void addUserAoPedido() {
     //database.removeAlUtilizadores();
-    if (database.getAllUtilizadores().length == 0){
+    if (database.getAllUtilizadores().length == 0) {
       database.putDemoUsers();
     }
+
     /// isto vai ser alterrado porque tenho de ter o utilizador da seção
-    pedido.utilizadorId = database.getAllUtilizadores()[0].id;  ///este zer0 tera de ser mudado ele escolhe qual é o utilizador
+    pedido.utilizadorId = database.getAllUtilizadores()[0].id;
+
+    ///este zer0 tera de ser mudado ele escolhe qual é o utilizador
 
     //print(pedido.utilizadorId);
   }
@@ -120,225 +125,222 @@ class _Pedido extends State<Pedido> with TickerProviderStateMixin {
     pedido.nome = "Pedido ${widget.pedidos.length + 1}";
 
     return Scaffold(
-              appBar: AppBar(
-            title: Text(pedido.nome),
-            // Mudar fazer aparecer o nome do pedido
-            backgroundColor: const Color(0xff00afe9),
-            actions: [
-              Stack(
-                children: [
-                  IconButton(
-                    icon: ScaleTransition(
-                      scale: Tween<double>(begin: 1, end: 1.5).animate(
-                        CurvedAnimation(
-                          parent: _controller,
-                          curve: Curves.easeInOut,
-                        ),
-                      ),
-                      child: const Icon(Icons.shopping_cart_outlined),
-                    ),
-                    onPressed: () {
-                      pedido.total = 0;
-                      addUserAoPedido();
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => Carrinho(
-                                    artigos: widget.artigos,
-                                    categorias: widget.categorias,
-                                    pedidos: widget.pedidos,
-                                    pedido: pedido,
-                                  )));
-                    },
-                  ),
-                  Positioned(
-                    right: 6,
-                    top: 6,
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => Carrinho(
-                                      artigos: widget.artigos,
-                                      categorias: widget.categorias,
-                                      pedidos: widget.pedidos,
-                                      pedido: pedido,
-                                    )));
-                      },
-                      child: ScaleTransition(
-                        scale: Tween<double>(begin: 1, end: 1.5).animate(
-                          CurvedAnimation(
-                            parent: _controller,
-                            curve: Curves.easeInOut,
-                          ),
-                        ),
-                        child: Container(
-                          padding: const EdgeInsets.all(2),
-                          decoration: BoxDecoration(
-                            color: Colors.red,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          constraints: const BoxConstraints(
-                            minWidth: 16,
-                            minHeight: 16,
-                          ),
-                          child: Text(
-                            '${pedido.nrArtigos}',
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              fontSize: 12,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ),
+      appBar: AppBar(
+        title: Text(pedido.nome),
+        backgroundColor: const Color(0xff00afe9),
+        actions: [
+          Stack(
+            children: [
+              IconButton(
+                icon: ScaleTransition(
+                  scale: Tween<double>(begin: 1, end: 1.5).animate(
+                    CurvedAnimation(
+                      parent: _controller,
+                      curve: Curves.easeInOut,
                     ),
                   ),
-                ],
-              ),
-              PopupMenuButton<String>(
-                onSelected: (value) {
-                  // Aqui você pode adicionar a lógica para lidar com as opções selecionadas
-                  print('Opção selecionada: ${pedido.nome}');
+                  child: const Icon(Icons.shopping_cart_outlined),
+                ),
+                onPressed: () {
+                  pedido.total = 0;
+                  addUserAoPedido();
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Carrinho(
+                                artigos: widget.artigos,
+                                categorias: widget.categorias,
+                                pedidos: widget.pedidos,
+                                pedido: pedido,
+                              )));
                 },
-                itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-                  const PopupMenuItem<String>(
-                    value: 'Sincronizar',
-                    child: ListTile(
-                      leading: Icon(Icons.sync),
-                      title: Text('Sincronizar'),
+              ),
+              Positioned(
+                right: 6,
+                top: 6,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => Carrinho(
+                                  artigos: widget.artigos,
+                                  categorias: widget.categorias,
+                                  pedidos: widget.pedidos,
+                                  pedido: pedido,
+                                )));
+                  },
+                  child: ScaleTransition(
+                    scale: Tween<double>(begin: 1, end: 1.5).animate(
+                      CurvedAnimation(
+                        parent: _controller,
+                        curve: Curves.easeInOut,
+                      ),
+                    ),
+                    child: Container(
+                      padding: const EdgeInsets.all(2),
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      constraints: const BoxConstraints(
+                        minWidth: 16,
+                        minHeight: 16,
+                      ),
+                      child: Text(
+                        '${pedido.nrArtigos}',
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: Colors.white,
+                        ),
+                      ),
                     ),
                   ),
-                ],
+                ),
               ),
             ],
           ),
-              body: Column(
-                children: [
-                  Row(
-                children: [
-                  Expanded(
-                    child: showSearch
-                        ? Padding(
-                            padding: const EdgeInsets.all(20),
-                            child: TextField(
-                              controller: searchController,
-                              decoration: const InputDecoration(
-                                hintText: 'Pesquisar artigos...',
-                              ),
-                              onChanged: (value) {
-                                setState(() {});
-                              },
-                            ),
-                          )
-                        : Padding(
-                            padding: const EdgeInsets.all(20),
-                            child: DropdownButtonFormField<Categoria>(
-                              decoration: const InputDecoration(
-                                label: Text('Categoria'),
-                                border: OutlineInputBorder(),
-                              ),
-                              value: categoriaSelecionada,
-                              onChanged: (Categoria? newValue) {
-                                setState(() {
-                                  categoriaSelecionada = newValue!;
-                                });
-                              },
-                              items: widget.categorias
-                                  .map<DropdownMenuItem<Categoria>>(
-                                      (Categoria value) {
-                                return DropdownMenuItem<Categoria>(
-                                  value: value,
-                                  child: Text(value.nome),
-                                );
-                              }).toList(),
-                            ),
-                          ),
-                  ),
-                  IconButton(
-                    icon: showSearch
-                        ? const Icon(Icons.close)
-                        : const Icon(Icons.search),
-                    onPressed: () {
-                      setState(() {
-                        // Faz com que apareca todos os artigos novamente
-                        categoriaSelecionada = Categoria(
-                          nome: 'Todos os artigos',
-                          description: '',
-                          nomeCurto: '',
-                        );
-                        showSearch = !showSearch;
-                        if (!showSearch) {
-                          searchController.clear();
-                        }
-                      });
-                    },
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.camera_alt_outlined),
-                    onPressed: _scanBarcode,
-                  ),
-                ],
-              ),
-                  Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                  child: artigosFiltrados().isEmpty
-                      ? const Center(
-                          child: Text('Nenhum artigo encontrado'),
-                        )
-                      : ListView.builder(
-                          itemCount: artigosFiltrados().length,
-                          itemBuilder: (context, index) {
-                            return Padding(
-                              padding: const EdgeInsets.only(bottom: 10.0),
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  pedido.artigosPedido
-                                      .add(artigosFiltrados()[index]);
-                                  print('foi adicionado o artigo');
-                                  addItemToCart();
-                                },
-                                style: ButtonStyle(
-                                  side: MaterialStateProperty.all(
-                                      const BorderSide(color: Colors.white12)),
-                                  // Linha de borda preta
-                                  backgroundColor:
-                                      MaterialStateProperty.all(Colors.white),
-                                  // Fundo white
-                                  fixedSize: MaterialStateProperty.all(
-                                      const Size(50, 60)),
-                                ),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      artigosFiltrados()[index].nome.length > 10
-                                          ? artigosFiltrados()[index]
-                                              .nome
-                                              .substring(0, 20)
-                                          : artigosFiltrados()[index].nome,
-                                      style: const TextStyle(
-                                          color: Colors.black, fontSize: 16),
-                                    ),
-                                    Text(
-                                      'Preço: € ${artigosFiltrados()[index].price}',
-                                      style: const TextStyle(
-                                          color: Colors.black, fontSize: 16),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
-                        ),
+          PopupMenuButton<String>(
+            onSelected: (value) {
+              // Aqui você pode adicionar a lógica para lidar com as opções selecionadas
+              print('Opção selecionada: ${pedido.nome}');
+            },
+            itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+              const PopupMenuItem<String>(
+                value: 'Sincronizar',
+                child: ListTile(
+                  leading: Icon(Icons.sync),
+                  title: Text('Sincronizar'),
                 ),
               ),
-                ],
+            ],
+          ),
+        ],
+      ),
+      body: Column(
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: showSearch
+                    ? Padding(
+                        padding: const EdgeInsets.all(20),
+                        child: TextField(
+                          controller: searchController,
+                          decoration: const InputDecoration(
+                            hintText: 'Pesquisar artigos...',
+                          ),
+                          onChanged: (value) {
+                            setState(() {});
+                          },
+                        ),
+                      )
+                    : Padding(
+                        padding: const EdgeInsets.all(20),
+                        child: DropdownButtonFormField<Categoria>(
+                          decoration: const InputDecoration(
+                            label: Text('Categoria'),
+                            border: OutlineInputBorder(),
+                          ),
+                          value: categoriaSelecionada,
+                          onChanged: (Categoria? newValue) {
+                            setState(() {
+                              categoriaSelecionada = newValue!;
+                            });
+                          },
+                          items: widget.categorias
+                              .map<DropdownMenuItem<Categoria>>(
+                                  (Categoria value) {
+                            return DropdownMenuItem<Categoria>(
+                              value: value,
+                              child: Text(value.nome),
+                            );
+                          }).toList(),
+                        ),
+                      ),
               ),
-
+              IconButton(
+                icon: showSearch
+                    ? const Icon(Icons.close)
+                    : const Icon(Icons.search),
+                onPressed: () {
+                  setState(() {
+                    // Faz com que apareca todos os artigos novamente
+                    categoriaSelecionada = Categoria(
+                      nome: 'Todos os artigos',
+                      description: '',
+                      nomeCurto: '',
+                    );
+                    showSearch = !showSearch;
+                    if (!showSearch) {
+                      searchController.clear();
+                    }
+                  });
+                },
+              ),
+              IconButton(
+                icon: const Icon(Icons.camera_alt_outlined),
+                onPressed: _scanBarcode,
+              ),
+            ],
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: artigosFiltrados().isEmpty
+                  ? const Center(
+                      child: Text('Nenhum artigo encontrado'),
+                    )
+                  : ListView.builder(
+                      itemCount: artigosFiltrados().length,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 10.0),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              pedido.artigosPedido
+                                  .add(artigosFiltrados()[index]);
+                              print('foi adicionado o artigo');
+                              addItemToCart();
+                            },
+                            style: ButtonStyle(
+                              side: MaterialStateProperty.all(
+                                  const BorderSide(color: Colors.white12)),
+                              // Linha de borda preta
+                              backgroundColor:
+                                  MaterialStateProperty.all(Colors.white),
+                              // Fundo white
+                              fixedSize:
+                                  MaterialStateProperty.all(const Size(50, 60)),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  artigosFiltrados()[index].nome.length > 20
+                                      ? artigosFiltrados()[index]
+                                          .nome
+                                          .substring(0, 20)
+                                      : artigosFiltrados()[index].nome,
+                                  style: const TextStyle(
+                                      color: Colors.black, fontSize: 16),
+                                ),
+                                Text(
+                                  'Preço: € ${artigosFiltrados()[index].price}',
+                                  style: const TextStyle(
+                                      color: Colors.black, fontSize: 16),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

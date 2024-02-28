@@ -104,7 +104,7 @@
     },
     {
       "id": "2:5583956632136704967",
-      "lastPropertyId": "4:1855846717063499664",
+      "lastPropertyId": "5:2143340461393527343",
       "name": "Categoria",
       "properties": [
         {
@@ -127,6 +127,11 @@
           "id": "4:1855846717063499664",
           "name": "description",
           "type": 9
+        },
+        {
+          "id": "5:2143340461393527343",
+          "name": "nrArtigos",
+          "type": 6
         }
       ],
       "relations": []

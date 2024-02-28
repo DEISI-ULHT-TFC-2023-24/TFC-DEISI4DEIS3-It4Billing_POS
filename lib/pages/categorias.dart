@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:it4billing_pos/pages/turno.dart';
 import 'package:it4billing_pos/pages/vendas.dart';
 import '../main.dart';
-import '../objetos/pedidoObj.dart';
+import '../objetos/categoriaObj.dart';
 import 'Pedidos/pedidos.dart';
 import 'artigos.dart';
 
 class Categorias extends StatelessWidget {
-
+  List<Categoria> categorias = database.getAllCategorias();
 
   Categorias({Key? key }) : super(key: key);
 
@@ -109,6 +109,56 @@ class Categorias extends StatelessWidget {
     ),
   );
 
+  Widget buildArtigoItem(BuildContext context, Categoria categoria) {
+    final bool isVertical = MediaQuery.of(context).orientation == Orientation.portrait;
+
+    return Container(
+      padding: const EdgeInsets.all(10), // Aumentando o espaçamento interno
+      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 0), // Aumentando o espaçamento externo
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.grey),
+        borderRadius: BorderRadius.circular(12), // Aumentando o raio da borda
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  categoria.nome.length > (isVertical ? 20 : 50)
+                      ? categoria.nome.substring(0, isVertical ? 20 : 50)
+                      : categoria.nome,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 5,),
+                Text(
+                  categoria.nomeCurto,
+                  style: const TextStyle(fontSize: 14, color: Colors.grey),
+                ),
+              ],
+            ),
+          ),
+          Row(
+            children: [
+              const SizedBox(width: 15),
+              Text(
+                'Nº de artigos: ${categoria.nrArtigos}',
+                style: const TextStyle(fontSize: 16),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -124,13 +174,20 @@ class Categorias extends StatelessWidget {
         ),
       ),
       appBar: AppBar(
-        title: const Text('Artigos'),
+        title: const Text('Categorias'),
         backgroundColor: const Color(0xff00afe9),
       ),
-      body: const Column(
-        children: [
+      body: ListView.builder(
+        itemCount: categorias.length - 1,
+        itemBuilder: (context, index) {
+          return Column(
+            children: [
+              const SizedBox(height: 20),
+              buildArtigoItem(context, categorias[index + 1])
+            ],
+          );
 
-        ],
+        },
       ),
     );
   }
