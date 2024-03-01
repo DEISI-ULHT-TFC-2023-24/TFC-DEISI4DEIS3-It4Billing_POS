@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:it4billing_pos/objetos/localObj.dart';
 import 'package:it4billing_pos/pages/Pedidos/concluirPedido.dart';
+import 'package:it4billing_pos/pages/Pedidos/dividirConta.dart';
 import 'package:it4billing_pos/pages/Pedidos/pedidos.dart';
 
 import '../../objetos/artigoObj.dart';
@@ -157,6 +157,12 @@ class _Cobrar extends State<Cobrar> {
                         child: ElevatedButton(
                           onPressed: () {
                             // fazer a navegação para a DIVIDIR CONTA.
+
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => DividirConta(pedido: widget.pedido)));
+
                           },
                           style: ElevatedButton.styleFrom(
                             primary: Colors.white,
@@ -193,7 +199,7 @@ class _Cobrar extends State<Cobrar> {
                               height: 50,
                               child: ElevatedButton(
                                 onPressed: () {
-                                  // Entrar no final da compra ..... outra vez clh grava aamerdas ....+
+                                  // Entrar no final da compra
 
                                   Navigator.push(
                                       context,

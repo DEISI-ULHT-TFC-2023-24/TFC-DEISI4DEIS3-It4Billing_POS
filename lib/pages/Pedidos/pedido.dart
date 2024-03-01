@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/animation.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
-import 'package:it4billing_pos/objetos/utilizadorObj.dart';
 import 'package:it4billing_pos/pages/Pedidos/carrinho.dart';
 import '../../main.dart';
 import '../../objetos/artigoObj.dart';
 import '../../objetos/categoriaObj.dart';
-import '../../objetos/localObj.dart';
 import '../../objetos/pedidoObj.dart';
 
 class Pedido extends StatefulWidget {
@@ -40,7 +38,7 @@ class _Pedido extends State<Pedido> with TickerProviderStateMixin {
     super.initState();
 
     pedido.nrArtigos =
-        pedido.artigosPedido.length; //atualiza o contador do carrinho
+        pedido.artigosPedidoIds.length; //atualiza o contador do carrinho
 
     searchController = TextEditingController();
     _controller = AnimationController(
@@ -106,18 +104,10 @@ class _Pedido extends State<Pedido> with TickerProviderStateMixin {
     });
   }
 
-  void addUserAoPedido() {
-    //database.removeAlUtilizadores();
-    if (database.getAllUtilizadores().length == 0) {
-      database.putDemoUsers();
-    }
-
+  Future<void> addUserAoPedido() async {
     /// isto vai ser alterrado porque tenho de ter o utilizador da seção
     pedido.utilizadorId = database.getAllUtilizadores()[0].id;
-
     ///este zer0 tera de ser mudado ele escolhe qual é o utilizador
-
-    //print(pedido.utilizadorId);
   }
 
   @override
@@ -299,8 +289,8 @@ class _Pedido extends State<Pedido> with TickerProviderStateMixin {
                           padding: const EdgeInsets.only(bottom: 10.0),
                           child: ElevatedButton(
                             onPressed: () {
-                              pedido.artigosPedido
-                                  .add(artigosFiltrados()[index]);
+                              pedido.artigosPedidoIds
+                                  .add(artigosFiltrados()[index].id);
                               print('foi adicionado o artigo');
                               addItemToCart();
                             },

@@ -1,8 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:it4billing_pos/database/objectbox_database.dart';
-import 'package:it4billing_pos/objetos/utilizadorObj.dart';
 import 'package:it4billing_pos/pages/Pedidos/pedido.dart';
 import 'package:it4billing_pos/pages/Pedidos/pedidoAberto.dart';
 import 'package:it4billing_pos/objetos/pedidoObj.dart';
@@ -10,7 +8,6 @@ import 'package:it4billing_pos/objetos/artigoObj.dart';
 import 'package:it4billing_pos/objetos/categoriaObj.dart';
 
 import '../../main.dart';
-import '../../objetos/localObj.dart';
 import '../artigos.dart';
 import '../categorias.dart';
 import '../turno.dart';
@@ -174,9 +171,8 @@ class _Pedidos extends State<Pedidos> {
     }
   }
 
-
   Future<void> carregarArtigosEAtualizarNrArtigosCategorias() async {
-    List<Categoria> allCategorias = await database.getAllCategorias();
+    List<Categoria> allCategorias = database.getAllCategorias();
     List<Artigo> allArtigos = database.getAllArtigos();
 
     for (Categoria categoria in allCategorias) {
@@ -191,7 +187,6 @@ class _Pedidos extends State<Pedidos> {
     }
   }
 
-
   void carregarArtigos() {
     if (database.getAllArtigos().isEmpty){
       database.putDemoArtigos();
@@ -199,18 +194,25 @@ class _Pedidos extends State<Pedidos> {
     }
 
   }
-
+  Future<void> carregarUsers() async {
+    if (database.getAllUtilizadores().isEmpty) {
+      await database.putDemoUsers();
+    };
+  }
 
   @override
   void initState() {
     super.initState();
-    print('Tamanho da lista de pedidos depois d vir do carrinho ${database.getAllPedidos().length}');
+    //print('Tamanho da lista de pedidos BD depois d vir do carrinho ${database.getAllPedidos().length}');
     carregarPedidos();
+    //print('Tamanho da lista de pedidos depois d vir do carrinho ${widget.pedidos.length}');
+    if (widget.pedidos.isNotEmpty){
+      //print('id do primeiro pedido: ${widget.pedidos[0].id}');
+    } else {print('Pedidos estam vazios');}
+    carregarUsers();
     carregarLocais();
     carregarCategorias();
-    print('Tamanho da lista de Categorias: ${database.getAllCategorias().length}');
     carregarArtigos();
-    print('Tamanho da lista de Artigos: ${database.getAllArtigos().length}');
   }
 
   @override
@@ -236,11 +238,15 @@ class _Pedidos extends State<Pedidos> {
 
             ElevatedButton(
                 onPressed: () {
-                  database.removeAll();
-                  database.removeAllArtigos();
-                  database.removeAllCategorias();
+                  setState(() {
+                    database.removeAllPedidos();
+                    carregarPedidos();
+                    //database.removeAllArtigos();
+                    //database.removeAllCategorias();
+                  });
+
                 },
-                child: const Text('Limpar a lista')),
+                child: const Text('Limpar a lista para testes-')),
 
             Padding(
               padding: EdgeInsets.only(
@@ -351,7 +357,8 @@ class _Pedidos extends State<Pedidos> {
                                 ],
                               ),
                               Text(
-                                'Funcionario: ${database.getUtilizador(widget.pedidos[index].utilizadorId)?.nome}',
+                                'Funcionario: ${database.getUtilizador(widget.pedidos[index].utilizadorId)?.nome} \n'
+                                    'Artigos na lista: ${widget.pedidos[index].artigosPedidoIds.length}',
                                 style: const TextStyle(
                                   color: Colors.black,
                                   fontSize: 18,

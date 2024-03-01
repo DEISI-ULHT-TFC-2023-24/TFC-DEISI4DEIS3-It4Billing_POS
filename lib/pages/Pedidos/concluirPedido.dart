@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:it4billing_pos/objetos/localObj.dart';
 import 'package:it4billing_pos/pages/Pedidos/pedidos.dart';
 
 import '../../objetos/artigoObj.dart';

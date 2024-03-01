@@ -157,7 +157,7 @@
     },
     {
       "id": "4:7104298556461174362",
-      "lastPropertyId": "7:2429853234783222043",
+      "lastPropertyId": "8:4448781442125381080",
       "name": "PedidoObj",
       "properties": [
         {
@@ -195,15 +195,14 @@
           "id": "7:2429853234783222043",
           "name": "localId",
           "type": 6
+        },
+        {
+          "id": "8:4448781442125381080",
+          "name": "artigosPedidoIds",
+          "type": 27
         }
       ],
-      "relations": [
-        {
-          "id": "1:7466652304049170735",
-          "name": "artigosPedido",
-          "targetId": "1:3191427397601551436"
-        }
-      ]
+      "relations": []
     },
     {
       "id": "5:6422666133805705485",
@@ -309,14 +308,15 @@
       "relations": []
     }
   ],
-  "lastEntityId": "7:760885638717546983",
-  "lastIndexId": "0:0",
+  "lastEntityId": "8:2030655850358947858",
+  "lastIndexId": "1:2709143836952813707",
   "lastRelationId": "1:7466652304049170735",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
   "modelVersionParserMinimum": 5,
   "retiredEntityUids": [
-    4772283387577696936
+    4772283387577696936,
+    2030655850358947858
   ],
   "retiredIndexUids": [],
   "retiredPropertyUids": [
@@ -324,8 +324,13 @@
     3408471008171598888,
     4620978447039160973,
     1523034204437704542,
-    7628756088963777523
+    7628756088963777523,
+    4348102591809595840,
+    6539675531570823517,
+    2891275562117548631
   ],
-  "retiredRelationUids": [],
+  "retiredRelationUids": [
+    7466652304049170735
+  ],
   "version": 1
 }

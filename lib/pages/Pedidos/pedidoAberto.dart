@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/animation.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
-import 'package:it4billing_pos/objetos/utilizadorObj.dart';
 import 'package:it4billing_pos/pages/Pedidos/carrinho.dart';
 import 'package:it4billing_pos/pages/Pedidos/pedidos.dart';
 import '../../main.dart';
@@ -96,7 +94,7 @@ class _PedidoAberto extends State<PedidoAberto> with TickerProviderStateMixin {
 
   void updateNrArtigos() {
     setState(() {
-      widget.pedido.nrArtigos = widget.pedido.artigosPedido.length;
+      widget.pedido.nrArtigos = widget.pedido.artigosPedidoIds.length;
     });
   }
 
@@ -117,7 +115,7 @@ class _PedidoAberto extends State<PedidoAberto> with TickerProviderStateMixin {
     // Remover os últimos artigos da lista
     for (int i = nrArtigosInicial; i < widget.pedido.nrArtigos; i++) {
       print('removeu o ultimo obeto $i');
-      widget.pedido.artigosPedido.removeLast();
+      widget.pedido.artigosPedidoIds.removeLast();
 
     }
     updateNrArtigos();
@@ -155,9 +153,10 @@ class _PedidoAberto extends State<PedidoAberto> with TickerProviderStateMixin {
                       child: const Icon(Icons.shopping_cart_outlined),
                     ),
                     onPressed: () {
-                      for (Artigo artigo in widget.pedido.artigosPedido) {
-                        print('Nome: ${artigo.nome} '
-                            'Preço: ${artigo.price}');
+
+                      for (int artigoId in widget.pedido.artigosPedidoIds) {
+                        print('Nome: ${database.getArtigo(artigoId)?.nome} '
+                            'Preço: ${database.getArtigo(artigoId)?.price}');
                       }
                       widget.pedido.total = 0;
                       Navigator.push(
@@ -222,7 +221,7 @@ class _PedidoAberto extends State<PedidoAberto> with TickerProviderStateMixin {
                   // Aqui você pode adicionar a lógica para lidar com as opções selecionadas
                   print('Opção selecionada: ${widget.pedido.nome}');
                   if (value == 'Eliminar pedido') {
-                    widget.pedidos.remove(widget.pedido);
+                    database.removePedido(widget.pedido.id);
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) =>
                             Pedidos()));
@@ -328,8 +327,8 @@ class _PedidoAberto extends State<PedidoAberto> with TickerProviderStateMixin {
                               padding: const EdgeInsets.only(bottom: 10.0),
                               child: ElevatedButton(
                                 onPressed: () {
-                                  widget.pedido.artigosPedido
-                                      .add(artigosFiltrados()[index]);
+                                  widget.pedido.artigosPedidoIds
+                                      .add(artigosFiltrados()[index].id);
                                   print('foi adicionado o artigo');
                                   addItemToCart();
                                 },

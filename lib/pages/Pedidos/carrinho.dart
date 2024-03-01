@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:it4billing_pos/main.dart';
-import 'package:it4billing_pos/objetos/localObj.dart';
 import 'package:it4billing_pos/pages/Pedidos/editCarrinho.dart';
 import 'package:it4billing_pos/pages/Pedidos/escolhaLocal.dart';
 import 'package:it4billing_pos/pages/Pedidos/pedidos.dart';
@@ -30,20 +29,31 @@ class Carrinho extends StatefulWidget {
 }
 
 class _Carrinho extends State<Carrinho> {
-  late Map<Artigo, int> artigosAgrupados;
+  late Map<int, int> artigosAgrupados;
 
-  Map<Artigo, int> groupItems(List<Artigo> items) {
-    Map<Artigo, int> artigosAgrupados = {};
-    for (var item in items) {
-      artigosAgrupados[item] = (artigosAgrupados[item] ?? 0) + 1;
+  Map<int, int> groupItems(List<int> listaIds) {
+    //Map<int, int> artigosAgrupados = {};
+    //for (var item in items) {
+    //  artigosAgrupados[item] = (artigosAgrupados[item] ?? 0) + 1;
+    //}
+    //return artigosAgrupados;
+    Map<int, int> frequenciaIds = {};
+
+    for (int id in listaIds) {
+      if (frequenciaIds.containsKey(id)) {
+        frequenciaIds[id] = (frequenciaIds[id] ?? 0) + 1;
+      } else {
+        frequenciaIds[id] = 1;
+      }
     }
-    return artigosAgrupados;
+
+    return frequenciaIds;
   }
 
   @override
   void initState() {
     super.initState();
-    artigosAgrupados = groupItems(widget.pedido.artigosPedido);
+    artigosAgrupados = groupItems(widget.pedido.artigosPedidoIds);
   }
 
   @override
@@ -103,9 +113,10 @@ class _Carrinho extends State<Carrinho> {
               child: ListView.builder(
                 itemCount: artigosAgrupados.length,
                 itemBuilder: (context, index) {
-                  Artigo artigo = artigosAgrupados.keys.elementAt(index);
-                  int quantidade = artigosAgrupados[artigo]!;
-                  double valor = artigo.price;
+                  int artigoId = artigosAgrupados.keys.elementAt(index);
+                  int quantidade = artigosAgrupados[artigoId]!;
+                  double valor = database.getArtigo(artigoId)!.price;
+                  Artigo artigo = database.getArtigo(artigoId)!;                /// isto vai dar problemas no editar carrinho
                   return Padding(
                     padding: const EdgeInsets.only(
                         left: 20, right: 20, bottom: 10.0),
@@ -194,8 +205,9 @@ class _Carrinho extends State<Carrinho> {
                     child: SizedBox(
                       height: 50,
                       child: ElevatedButton(
-                        onPressed: () {
-                          if (widget.pedido.artigosPedido.isNotEmpty) {
+                        onPressed: () async {
+
+                          if (widget.pedido.artigosPedidoIds.isNotEmpty) {
                             if (widget.pedido.localId == -1) {
 
                               print('Lista de locais: ${database.getAllLocal().length}');
@@ -213,6 +225,8 @@ class _Carrinho extends State<Carrinho> {
                                   )
                               );
                             } else {
+
+                              await database.addPedido(widget.pedido);
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (context) =>
                                       Pedidos()));
@@ -255,7 +269,7 @@ class _Carrinho extends State<Carrinho> {
                       height: 50,
                       child: ElevatedButton(
                         onPressed: () {
-                          if (widget.pedido.artigosPedido.isNotEmpty) {
+                          if (widget.pedido.artigosPedidoIds.isNotEmpty) {
                             // fazer a navegação para a proxima pag a de cobrança.
 
                             Navigator.push(

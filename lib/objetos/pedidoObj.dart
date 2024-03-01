@@ -1,5 +1,4 @@
-import 'package:it4billing_pos/objetos/localObj.dart';
-import 'utilizadorObj.dart';
+import '../main.dart';
 import 'artigoObj.dart';
 import 'package:objectbox/objectbox.dart';
 import '../database/objectbox.g.dart';
@@ -11,7 +10,9 @@ class PedidoObj {
   DateTime hora;
 
 
-  late ToMany<Artigo> artigosPedido = ToMany<Artigo>();
+  // late ToMany<Artigo> artigosPedido = ToMany<Artigo>();
+  late List<int> artigosPedidoIds = [];
+
   int utilizadorId;
   int localId ;
 
@@ -26,10 +27,11 @@ class PedidoObj {
     required this.total,
   });
 
+
   double calcularValorTotal() {
     total=0;
-    for (var artigo in artigosPedido) {
-      total += artigo.price;
+    for (var artigoId in artigosPedidoIds) {
+      total += database.getArtigo(artigoId)!.price;
     }
     return total;
   }

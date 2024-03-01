@@ -3,7 +3,6 @@ import 'package:it4billing_pos/pages/turno.dart';
 import 'package:it4billing_pos/pages/vendas.dart';
 import '../main.dart';
 import '../objetos/artigoObj.dart';
-import '../objetos/pedidoObj.dart';
 import 'Pedidos/pedidos.dart';
 import 'categorias.dart';
 

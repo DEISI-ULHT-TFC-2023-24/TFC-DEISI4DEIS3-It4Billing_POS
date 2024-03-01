@@ -3,12 +3,12 @@ import 'package:it4billing_pos/pages/Pedidos/carrinho.dart';
 
 import '../../objetos/artigoObj.dart';
 import '../../objetos/categoriaObj.dart';
-import '../../objetos/localObj.dart';
 import '../../objetos/pedidoObj.dart';
 
 class EditCarrinho extends StatefulWidget {
   final Artigo artigo;
   int quantidade;
+  late int qunatidadeInicial;
   List<PedidoObj> pedidos = [];
   List<Categoria> categorias = [];
   List<Artigo> artigos = [];
@@ -34,10 +34,15 @@ class _EditCarrinhoState extends State<EditCarrinho> {
   bool _updatedP = false;
   bool _updatedD = false;
 
+  @override
+  void initState() {
+    super.initState();
+    widget.qunatidadeInicial = widget.quantidade;
+  }
+
   void _increment() {
     setState(() {
       // adicionar alguma verificação para não passar o stock existente+
-
       widget.quantidade++;
     });
   }
@@ -51,7 +56,7 @@ class _EditCarrinhoState extends State<EditCarrinho> {
   }
 
   void _atualizarPreco() {
-    //ADICIONAR UMA VERIFICAÇÃO
+    ///ADICIONAR UMA VERIFICAÇÃO
     double novoPreco = double.parse(_controllerP.text);
     setState(() {
       widget.artigo.price = novoPreco;
@@ -69,26 +74,32 @@ class _EditCarrinhoState extends State<EditCarrinho> {
     setState(() {
       for (int i = 0; i < widget.quantidade; i++) {
         widget.pedido.nrArtigos--;
-        widget.pedido.artigosPedido.remove(widget.artigo);
+        widget.pedido.artigosPedidoIds.remove(widget.artigo.id);
       }
     });
   }
 
   void gravar(){
     setState(() {
-      if (widget.quantidade > widget.pedido.nrArtigos){
-        for (int i = widget.pedido.nrArtigos; i < widget.quantidade; i++) {
-          widget.pedido.nrArtigos++;
-          widget.pedido.artigosPedido.add(widget.artigo);
+      print(widget.quantidade);
+      print(widget.pedido.nrArtigos);
+
+      if (widget.quantidade > widget.qunatidadeInicial){
+        for (int i = widget.qunatidadeInicial; i < widget.quantidade; i++) {
+          widget.pedido.artigosPedidoIds.add(widget.artigo.id);
         }
+        print('incrementa');
       }
-      if (widget.quantidade < widget.pedido.nrArtigos) {
-        for (int i = widget.quantidade; i < widget.pedido.nrArtigos; i++) {
-          widget.pedido.nrArtigos--;
-          widget.pedido.artigosPedido.remove(widget.artigo);
+
+      if (widget.quantidade < widget.qunatidadeInicial) {
+        for (int i = widget.quantidade; i < widget.qunatidadeInicial; i++) {
+          widget.pedido.artigosPedidoIds.remove(widget.artigo.id);
         }
+        print('descrementa');
       }
+
     });
+  print(widget.pedido.artigosPedidoIds);
   }
 
   @override
@@ -298,7 +309,6 @@ class _EditCarrinhoState extends State<EditCarrinho> {
                       height: 50,
                       child: ElevatedButton(
                         onPressed: () {
-                            // Adicione sua lógica para o segundo botão aqui
                             // adicionar o nomero de vezes a mais na lista dos artigos no carrinho ou retirar
                             // meu deus que confusão...
                           gravar();

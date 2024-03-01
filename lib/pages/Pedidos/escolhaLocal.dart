@@ -38,21 +38,20 @@ class Local extends StatelessWidget {
                 return Column(
                   children: [
                     ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
                         // Lógica para lidar com a seleção do local
                         pedido.localId = local.id;
 
-                        //pedidos.add(pedido);
-                        database.addPedido(pedido);
+                        print('tamanho da lista de artigos: ${pedido.artigosPedidoIds.length}');
 
+                        await database.addPedido(pedido);
 
-                        ///verificar o que esta a acontecer
-
+                        print('tamanho da lista de artigos do pedido na BD: '
+                            '${database.getAllPedidos().last.artigosPedidoIds.length}');
 
                         Navigator.of(context).pop();
                         Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) =>
-                                Pedidos()));// Fechar a página
+                            builder: (context) => Pedidos()));// Fechar a página
                       },
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all<Color>(Colors.white),

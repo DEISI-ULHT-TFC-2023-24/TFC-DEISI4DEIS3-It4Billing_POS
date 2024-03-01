@@ -180,7 +180,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
       id: const obx_int.IdUid(4, 7104298556461174362),
       name: 'PedidoObj',
-      lastPropertyId: const obx_int.IdUid(7, 2429853234783222043),
+      lastPropertyId: const obx_int.IdUid(8, 4448781442125381080),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
@@ -217,14 +217,14 @@ final _entities = <obx_int.ModelEntity>[
             id: const obx_int.IdUid(7, 2429853234783222043),
             name: 'localId',
             type: 6,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(8, 4448781442125381080),
+            name: 'artigosPedidoIds',
+            type: 27,
             flags: 0)
       ],
-      relations: <obx_int.ModelRelation>[
-        obx_int.ModelRelation(
-            id: const obx_int.IdUid(1, 7466652304049170735),
-            name: 'artigosPedido',
-            targetId: const obx_int.IdUid(1, 3191427397601551436))
-      ],
+      relations: <obx_int.ModelRelation>[],
       backlinks: <obx_int.ModelBacklink>[]),
   obx_int.ModelEntity(
       id: const obx_int.IdUid(5, 6422666133805705485),
@@ -366,20 +366,23 @@ Future<obx.Store> openStore(
 obx_int.ModelDefinition getObjectBoxModel() {
   final model = obx_int.ModelInfo(
       entities: _entities,
-      lastEntityId: const obx_int.IdUid(7, 760885638717546983),
-      lastIndexId: const obx_int.IdUid(0, 0),
+      lastEntityId: const obx_int.IdUid(8, 2030655850358947858),
+      lastIndexId: const obx_int.IdUid(1, 2709143836952813707),
       lastRelationId: const obx_int.IdUid(1, 7466652304049170735),
       lastSequenceId: const obx_int.IdUid(0, 0),
-      retiredEntityUids: const [4772283387577696936],
+      retiredEntityUids: const [4772283387577696936, 2030655850358947858],
       retiredIndexUids: const [],
       retiredPropertyUids: const [
         5920608008104397494,
         3408471008171598888,
         4620978447039160973,
         1523034204437704542,
-        7628756088963777523
+        7628756088963777523,
+        4348102591809595840,
+        6539675531570823517,
+        2891275562117548631
       ],
-      retiredRelationUids: const [],
+      retiredRelationUids: const [7466652304049170735],
       modelVersion: 5,
       modelVersionParserMinimum: 5,
       version: 1);
@@ -556,17 +559,16 @@ obx_int.ModelDefinition getObjectBoxModel() {
     PedidoObj: obx_int.EntityDefinition<PedidoObj>(
         model: _entities[3],
         toOneRelations: (PedidoObj object) => [],
-        toManyRelations: (PedidoObj object) => {
-              obx_int.RelInfo<PedidoObj>.toMany(1, object.id):
-                  object.artigosPedido
-            },
+        toManyRelations: (PedidoObj object) => {},
         getId: (PedidoObj object) => object.id,
         setId: (PedidoObj object, int id) {
           object.id = id;
         },
         objectToFB: (PedidoObj object, fb.Builder fbb) {
           final nomeOffset = fbb.writeString(object.nome);
-          fbb.startTable(8);
+          final artigosPedidoIdsOffset =
+              fbb.writeListInt64(object.artigosPedidoIds);
+          fbb.startTable(9);
           fbb.addInt64(0, object.id);
           fbb.addOffset(1, nomeOffset);
           fbb.addInt64(2, object.hora.millisecondsSinceEpoch);
@@ -574,6 +576,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           fbb.addInt64(4, object.nrArtigos);
           fbb.addInt64(5, object.utilizadorId);
           fbb.addInt64(6, object.localId);
+          fbb.addOffset(7, artigosPedidoIdsOffset);
           fbb.finish(fbb.endTable());
           return object.id;
         },
@@ -598,11 +601,11 @@ obx_int.ModelDefinition getObjectBoxModel() {
               total: totalParam)
             ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0)
             ..nrArtigos =
-                const fb.Int64Reader().vTableGet(buffer, rootOffset, 12, 0);
-          obx_int.InternalToManyAccess.setRelInfo<PedidoObj>(
-              object.artigosPedido,
-              store,
-              obx_int.RelInfo<PedidoObj>.toMany(1, object.id));
+                const fb.Int64Reader().vTableGet(buffer, rootOffset, 12, 0)
+            ..artigosPedidoIds =
+                const fb.ListReader<int>(fb.Int64Reader(), lazy: false)
+                    .vTableGet(buffer, rootOffset, 18, []);
+
           return object;
         }),
     Utilizador: obx_int.EntityDefinition<Utilizador>(
@@ -846,9 +849,9 @@ class PedidoObj_ {
   static final localId =
       obx.QueryIntegerProperty<PedidoObj>(_entities[3].properties[6]);
 
-  /// see [PedidoObj.artigosPedido]
-  static final artigosPedido =
-      obx.QueryRelationToMany<PedidoObj, Artigo>(_entities[3].relations[0]);
+  /// see [PedidoObj.artigosPedidoIds]
+  static final artigosPedidoIds =
+      obx.QueryIntegerVectorProperty<PedidoObj>(_entities[3].properties[7]);
 }
 
 /// [Utilizador] entity fields to define ObjectBox queries.

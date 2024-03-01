@@ -35,7 +35,6 @@ class ObjectBoxDatabase {
     _categoriasBox = Box<Categoria>(_store);
     _artigosBox = Box<Artigo>(_store);
 
-
     // Add some demo data if the box is empty.
   }
 
@@ -48,12 +47,12 @@ class ObjectBoxDatabase {
     return ObjectBoxDatabase._create(store);
   }
 
-  void putDemoUsers() {
+  Future<void> putDemoUsers() async {
     final demoUsers = [
       Utilizador('User 001', 9638),
       Utilizador('User 064', 9849),
     ];
-    _utilizadoresBox.putManyAsync(demoUsers);
+    await _utilizadoresBox.putManyAsync(demoUsers);
   }
 
   void putDemoLocais() {
@@ -77,13 +76,14 @@ class ObjectBoxDatabase {
   }
 
   void putDemoArtigos() {
-    database._categoriasBox;
-
     List<int> idCategorias = [];
-    if (database.getAllCategorias().isNotEmpty){
-      for (var i = 0 ; i < database.getAllCategorias().length ; i++){
+
+    if (database.getAllCategorias().isNotEmpty) {
+
+      for (var i = 0; i < database.getAllCategorias().length; i++) {
         idCategorias.add(database.getAllCategorias()[i].id);
       }
+
       List<Artigo> artigos = [
         Artigo(
             referencia: "001",
@@ -152,9 +152,7 @@ class ObjectBoxDatabase {
       ];
       print('estive aqui');
       _artigosBox.putMany(artigos);
-
     }
-
   }
 
   Future<void> addPedido(PedidoObj pedido) async {
@@ -173,7 +171,7 @@ class ObjectBoxDatabase {
     return _pedidosBox.get(id);
   }
 
-  Future<void> removeAll() async {
+  Future<void> removeAllPedidos() async {
     await _pedidosBox.removeAll();
   }
 
@@ -252,5 +250,6 @@ class ObjectBoxDatabase {
   Future<void> removeAllArtigos() async {
     await _artigosBox.removeAll();
   }
+
 
 }
