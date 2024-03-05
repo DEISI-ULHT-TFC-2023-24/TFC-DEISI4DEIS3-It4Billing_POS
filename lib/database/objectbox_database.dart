@@ -1,5 +1,6 @@
 import 'package:it4billing_pos/main.dart';
 import 'package:it4billing_pos/objetos/setupObj.dart';
+import 'package:it4billing_pos/objetos/turnoObj.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 
@@ -25,6 +26,8 @@ class ObjectBoxDatabase {
   late final Box<Categoria> _categoriasBox;
   late final Box<Artigo> _artigosBox;
 
+  late final Box<TurnoObj> _turnosBox;
+
   ObjectBoxDatabase._create(this._store) {
     _setupBox = Box<Setup>(_store);
 
@@ -35,7 +38,7 @@ class ObjectBoxDatabase {
     _categoriasBox = Box<Categoria>(_store);
     _artigosBox = Box<Artigo>(_store);
 
-    // Add some demo data if the box is empty.
+    _turnosBox = Box<TurnoObj>(_store);
   }
 
   /// Create an instance of ObjectBox to use throughout the app.
@@ -249,6 +252,24 @@ class ObjectBoxDatabase {
 
   Future<void> removeAllArtigos() async {
     await _artigosBox.removeAll();
+  }
+
+  ///---------------------------------------------------------
+  // Funções para manipular os Turnos
+  Future<void> addTurno(TurnoObj turno) async {
+    await _turnosBox.put(turno);
+  }
+
+  TurnoObj? getTurno(int id) {
+    return _turnosBox.get(id);
+  }
+
+  List<TurnoObj> getAllTurnos() {
+    return _turnosBox.getAll();
+  }
+
+  Future<void> removeAllTurnos() async {
+    await _turnosBox.removeAll();
   }
 
 

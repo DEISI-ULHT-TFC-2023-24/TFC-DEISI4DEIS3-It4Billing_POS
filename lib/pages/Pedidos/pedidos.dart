@@ -10,7 +10,7 @@ import 'package:it4billing_pos/objetos/categoriaObj.dart';
 import '../../main.dart';
 import '../artigos.dart';
 import '../categorias.dart';
-import '../turno.dart';
+import '../Turnos/turno.dart';
 import '../vendas.dart';
 
 class Pedidos extends StatefulWidget {
@@ -204,11 +204,17 @@ class _Pedidos extends State<Pedidos> {
   void initState() {
     super.initState();
     //print('Tamanho da lista de pedidos BD depois d vir do carrinho ${database.getAllPedidos().length}');
+
+
+
     carregarPedidos();
+
     //print('Tamanho da lista de pedidos depois d vir do carrinho ${widget.pedidos.length}');
     if (widget.pedidos.isNotEmpty){
       //print('id do primeiro pedido: ${widget.pedidos[0].id}');
     } else {print('Pedidos estam vazios');}
+
+
     carregarUsers();
     carregarLocais();
     carregarCategorias();
@@ -357,7 +363,7 @@ class _Pedidos extends State<Pedidos> {
                                 ],
                               ),
                               Text(
-                                'Funcionario: ${database.getUtilizador(widget.pedidos[index].utilizadorId)?.nome} \n'
+                                'Funcionario: ${database.getUtilizador(widget.pedidos[index].funcionarioID)?.nome} \n'
                                     'Artigos na lista: ${widget.pedidos[index].artigosPedidoIds.length}',
                                 style: const TextStyle(
                                   color: Colors.black,

@@ -157,7 +157,7 @@
     },
     {
       "id": "4:7104298556461174362",
-      "lastPropertyId": "8:4448781442125381080",
+      "lastPropertyId": "9:1484090413830281754",
       "name": "PedidoObj",
       "properties": [
         {
@@ -187,11 +187,6 @@
           "type": 6
         },
         {
-          "id": "6:7552558037840988166",
-          "name": "utilizadorId",
-          "type": 6
-        },
-        {
           "id": "7:2429853234783222043",
           "name": "localId",
           "type": 6
@@ -200,6 +195,11 @@
           "id": "8:4448781442125381080",
           "name": "artigosPedidoIds",
           "type": 27
+        },
+        {
+          "id": "9:1484090413830281754",
+          "name": "funcionarioID",
+          "type": 6
         }
       ],
       "relations": []
@@ -306,9 +306,103 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "9:6051910675640835218",
+      "lastPropertyId": "17:2922750027210177741",
+      "name": "TurnoObj",
+      "properties": [
+        {
+          "id": "1:6200953183860202611",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:3273047033162630490",
+          "name": "turnoAberto",
+          "type": 1
+        },
+        {
+          "id": "3:1015650084272483863",
+          "name": "horaAbertura",
+          "type": 10
+        },
+        {
+          "id": "4:8883016283833285187",
+          "name": "horaFecho",
+          "type": 10
+        },
+        {
+          "id": "5:3796804986577443379",
+          "name": "vendasBrutas",
+          "type": 8
+        },
+        {
+          "id": "6:5419248214733878988",
+          "name": "reembolsos",
+          "type": 8
+        },
+        {
+          "id": "7:3726933242164990486",
+          "name": "descontos",
+          "type": 8
+        },
+        {
+          "id": "8:3443008092730262250",
+          "name": "vendasliquidas",
+          "type": 8
+        },
+        {
+          "id": "9:5732034200910664457",
+          "name": "dinheiro",
+          "type": 8
+        },
+        {
+          "id": "10:1685756764194169679",
+          "name": "multibanco",
+          "type": 8
+        },
+        {
+          "id": "11:9072606405762854221",
+          "name": "mbWay",
+          "type": 8
+        },
+        {
+          "id": "12:4599961517436732703",
+          "name": "dinheiroInicial",
+          "type": 8
+        },
+        {
+          "id": "13:4915434816181742842",
+          "name": "pagamentosDinheiro",
+          "type": 8
+        },
+        {
+          "id": "14:9117835889598092967",
+          "name": "suprimento",
+          "type": 8
+        },
+        {
+          "id": "15:1699574406241916572",
+          "name": "sangria",
+          "type": 8
+        },
+        {
+          "id": "16:1650460555655926648",
+          "name": "dinheiroEsperado",
+          "type": 8
+        },
+        {
+          "id": "17:2922750027210177741",
+          "name": "funcionarioID",
+          "type": 6
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "8:2030655850358947858",
+  "lastEntityId": "9:6051910675640835218",
   "lastIndexId": "1:2709143836952813707",
   "lastRelationId": "1:7466652304049170735",
   "lastSequenceId": "0:0",
@@ -327,7 +421,8 @@
     7628756088963777523,
     4348102591809595840,
     6539675531570823517,
-    2891275562117548631
+    2891275562117548631,
+    7552558037840988166
   ],
   "retiredRelationUids": [
     7466652304049170735

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:it4billing_pos/pages/loginPage.dart';
+import 'package:it4billing_pos/pages/Login/loginPage.dart';
 
 class SetupPOSPage extends StatefulWidget {
   const SetupPOSPage({Key? key}) : super(key: key);

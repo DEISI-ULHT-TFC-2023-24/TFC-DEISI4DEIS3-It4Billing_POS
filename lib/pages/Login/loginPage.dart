@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'Pedidos/pedidos.dart';
+import 'package:it4billing_pos/main.dart';
+import 'package:it4billing_pos/objetos/turnoObj.dart';
+import '../Pedidos/pedidos.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -157,6 +159,8 @@ class __FormContentState extends State<_FormContent> {
 
                       /// Tenho de fazer a verificação do pin com os empregados registados
 
+                      criarTurno();
+
                       Navigator.of(context).pushAndRemoveUntil(
                           MaterialPageRoute(
                               builder: (BuildContext context) => Pedidos()),
@@ -171,4 +175,9 @@ class __FormContentState extends State<_FormContent> {
     );
   }
   Widget _gap() => const SizedBox(height: 20);
+
+  void criarTurno() {
+    TurnoObj turno = TurnoObj();
+    database.addTurno(turno);
+  }
 }

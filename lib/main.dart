@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:it4billing_pos/pages/Turnos/turnoFechado.dart';
 import 'package:it4billing_pos/pages/artigos.dart';
 import 'package:it4billing_pos/pages/categorias.dart';
-import 'package:it4billing_pos/pages/setupPOSPage.dart';
-import 'package:it4billing_pos/pages/setupPage.dart';
+import 'package:it4billing_pos/pages/Login/setupPOSPage.dart';
+import 'package:it4billing_pos/pages/Login/setupPage.dart';
 import 'package:it4billing_pos/pages/vendas.dart';
-import 'package:it4billing_pos/pages/turno.dart';
+import 'package:it4billing_pos/pages/Turnos/turno.dart';
 import 'package:it4billing_pos/pages/Pedidos/pedidos.dart';
 import 'dart:async';
 import 'database/objectbox_database.dart';
@@ -30,12 +31,13 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'it4billing_pos',
       theme: ThemeData(primarySwatch: Colors.blue),
-      initialRoute: '/pedidos',  // Trocar depois quando funcionar bem
+      initialRoute: '/turnoF',  // Trocar depois quando funcionar bem
       routes: {
         '/loginPage': (context) => const SetupPage(),
         '/docPage' : (context) => const SetupPOSPage(), // para test
         '/pedidos': (context) => Pedidos(),
         '/turno': (context) => Turnos(),
+        '/turnoF': (context) => TurnoFechado(),
         '/vendas': (context) => Vendas(),
         '/artigos': (context) =>  Artigos(),
         '/categorias': (context) =>  Categorias(),

@@ -7,13 +7,15 @@ import '../database/objectbox.g.dart';
 class PedidoObj {
   int id = 0;
   String nome;
+
+  @Property(type: PropertyType.date)
   DateTime hora;
 
 
   // late ToMany<Artigo> artigosPedido = ToMany<Artigo>();
   late List<int> artigosPedidoIds = [];
 
-  int utilizadorId;
+  int funcionarioID;
   int localId ;
 
   double total = 0;
@@ -22,7 +24,7 @@ class PedidoObj {
   PedidoObj({
     required this.nome,
     required this.hora,
-    required this.utilizadorId,
+    required this.funcionarioID,
     required this.localId,
     required this.total,
   });

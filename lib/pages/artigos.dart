@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:it4billing_pos/pages/turno.dart';
+import 'package:it4billing_pos/pages/Turnos/turno.dart';
 import 'package:it4billing_pos/pages/vendas.dart';
 import '../main.dart';
 import '../objetos/artigoObj.dart';
@@ -128,8 +128,8 @@ class Artigos extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  artigo.nome.length > (isVertical ? 20 : 50)
-                      ? artigo.nome.substring(0, isVertical ? 20 : 50)
+                  artigo.nome.length > (isVertical ? 15 : 50)
+                      ? artigo.nome.substring(0, isVertical ? 15 : 50)
                       : artigo.nome,
                   style: const TextStyle(
                     fontSize: 18,
@@ -164,9 +164,6 @@ class Artigos extends StatelessWidget {
       ),
     );
   }
-
-
-
 
   @override
   Widget build(BuildContext context) {

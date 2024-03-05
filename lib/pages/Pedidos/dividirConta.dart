@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../objetos/pedidoObj.dart';
+import 'cobrarDividido.dart';
 
 class DividirConta extends StatefulWidget {
   late PedidoObj pedido;
@@ -18,11 +19,14 @@ class _DividirConta extends State<DividirConta> {
   int numPessoas = 2; // Começa com dois
   // Valor total do pedido
   List<double> valoresIndividuais = []; // Valores individuais de cada pessoa
+  List<bool> botaoPressionado = [];
+  bool mostrarBotaoConcluir = false;
 
   @override
   void initState() {
     super.initState();
     calcularValoresIndividuais();
+    botaoPressionado = List.generate(numPessoas, (index) => false);
   }
 
   void calcularValoresIndividuais() {
@@ -51,12 +55,15 @@ class _DividirConta extends State<DividirConta> {
 
       // Ajuste para garantir que a soma seja igual ao total do pedido
       valoresIndividuais[0] += totalPedido - valoresIndividuais.reduce((value, element) => value + element);
+
     });
   }
 
   void aumentarPessoas() {
     setState(() {
       numPessoas++;
+      botaoPressionado.add(false);
+      mostrarBotaoConcluir = false; // Se aumentar o número de pessoas, o botão "Concluir Venda" deve desaparecer
       calcularValoresIndividuais();
     });
   }
@@ -65,16 +72,48 @@ class _DividirConta extends State<DividirConta> {
     if (numPessoas > 2) {
       setState(() {
         numPessoas--;
+        botaoPressionado.removeLast();
         calcularValoresIndividuais();
       });
     }
   }
 
-  void cobrarValor(int index) {
-    // Implemente a lógica para cobrar o valor da pessoa com o índice 'index'
-    // Aqui você pode realizar a ação necessária, como registrar o pagamento, etc.
-    print("Cobrar valor da pessoa ${index + 1}: ${valoresIndividuais[index]}");
+
+  //void cobrarValor(int index) {
+  //  setState(() {
+  //    botaoPressionado[index] = true; // Marca o botão como pressionado
+  //    // Implemente outras lógicas aqui, se necessário
+  //  });
+//
+  //  /// ir para a pagina de combrança diferente não pode ser a mesma acho
+//
+  //  // Implemente a lógica para cobrar o valor da pessoa com o índice 'index'
+  //  // Aqui você pode realizar a ação necessária, como registrar o pagamento, etc.
+  //  print("Cobrar valor da pessoa ${index + 1}: ${valoresIndividuais[index]}");
+  //}
+  // Adicione um método para contar quantos botões foram pressionados
+  int countPressedButtons() {
+    return botaoPressionado.where((pressed) => pressed).length;
   }
+
+  void cobrarValor(int index) {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => CobrarDividido(pedido: widget.pedido)))
+        .then((_) {
+      setState(() {
+        botaoPressionado[index] = true;
+        if (countPressedButtons() == numPessoas) {
+          mostrarBotaoConcluir = true;
+        }
+      });
+    });
+  }
+
+  void concluirVenda() {
+    // Lógica para concluir a venda
+    print('Venda concluída!');
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -89,7 +128,7 @@ class _DividirConta extends State<DividirConta> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               IconButton(
-                icon: Icon(Icons.remove),
+                icon: const Icon(Icons.remove),
                 onPressed: diminuirPessoas,
               ),
               Text(
@@ -113,24 +152,24 @@ class _DividirConta extends State<DividirConta> {
               itemCount: numPessoas,
               itemBuilder: (context, index) {
                 return ListTile(
-                  title: Text('Valor da clientes ${index + 1}: ${valoresIndividuais[index].toStringAsFixed(2)} €'),
+                  title: Text('Valor do cliente ${index + 1}: ${valoresIndividuais[index].toStringAsFixed(2)} €'),
                   trailing: ElevatedButton(
-                    onPressed: () {
-                      cobrarValor(index);
-                    },
+                    onPressed:  botaoPressionado[index] ? null : () => cobrarValor(index),
                     style: ElevatedButton.styleFrom(
-                      primary: const Color(0xff00afe9),
+                      primary: botaoPressionado[index] ? Colors.grey : const Color(0xff00afe9),
+                      onPrimary:botaoPressionado[index] ? Colors.black : Colors.white,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                         side: const BorderSide(color: Colors.black),
                       ),
                     ),
-                    child: const Text('Cobrar'),
+                    child: Text(botaoPressionado[index] ? 'Cobrado' : 'Cobrar'),
                   ),
                 );
               },
             ),
           ),
+          if (mostrarBotaoConcluir == true) ElevatedButton(onPressed: concluirVenda, child: const Text('Concluir Venda'),),
         ],
       ),
     );

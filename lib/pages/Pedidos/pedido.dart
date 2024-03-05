@@ -87,7 +87,7 @@ class _Pedido extends State<Pedido> with TickerProviderStateMixin {
   PedidoObj pedido = PedidoObj(
       nome: "Pedido 01",
       hora: DateTime.now(),
-      utilizadorId: 0,
+      funcionarioID: 0,
       total: 0,
       localId: -1);
 
@@ -106,7 +106,7 @@ class _Pedido extends State<Pedido> with TickerProviderStateMixin {
 
   Future<void> addUserAoPedido() async {
     /// isto vai ser alterrado porque tenho de ter o utilizador da seção
-    pedido.utilizadorId = database.getAllUtilizadores()[0].id;
+    pedido.funcionarioID = database.getAllUtilizadores()[0].id;
     ///este zer0 tera de ser mudado ele escolhe qual é o utilizador
   }
 
