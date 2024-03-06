@@ -2,16 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:it4billing_pos/pages/Turnos/turnoFechado.dart';
 
+import '../../main.dart';
+import '../../objetos/turnoObj.dart';
+
 class FecharTurno extends StatefulWidget {
   @override
   _FecharTurnoState createState() => _FecharTurnoState();
 }
 
 class _FecharTurnoState extends State<FecharTurno> {
-  double dinheiroEsperado = 100.00;
-  double dinheiroReal = 0.00;
+  TurnoObj turno = database.getAllTurnos()[0];
   TextEditingController _textEditingController = TextEditingController();
   FocusNode _focusNode = FocusNode();
+
+  double dinheiroEsperado = 100.00;
+  double dinheiroReal = 0.00;
+
 
   @override
   void initState() {
@@ -41,7 +47,7 @@ class _FecharTurnoState extends State<FecharTurno> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        FocusScope.of(context).unfocus(); // Remover o foco do campo de texto quando houver um clique em outra parte da tela
+        FocusScope.of(context).unfocus(); // Remover o foco do campo de texto quando houver um clique em outra parte do ecra
       },
       child: Scaffold(
         backgroundColor: Colors.white,
@@ -64,13 +70,13 @@ class _FecharTurnoState extends State<FecharTurno> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
+                  const Text(
                     'Quantidade de dinheiro esperado:',
                     style: TextStyle(fontSize: 16),
                   ),
                   Text(
-                    '${dinheiroEsperado.toStringAsFixed(2)}',
-                    style: TextStyle(fontSize: 16),
+                    dinheiroEsperado.toStringAsFixed(2),
+                    style: const TextStyle(fontSize: 16),
                   ),
                 ],
               ),
@@ -78,7 +84,7 @@ class _FecharTurnoState extends State<FecharTurno> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
+                  const Text(
                     'Quantidade de dinheiro real:',
                     style: TextStyle(fontSize: 16),
                   ),
@@ -116,13 +122,13 @@ class _FecharTurnoState extends State<FecharTurno> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
+                  const Text(
                     'Diferença:',
                     style: TextStyle(fontSize: 16),
                   ),
                   Text(
-                    '${(dinheiroReal - dinheiroEsperado).toStringAsFixed(2)}', // Exibir a diferença calculada
-                    style: TextStyle(fontSize: 16),
+                    (dinheiroReal - dinheiroEsperado).toStringAsFixed(2), // Exibir a diferença calculada
+                    style: const TextStyle(fontSize: 16),
                   ),
                 ],
               ),
@@ -138,7 +144,14 @@ class _FecharTurnoState extends State<FecharTurno> {
               onPressed: () {
                 // Ação ao pressionar o botão de fechar turno
 
-                ///   falta a logica da BD local
+                turno.turnoAberto = false;
+                database.addTurno(turno);
+                print('Esta aberto? DEVIA!! -> ${database.getAllTurnos()[0].turnoAberto}');
+
+
+                ///
+                ///  Falta
+                ///
 
 
                 Navigator.push(
@@ -150,12 +163,12 @@ class _FecharTurnoState extends State<FecharTurno> {
               style: ElevatedButton.styleFrom(
                 primary: const Color(0xffad171b),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                  side: BorderSide(color: Colors.black),
+                  borderRadius: BorderRadius.circular(12.0),
+                  side: const BorderSide(color: Colors.black),
                 ),
               ),
-              child: Text(
-                'Fechar Turno',
+              child: const Text(
+                'FECHAR TURNO',
                 style: TextStyle(color: Colors.white),
               ),
             ),

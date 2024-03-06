@@ -400,9 +400,58 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "10:969872590487839664",
+      "lastPropertyId": "8:4453366980173806972",
+      "name": "VendaObj",
+      "properties": [
+        {
+          "id": "1:5586454065799306017",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:5831161548504895327",
+          "name": "nome",
+          "type": 9
+        },
+        {
+          "id": "3:7108134227286749339",
+          "name": "hora",
+          "type": 10
+        },
+        {
+          "id": "4:1290201078143149856",
+          "name": "artigosPedidoIds",
+          "type": 27
+        },
+        {
+          "id": "5:4625249791527296432",
+          "name": "funcionarioID",
+          "type": 6
+        },
+        {
+          "id": "6:2644627847431001127",
+          "name": "localId",
+          "type": 6
+        },
+        {
+          "id": "7:4661694662445500609",
+          "name": "total",
+          "type": 8
+        },
+        {
+          "id": "8:4453366980173806972",
+          "name": "nrArtigos",
+          "type": 6
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "9:6051910675640835218",
+  "lastEntityId": "10:969872590487839664",
   "lastIndexId": "1:2709143836952813707",
   "lastRelationId": "1:7466652304049170735",
   "lastSequenceId": "0:0",

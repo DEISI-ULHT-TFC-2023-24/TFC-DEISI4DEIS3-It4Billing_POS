@@ -181,10 +181,8 @@ class Turnos extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: () {
                     // Ação do botão "Fechar turno"
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => FecharTurno()));
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => FecharTurno()));
                   },
                   style: ElevatedButton.styleFrom(
                     primary: Colors.white,
@@ -250,7 +248,12 @@ class Turnos extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      Text('0.00 €'),
+                      Text(
+                        '0.00 €',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ],
                   ),
                   _gap(),
@@ -288,7 +291,11 @@ class Turnos extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      Text('0.00 €'),
+                      Text('0.00 €',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ],
                   ),
                   SizedBox(height: 8),
@@ -390,7 +397,11 @@ class Turnos extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      Text('0.00 €'),
+                      Text('0.00 €',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ],
                   ),
                   const SizedBox(height: 20),

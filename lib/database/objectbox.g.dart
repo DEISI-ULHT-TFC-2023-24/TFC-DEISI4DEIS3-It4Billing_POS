@@ -15,6 +15,7 @@ import 'package:objectbox/internal.dart'
 import 'package:objectbox/objectbox.dart' as obx;
 import 'package:objectbox_flutter_libs/objectbox_flutter_libs.dart';
 
+import '../objetos/VendaObj.dart';
 import '../objetos/artigoObj.dart';
 import '../objetos/categoriaObj.dart';
 import '../objetos/localObj.dart';
@@ -423,6 +424,55 @@ final _entities = <obx_int.ModelEntity>[
             flags: 0)
       ],
       relations: <obx_int.ModelRelation>[],
+      backlinks: <obx_int.ModelBacklink>[]),
+  obx_int.ModelEntity(
+      id: const obx_int.IdUid(10, 969872590487839664),
+      name: 'VendaObj',
+      lastPropertyId: const obx_int.IdUid(8, 4453366980173806972),
+      flags: 0,
+      properties: <obx_int.ModelProperty>[
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(1, 5586454065799306017),
+            name: 'id',
+            type: 6,
+            flags: 1),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(2, 5831161548504895327),
+            name: 'nome',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(3, 7108134227286749339),
+            name: 'hora',
+            type: 10,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(4, 1290201078143149856),
+            name: 'artigosPedidoIds',
+            type: 27,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(5, 4625249791527296432),
+            name: 'funcionarioID',
+            type: 6,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(6, 2644627847431001127),
+            name: 'localId',
+            type: 6,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(7, 4661694662445500609),
+            name: 'total',
+            type: 8,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(8, 4453366980173806972),
+            name: 'nrArtigos',
+            type: 6,
+            flags: 0)
+      ],
+      relations: <obx_int.ModelRelation>[],
       backlinks: <obx_int.ModelBacklink>[])
 ];
 
@@ -461,7 +511,7 @@ Future<obx.Store> openStore(
 obx_int.ModelDefinition getObjectBoxModel() {
   final model = obx_int.ModelInfo(
       entities: _entities,
-      lastEntityId: const obx_int.IdUid(9, 6051910675640835218),
+      lastEntityId: const obx_int.IdUid(10, 969872590487839664),
       lastIndexId: const obx_int.IdUid(1, 2709143836952813707),
       lastRelationId: const obx_int.IdUid(1, 7466652304049170735),
       lastSequenceId: const obx_int.IdUid(0, 0),
@@ -871,6 +921,58 @@ obx_int.ModelDefinition getObjectBoxModel() {
                 const fb.Int64Reader().vTableGet(buffer, rootOffset, 36, 0);
 
           return object;
+        }),
+    VendaObj: obx_int.EntityDefinition<VendaObj>(
+        model: _entities[7],
+        toOneRelations: (VendaObj object) => [],
+        toManyRelations: (VendaObj object) => {},
+        getId: (VendaObj object) => object.id,
+        setId: (VendaObj object, int id) {
+          object.id = id;
+        },
+        objectToFB: (VendaObj object, fb.Builder fbb) {
+          final nomeOffset = fbb.writeString(object.nome);
+          final artigosPedidoIdsOffset =
+              fbb.writeListInt64(object.artigosPedidoIds);
+          fbb.startTable(9);
+          fbb.addInt64(0, object.id);
+          fbb.addOffset(1, nomeOffset);
+          fbb.addInt64(2, object.hora.millisecondsSinceEpoch);
+          fbb.addOffset(3, artigosPedidoIdsOffset);
+          fbb.addInt64(4, object.funcionarioID);
+          fbb.addInt64(5, object.localId);
+          fbb.addFloat64(6, object.total);
+          fbb.addInt64(7, object.nrArtigos);
+          fbb.finish(fbb.endTable());
+          return object.id;
+        },
+        objectFromFB: (obx.Store store, ByteData fbData) {
+          final buffer = fb.BufferContext(fbData);
+          final rootOffset = buffer.derefObject(0);
+          final nomeParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGet(buffer, rootOffset, 6, '');
+          final horaParam = DateTime.fromMillisecondsSinceEpoch(
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 8, 0));
+          final funcionarioIDParam =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 12, 0);
+          final localIdParam =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 14, 0);
+          final totalParam =
+              const fb.Float64Reader().vTableGet(buffer, rootOffset, 16, 0);
+          final object = VendaObj(
+              nome: nomeParam,
+              hora: horaParam,
+              funcionarioID: funcionarioIDParam,
+              localId: localIdParam,
+              total: totalParam)
+            ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0)
+            ..artigosPedidoIds =
+                const fb.ListReader<int>(fb.Int64Reader(), lazy: false)
+                    .vTableGet(buffer, rootOffset, 10, [])
+            ..nrArtigos =
+                const fb.Int64Reader().vTableGet(buffer, rootOffset, 18, 0);
+
+          return object;
         })
   };
 
@@ -1161,4 +1263,39 @@ class TurnoObj_ {
   /// see [TurnoObj.funcionarioID]
   static final funcionarioID =
       obx.QueryIntegerProperty<TurnoObj>(_entities[6].properties[16]);
+}
+
+/// [VendaObj] entity fields to define ObjectBox queries.
+class VendaObj_ {
+  /// see [VendaObj.id]
+  static final id =
+      obx.QueryIntegerProperty<VendaObj>(_entities[7].properties[0]);
+
+  /// see [VendaObj.nome]
+  static final nome =
+      obx.QueryStringProperty<VendaObj>(_entities[7].properties[1]);
+
+  /// see [VendaObj.hora]
+  static final hora =
+      obx.QueryDateProperty<VendaObj>(_entities[7].properties[2]);
+
+  /// see [VendaObj.artigosPedidoIds]
+  static final artigosPedidoIds =
+      obx.QueryIntegerVectorProperty<VendaObj>(_entities[7].properties[3]);
+
+  /// see [VendaObj.funcionarioID]
+  static final funcionarioID =
+      obx.QueryIntegerProperty<VendaObj>(_entities[7].properties[4]);
+
+  /// see [VendaObj.localId]
+  static final localId =
+      obx.QueryIntegerProperty<VendaObj>(_entities[7].properties[5]);
+
+  /// see [VendaObj.total]
+  static final total =
+      obx.QueryDoubleProperty<VendaObj>(_entities[7].properties[6]);
+
+  /// see [VendaObj.nrArtigos]
+  static final nrArtigos =
+      obx.QueryIntegerProperty<VendaObj>(_entities[7].properties[7]);
 }

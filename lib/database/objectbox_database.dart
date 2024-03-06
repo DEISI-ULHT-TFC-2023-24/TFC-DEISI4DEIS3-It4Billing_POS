@@ -4,6 +4,7 @@ import 'package:it4billing_pos/objetos/turnoObj.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 
+import '../objetos/VendaObj.dart';
 import '../objetos/artigoObj.dart';
 import '../objetos/categoriaObj.dart';
 import '../objetos/localObj.dart';
@@ -19,8 +20,8 @@ class ObjectBoxDatabase {
   late final Store _store;
 
   /// A Boxs.
-  late final Box<Setup> _setupBox;
   late final Box<PedidoObj> _pedidosBox;
+  late final Box<VendaObj> _vendasBox;
   late final Box<Utilizador> _utilizadoresBox;
   late final Box<LocalObj> _locaisBox;
   late final Box<Categoria> _categoriasBox;
@@ -29,9 +30,9 @@ class ObjectBoxDatabase {
   late final Box<TurnoObj> _turnosBox;
 
   ObjectBoxDatabase._create(this._store) {
-    _setupBox = Box<Setup>(_store);
 
     _pedidosBox = Box<PedidoObj>(_store);
+    _vendasBox = Box<VendaObj>(_store);
     _utilizadoresBox = Box<Utilizador>(_store);
 
     _locaisBox = Box<LocalObj>(_store);
@@ -270,6 +271,24 @@ class ObjectBoxDatabase {
 
   Future<void> removeAllTurnos() async {
     await _turnosBox.removeAll();
+  }
+
+  ///---------------------------------------------------------
+  // Funções para manipular as Vendas
+  Future<void> addVenda(VendaObj venda) async {
+    await _vendasBox.put(venda);
+  }
+
+  VendaObj? getVenda(int id) {
+    return _vendasBox.get(id);
+  }
+
+  List<VendaObj> getAllVendas() {
+    return _vendasBox.getAll();
+  }
+
+  Future<void> removeAllVendas() async {
+    await _vendasBox.removeAll();
   }
 
 

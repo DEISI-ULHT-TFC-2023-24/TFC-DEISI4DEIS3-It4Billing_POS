@@ -151,7 +151,7 @@ class __FormContentState extends State<_FormContent> {
                       style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                   ),
-                  onPressed: () {
+                  onPressed: () async {
                     if (_formKey.currentState?.validate() ?? false) {
                       setState(() {
                         _showConfirmation = true;
@@ -159,7 +159,7 @@ class __FormContentState extends State<_FormContent> {
 
                       /// Tenho de fazer a verificação do pin com os empregados registados
 
-                      criarTurno();
+                      await criarTurno();
 
                       Navigator.of(context).pushAndRemoveUntil(
                           MaterialPageRoute(
@@ -176,8 +176,13 @@ class __FormContentState extends State<_FormContent> {
   }
   Widget _gap() => const SizedBox(height: 20);
 
-  void criarTurno() {
+  Future<void> criarTurno() async {
     TurnoObj turno = TurnoObj();
-    database.addTurno(turno);
+
+    if (database.getAllTurnos().isEmpty){
+      print('tenho turno');
+      await database.addTurno(turno);
+      print('adicionei sem problemas acho');
+    }
   }
 }

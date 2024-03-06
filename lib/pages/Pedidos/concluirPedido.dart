@@ -103,6 +103,7 @@ class _ConcluirPedido extends State<ConcluirPedido> {
           child: ElevatedButton(
             onPressed: () {
               // acrescentar a lógica de pagamento, impressora, enviar e-mail, etc.
+
               widget.pedidos.remove(widget.pedido);
               Navigator.push(
                 context,

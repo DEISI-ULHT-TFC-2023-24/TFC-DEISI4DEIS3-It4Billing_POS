@@ -7,26 +7,26 @@ class TurnoObj {
   bool turnoAberto = false;
 
   @Property(type: PropertyType.date)
-  late DateTime horaAbertura;
+  late DateTime horaAbertura = DateTime.now();
 
   @Property(type: PropertyType.date)
-  late DateTime horaFecho;
+  late DateTime horaFecho = DateTime.now();
 
-  late double vendasBrutas;
-  late double reembolsos;
-  late double descontos;
-  late double vendasliquidas;
-  late double dinheiro;    // ?? não sei como fazer isto porque pode ter ou não ter estas :/
-  late double multibanco;  // ?? não sei como fazer isto porque pode ter ou não ter estas :/
-  late double mbWay;       // ?? não sei como fazer isto porque pode ter ou não ter estas :/
-  late double dinheiroInicial;
-  late double pagamentosDinheiro;
-  late double suprimento;
-  late double sangria;
-  late double dinheiroEsperado;
+  double vendasBrutas = 0;
+  double reembolsos = 0;
+  double descontos = 0;
+  double vendasliquidas = 0;
+  double dinheiro = 0;    // ?? não sei como fazer isto porque pode ter ou não ter estas :/ ou ter mais ainda 🤯
+  double multibanco = 0;  // ?? não sei como fazer isto porque pode ter ou não ter estas :/ ou ter mais ainda 🤯
+  double mbWay = 0;       // ?? não sei como fazer isto porque pode ter ou não ter estas :/ ou ter mais ainda 🤯
+  double dinheiroInicial = 0;
+  double pagamentosDinheiro = 0;
+  double suprimento = 0;
+  double sangria = 0;
+  double dinheiroEsperado = 0;
 
 
-  late int funcionarioID;
+  int funcionarioID = 0;
 
   TurnoObj();
 }

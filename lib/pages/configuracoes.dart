@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:it4billing_pos/pages/artigos.dart';
 import 'package:it4billing_pos/pages/Turnos/turno.dart';
-import 'package:it4billing_pos/pages/vendas.dart';
 import '../main.dart';
-import '../objetos/categoriaObj.dart';
+import '../objetos/VendaObj.dart';
 import '../objetos/turnoObj.dart';
 import 'Pedidos/pedidos.dart';
 import 'Turnos/turnoFechado.dart';
-import 'artigos.dart';
+import 'categorias.dart';
 
-class Categorias extends StatelessWidget {
-  List<Categoria> categorias = database.getAllCategorias();
+class Configuracoes extends StatelessWidget {
+  List<VendaObj> vendas = database.getAllVendas();
   TurnoObj turno = database.getAllTurnos()[0];
 
-  Categorias({Key? key }) : super(key: key);
+  Configuracoes ({Key? key }) : super(key: key);
 
   Widget buildHeader(BuildContext context) => Container(
     color: const Color(0xff00afe9),
@@ -58,7 +58,6 @@ class Categorias extends StatelessWidget {
           title: const Text('Vendas concluidas'),
           onTap: () {
             Navigator.pop(context);
-            Navigator.of(context).push(MaterialPageRoute(builder: (context) => Vendas()));
           },
         ),
         ListTile(
@@ -88,6 +87,7 @@ class Categorias extends StatelessWidget {
           title: const Text('Categorias'),
           onTap: () {
             Navigator.pop(context);
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => Categorias()));
           },
         ),
 
@@ -97,6 +97,7 @@ class Categorias extends StatelessWidget {
           leading: const Icon(Icons.bar_chart_outlined),
           title: const Text('Back office'),
           onTap: () {
+            Navigator.pop(context);
             Navigator.pushReplacementNamed(context, '/recibos');
           },
         ),
@@ -104,6 +105,7 @@ class Categorias extends StatelessWidget {
           leading: const Icon(Icons.settings),
           title: const Text('Configurações'),
           onTap: () {
+            Navigator.pop(context);
             Navigator.pushReplacementNamed(context,'/recibos');
           },
         ),
@@ -111,6 +113,7 @@ class Categorias extends StatelessWidget {
           leading: const Icon(Icons.info_outline),
           title: const Text('Suporte'),
           onTap: () {
+            Navigator.pop(context);
             Navigator.pushReplacementNamed(context,'/recibos');
           },
         ),
@@ -118,86 +121,30 @@ class Categorias extends StatelessWidget {
     ),
   );
 
-  Widget buildArtigoItem(BuildContext context, Categoria categoria) {
-    final bool isVertical = MediaQuery.of(context).orientation == Orientation.portrait;
-
-    return Container(
-      padding: const EdgeInsets.all(10), // Aumentando o espaçamento interno
-      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 0), // Aumentando o espaçamento externo
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey),
-        borderRadius: BorderRadius.circular(12), // Aumentando o raio da borda
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  categoria.nome.length > (isVertical ? 20 : 50)
-                      ? categoria.nome.substring(0, isVertical ? 20 : 50)
-                      : categoria.nome,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 5,),
-                Text(
-                  categoria.nomeCurto,
-                  style: const TextStyle(fontSize: 14, color: Colors.grey),
-                ),
-              ],
-            ),
-          ),
-          Row(
-            children: [
-              const SizedBox(width: 15),
-              Text(
-                'Nº de artigos: ${categoria.nrArtigos}',
-                style: const TextStyle(fontSize: 16),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-
-
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      drawer: Drawer(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              buildHeader(context),
-              buildMenuItems(context),
+    return  Scaffold(
+          drawer: Drawer(
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  buildHeader(context),
+                  buildMenuItems(context),
+                ],
+              ),
+            ),
+          ),
+          appBar: AppBar(
+            title: const Text('Vendas concluídas'),
+            backgroundColor: const Color(0xff00afe9),
+          ),
+          body: const Column(
+            children: [
+
             ],
           ),
-        ),
-      ),
-      appBar: AppBar(
-        title: const Text('Categorias'),
-        backgroundColor: const Color(0xff00afe9),
-      ),
-      body: ListView.builder(
-        itemCount: categorias.length - 1,
-        itemBuilder: (context, index) {
-          return Column(
-            children: [
-              const SizedBox(height: 20),
-              buildArtigoItem(context, categorias[index + 1])
-            ],
-          );
 
-        },
-      ),
     );
   }
 }

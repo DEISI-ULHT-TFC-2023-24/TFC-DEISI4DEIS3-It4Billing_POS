@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:it4billing_pos/objetos/turnoObj.dart';
 import 'package:it4billing_pos/pages/Turnos/turno.dart';
 import 'package:it4billing_pos/pages/vendas.dart';
 import '../main.dart';
 import '../objetos/artigoObj.dart';
 import 'Pedidos/pedidos.dart';
+import 'Turnos/turnoFechado.dart';
 import 'categorias.dart';
 
 class Artigos extends StatelessWidget {
   List<Artigo> artigos = database.getAllArtigos();
+  TurnoObj turno = database.getAllTurnos()[0];
 
   Artigos({Key? key}) : super(key: key);
 
@@ -65,8 +68,13 @@ class Artigos extends StatelessWidget {
               title: const Text('Turno'),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) => Turnos()));
+                if (turno.turnoAberto){
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (context) => Turnos()));
+                } else {
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (context) => TurnoFechado()));
+                }
               },
             ),
             ListTile(
