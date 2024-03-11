@@ -5,12 +5,12 @@ import 'package:it4billing_pos/pages/Pedidos/pedidos.dart';
 
 import '../../objetos/pedidoObj.dart';
 
-class Local extends StatelessWidget {
+class LocalPage extends StatelessWidget {
   List<PedidoObj> pedidos = [];
   List<LocalObj> locais = database.getAllLocal();
   PedidoObj pedido;
 
-  Local({
+  LocalPage({
     Key? key,
     required this.pedidos,
     required this.pedido,
@@ -48,10 +48,11 @@ class Local extends StatelessWidget {
 
                         print('tamanho da lista de artigos do pedido na BD: '
                             '${database.getAllPedidos().last.artigosPedidoIds.length}');
+                        print('o teste aqui ${pedido.funcionarioID} | ${database.getPedido(pedido.id)?.funcionarioID}');
 
                         Navigator.of(context).pop();
                         Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => Pedidos()));// Fechar a página
+                            builder: (context) => PedidosPage()));// Fechar a página
                       },
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all<Color>(Colors.white),

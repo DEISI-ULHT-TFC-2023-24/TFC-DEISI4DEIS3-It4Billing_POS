@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:it4billing_pos/main.dart';
+import 'package:it4billing_pos/objetos/setupObj.dart';
 import 'package:it4billing_pos/pages/Login/setupPOSPage.dart';
 
 class SetupPage extends StatefulWidget {
@@ -9,36 +11,20 @@ class SetupPage extends StatefulWidget {
 }
 
 class _SetupPageState extends State<SetupPage> {
+
   @override
   Widget build(BuildContext context) {
-    final bool isSmallScreen = MediaQuery.of(context).size.width < 600;
-
     return Scaffold(
-        body: Center(
-            child: isSmallScreen
-                ? const Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      _Logo(),
-                      _FormContent(),
-                    ],
-                  )
-                : Container(
-                    padding: const EdgeInsets.all(32.0),
-                    constraints: const BoxConstraints(maxWidth: 800),
-                    child: const Row(
-                      children: [
-                        Expanded(child: _Logo()),
-                        Expanded(
-                          child: Scrollbar(
-                            child: SingleChildScrollView(
-                              child: _FormContent(),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  )));
+      body: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _Logo(),
+            _FormContent(),
+          ],
+        ),
+      ),
+    );
   }
 }
 
@@ -61,9 +47,9 @@ class _Logo extends StatelessWidget {
             style: isSmallScreen
                 ? Theme.of(context).textTheme.headline5
                 : Theme.of(context)
-                    .textTheme
-                    .headline4
-                    ?.copyWith(color: Colors.black),
+                .textTheme
+                .headline4
+                ?.copyWith(color: Colors.black),
           ),
         )
       ],
@@ -79,14 +65,30 @@ class _FormContent extends StatefulWidget {
 }
 
 class __FormContentState extends State<_FormContent> {
+  final TextEditingController urlController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
   bool _isPasswordVisible = false;
   bool _showConfirmation = false;
   String? _selectedStore;
   String? _selectedPos;
   final List<String> _stores = ['Selecione a loja', 'Loja 1', 'Loja 2', 'Loja 3'];
   final List<String> _poss = ['Selecione o POS', 'POS 1', 'POS 2', 'POS 3'];
+  SetupObj setup = SetupObj();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  Future<void> carregarUsers() async {
+    if (database.getAllUtilizadores().isEmpty) {
+      await database.putDemoUsers();
+    }
+    ;
+  }
+   @override
+  void setState(VoidCallback fn) {
+    carregarUsers();
+    super.setState(fn);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -99,10 +101,11 @@ class __FormContentState extends State<_FormContent> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             TextFormField(
+              controller: urlController,
               validator: (value) {
                 // add email validation
                 if (value == null || value.isEmpty) {
-                  return 'Pintroduza um URL válido';
+                  return 'Introduza um URL válido';
                 }
 
                 //bool emailValid = RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value);
@@ -125,6 +128,7 @@ class __FormContentState extends State<_FormContent> {
             ),
             _gap(),
             TextFormField(
+              controller: passwordController,
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Please enter some text';
@@ -159,132 +163,140 @@ class __FormContentState extends State<_FormContent> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SizedBox(
-                    height: 50,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        primary: const Color(0xff00afe9),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          side: const BorderSide(color: Colors.black),
-                        ),
-                      ),
-                      child: const Padding(
-                        padding: EdgeInsets.all(10.0),
-                        child: Text(
-                          'Conectar',
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      onPressed: () {
-                        if (_formKey.currentState?.validate() ?? false) {
-                          setState(() {
-                            _showConfirmation = true;
-                          });
-                        }
-                      },
-                    ),
-                  ),
-                if (_showConfirmation)
-                  const Row(children: [SizedBox(width: 20), Icon(Icons.check_circle, color: Colors.green),],)
-              ],
-            ),
-            if (_showConfirmation)
-            Column(
-              children: [
-                _gap(),
-                DropdownButtonFormField<String>(
-                  isExpanded: true,
-                  value: _selectedStore,
-                  decoration: InputDecoration(
-                      label: const Text('Loja', style: TextStyle(fontSize: 20)),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      )),
-                  hint: const Text('Selecione a loja'),
-                  onChanged: (newValue) {
-                    setState(() {
-                      _selectedStore = newValue!;
-                    });
-                  },
-                  items: _stores.map<DropdownMenuItem<String>>((String? value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value!),
-                    );
-                  }).toList(),
-                ),
-                //if (_selectedStore != null && _selectedStore != 'Selecione a loja')
-                Column(
-                  children: [
-                    _gap(),
-                    DropdownButtonFormField<String>(
-                      isExpanded: true,
-                      value: _selectedPos,
-                      hint: const Text('Selecione o POS'),
-                      decoration: InputDecoration(
-                          label:
-                              const Text('POS', style: TextStyle(fontSize: 20)),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          )
-                      ),
-                      onChanged: (newValue) {
-                        setState(() {
-                          _selectedPos = newValue!;
-                        });
-                      },
-                      items:
-                          _poss.map<DropdownMenuItem<String>>((String? value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value!),
-                        );
-                      }).toList(),
-                    ),
-                  ],
-                ),
-                _gap(),
-                SizedBox(
                   height: 50,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      primary: const Color(0xff00afe9),
+                      backgroundColor: const Color(0xff00afe9),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                         side: const BorderSide(color: Colors.black),
                       ),
                     ),
+                    child: const Padding(
+                      padding: EdgeInsets.all(10.0),
+                      child: Text(
+                        'Conectar',
+                        style: TextStyle(
+                          color: Colors.white,fontWeight: FontWeight.bold,
+                          fontSize: 16.0,
+                        ),
+                      ),
+                    ),
                     onPressed: () {
-                      if (_selectedStore != null &&
-                          _selectedStore != 'Selecione a loja' &&
-                          _selectedPos != null &&
-                          _selectedPos != 'Selecione o POS') {
-                        // Lógica para confirmar seleção da loja e do POS
+                      setState(() {
+                        setup.url = urlController.text;
+                        setup.password = passwordController.text;
 
-                        Navigator.of(context).pushAndRemoveUntil(
-                            MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                const SetupPOSPage()),
-                                (route) => false);
-                      } else {
-                        // Exibir mensagem de erro.
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Por favor, selecione a loja e o POS.'),
-                            duration: Duration(seconds: 3),
-                          ),
-                        );
-                      }
-
+                        if (_formKey.currentState?.validate() ?? false) {
+                          _showConfirmation = true;
+                        }
+                      });
                     },
-                    child: const Text('Entrar',
-                        style:
-                        TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                   ),
                 ),
+                if (_showConfirmation)
+                  const Row(
+                    children: [
+                      SizedBox(width: 20),
+                      Icon(Icons.check_circle, color: Colors.green),
+                    ],
+                  )
               ],
             ),
+            if (_showConfirmation)
+              Column(
+                children: [
+                  _gap(),
+                  DropdownButtonFormField<String>(
+                    isExpanded: true,
+                    value: _selectedStore,
+                    decoration: InputDecoration(
+                        label: const Text('Loja', style: TextStyle(fontSize: 20)),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        )),
+                    hint: const Text('Selecione a loja'),
+                    onChanged: (newValue) {
+                      setState(() {
+                        _selectedStore = newValue!;
+                      });
+                    },
+                    items: _stores.map<DropdownMenuItem<String>>((String? value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value!),
+                      );
+                    }).toList(),
+                  ),
+                  //if (_selectedStore != null && _selectedStore != 'Selecione a loja')
+                  Column(
+                    children: [
+                      _gap(),
+                      DropdownButtonFormField<String>(
+                        isExpanded: true,
+                        value: _selectedPos,
+                        hint: const Text('Selecione o POS'),
+                        decoration: InputDecoration(
+                            label: const Text('POS', style: TextStyle(fontSize: 20)),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            )),
+                        onChanged: (newValue) {
+                          setState(() {
+                            _selectedPos = newValue!;
+                          });
+                        },
+                        items: _poss.map<DropdownMenuItem<String>>((String? value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value!),
+                          );
+                        }).toList(),
+                      ),
+                    ],
+                  ),
+                  _gap(),
+                  SizedBox(
+                    height: 50,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xff00afe9),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          side: const BorderSide(color: Colors.black),
+                        ),
+                      ),
+                      onPressed: () {
+                        if (_selectedStore != null &&
+                            _selectedStore != 'Selecione a loja' &&
+                            _selectedPos != null &&
+                            _selectedPos != 'Selecione o POS') {
+                          // Lógica para confirmar seleção da loja e do POS
+                          setup.nomeLoja = _selectedStore!;
+                          setup.pos = _selectedPos!;
+
+                          Navigator.of(context).pushAndRemoveUntil(
+                              MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                  SetupPOSPage(setup: setup,)),
+                                  (route) => false);
+                        } else {
+                          // Exibir mensagem de erro.
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Por favor, selecione a loja e o POS.'),
+                              duration: Duration(seconds: 3),
+                            ),
+                          );
+                        }
+                      },
+                      child: const Text('Entrar',
+                          style:
+                          TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.bold)),
+                    ),
+                  ),
+                ],
+              ),
           ],
         ),
       ),

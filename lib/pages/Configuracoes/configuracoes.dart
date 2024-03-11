@@ -1,21 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:it4billing_pos/objetos/turnoObj.dart';
+import 'package:it4billing_pos/pages/artigos.dart';
 import 'package:it4billing_pos/pages/Turnos/turno.dart';
 import 'package:it4billing_pos/pages/vendas.dart';
-import '../main.dart';
-import '../objetos/artigoObj.dart';
-import '../objetos/setupObj.dart';
-import 'Pedidos/pedidos.dart';
-import 'Turnos/turnoFechado.dart';
-import 'categorias.dart';
-import 'Configuracoes/configuracoes.dart';
+import '../../main.dart';
+import '../../objetos/VendaObj.dart';
+import '../../objetos/setupObj.dart';
+import '../../objetos/turnoObj.dart';
+import '../Pedidos/pedidos.dart';
+import '../Turnos/turnoFechado.dart';
+import '../categorias.dart';
+import 'exposocaoCliente.dart';
+import 'geral.dart';
+import 'impressoras.dart';
 
-class ArtigosPage extends StatelessWidget {
-  List<Artigo> artigos = database.getAllArtigos();
+class ConfiguracoesPage extends StatelessWidget {
+  List<VendaObj> vendas = database.getAllVendas();
   TurnoObj turno = database.getAllTurnos()[0];
   SetupObj setup = database.getAllSetup()[0];
 
-  ArtigosPage({Key? key}) : super(key: key);
+  ConfiguracoesPage({Key? key}) : super(key: key);
 
   Widget buildHeader(BuildContext context) => Container(
     color: const Color(0xff00afe9),
@@ -53,8 +56,8 @@ class ArtigosPage extends StatelessWidget {
               title: const Text('Pedidos'),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) => PedidosPage()));
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => PedidosPage()));
               },
             ),
             ListTile(
@@ -62,8 +65,8 @@ class ArtigosPage extends StatelessWidget {
               title: const Text('Vendas concluidas'),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) => VendasPage()));
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => VendasPage()));
               },
             ),
             ListTile(
@@ -71,12 +74,12 @@ class ArtigosPage extends StatelessWidget {
               title: const Text('Turno'),
               onTap: () {
                 Navigator.pop(context);
-                if (turno.turnoAberto){
-                  Navigator.of(context)
-                      .push(MaterialPageRoute(builder: (context) => TurnosPage()));
+                if (turno.turnoAberto) {
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => TurnosPage()));
                 } else {
-                  Navigator.of(context)
-                      .push(MaterialPageRoute(builder: (context) => TurnoFechado()));
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => TurnoFechado()));
                 }
               },
             ),
@@ -85,6 +88,8 @@ class ArtigosPage extends StatelessWidget {
               title: const Text('Artigos'),
               onTap: () {
                 Navigator.pop(context);
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => ArtigosPage()));
               },
             ),
             ListTile(
@@ -109,7 +114,6 @@ class ArtigosPage extends StatelessWidget {
               title: const Text('Configurações'),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) => ConfiguracoesPage()));
               },
             ),
             ListTile(
@@ -118,64 +122,10 @@ class ArtigosPage extends StatelessWidget {
               onTap: () {
                 Navigator.pop(context);
               },
-            )
+            ),
           ],
         ),
       );
-
-  Widget buildArtigoItem(BuildContext context, Artigo artigo) {
-    final bool isVertical = MediaQuery.of(context).orientation == Orientation.portrait;
-
-    return Container(
-      padding: const EdgeInsets.all(10), // Aumentando o espaçamento interno
-      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 0), // Aumentando o espaçamento externo
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey),
-        borderRadius: BorderRadius.circular(12), // Aumentando o raio da borda
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  artigo.nome.length > (isVertical ? 15 : 50)
-                      ? artigo.nome.substring(0, isVertical ? 15 : 50)
-                      : artigo.nome,
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  'Referencia: ${artigo.referencia}',
-                  style: const TextStyle(fontSize: 16, color: Colors.grey),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(
-            width: 200, // Definindo uma largura fixa para o bloco de informações de estoque e preço
-            child: Row(
-              children: [
-                const SizedBox(width: 15),
-                Text(
-                  'Stock: ${artigo.stock}',
-                  style: const TextStyle(fontSize: 16),
-                ),
-                const SizedBox(width: 15),
-                Text(
-                  'Preço: ${artigo.price.toStringAsFixed(2)} €',
-                  style: const TextStyle(fontSize: 16),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -192,21 +142,41 @@ class ArtigosPage extends StatelessWidget {
         ),
       ),
       appBar: AppBar(
-        title: const Text('Artigos'),
+        title: const Text('Configurações'),
         backgroundColor: const Color(0xff00afe9),
       ),
-      body: ListView.builder(
-        itemCount: artigos.length,
-        itemBuilder: (context, index) {
-          return Column(
-            children: [
-              const SizedBox(height: 20),
-              buildArtigoItem(context, artigos[index])
-            ],
-          );
-
-        },
+      body: Container(
+        margin: EdgeInsets.all(20.0),
+        child: ListView(
+          children: <Widget>[
+            ListTile(
+              leading: const Icon(Icons.settings),
+              title: const Text('Geral'),
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => GeralPage()));
+              },
+            ),
+            Divider(), // Linha divisória
+            ListTile(
+              leading: const Icon(Icons.print),
+              title: const Text('Impressoras'),
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => ImpressorasPage()));
+              },
+            ),
+            Divider(), // Linha divisória
+            ListTile(
+              leading: const Icon(Icons.person),
+              title: const Text('Exposição do Cliente'),
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => ExposicaoPage()));
+              },
+            ),
+            Divider(), // Linha divisória
+          ],
+        ),
       ),
     );
   }
+
 }

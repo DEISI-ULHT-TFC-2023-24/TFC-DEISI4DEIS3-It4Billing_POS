@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:it4billing_pos/main.dart';
+import 'package:it4billing_pos/pages/Cliente/addClientePage.dart';
 import 'package:it4billing_pos/pages/Pedidos/editCarrinho.dart';
 import 'package:it4billing_pos/pages/Pedidos/escolhaLocal.dart';
 import 'package:it4billing_pos/pages/Pedidos/pedidos.dart';
@@ -10,13 +11,13 @@ import '../../objetos/categoriaObj.dart';
 import '../../objetos/pedidoObj.dart';
 import 'cobrar.dart';
 
-class Carrinho extends StatefulWidget {
+class CarrinhoPage extends StatefulWidget {
   late List<PedidoObj> pedidos = [];
   late List<Categoria> categorias = [];
   late List<Artigo> artigos = [];
   late PedidoObj pedido;
 
-  Carrinho({
+  CarrinhoPage({
     Key? key,
     required this.pedidos,
     required this.categorias,
@@ -25,10 +26,10 @@ class Carrinho extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _Carrinho createState() => _Carrinho();
+  _CarrinhoPage createState() => _CarrinhoPage();
 }
 
-class _Carrinho extends State<Carrinho> {
+class _CarrinhoPage extends State<CarrinhoPage> {
   late Map<int, int> artigosAgrupados;
 
   Map<int, int> groupItems(List<int> listaIds) {
@@ -66,17 +67,18 @@ class _Carrinho extends State<Carrinho> {
               icon: const Icon(Icons.person_add_outlined),
               tooltip: 'Open shopping cart',
               onPressed: () {
-                // handle the press
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => AdicionarClientePage()));
               },
             ),
             PopupMenuButton<String>(
               onSelected: (value) {
-                // Aqui você pode adicionar a lógica para lidar com as opções selecionadas
+                // Lógica para lidar com as opções selecionadas
                 print('Opção selecionada: ${widget.pedido.nome}');
                 if (value == 'Eliminar pedido') {
                   database.removePedido(widget.pedido.id);
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => Pedidos()));
+                      builder: (context) => PedidosPage()));
                 }
               },
               itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
@@ -218,7 +220,7 @@ class _Carrinho extends State<Carrinho> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => Local(
+                                      builder: (context) => LocalPage(
                                           pedidos: widget.pedidos,
                                           pedido: widget.pedido,
                                       )
@@ -229,7 +231,7 @@ class _Carrinho extends State<Carrinho> {
                               await database.addPedido(widget.pedido);
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (context) =>
-                                      Pedidos()));
+                                      PedidosPage()));
                             }
                           } else {
                             Fluttertoast.showToast(
@@ -244,7 +246,7 @@ class _Carrinho extends State<Carrinho> {
                           }
                         },
                         style: ElevatedButton.styleFrom(
-                          primary: Colors.grey,
+                          backgroundColor: Colors.grey,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                             side: const BorderSide(color: Colors.black),
@@ -296,7 +298,7 @@ class _Carrinho extends State<Carrinho> {
 
                         },
                         style: ElevatedButton.styleFrom(
-                          primary: const Color(0xff00afe9),
+                          backgroundColor: const Color(0xff00afe9),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                             side: const BorderSide(color: Colors.black),

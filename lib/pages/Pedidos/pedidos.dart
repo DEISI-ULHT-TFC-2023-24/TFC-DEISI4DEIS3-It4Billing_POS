@@ -1,6 +1,9 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import 'package:it4billing_pos/objetos/setupObj.dart';
 import 'package:it4billing_pos/objetos/turnoObj.dart';
 import 'package:it4billing_pos/pages/Pedidos/pedido.dart';
 import 'package:it4billing_pos/pages/Pedidos/pedidoAberto.dart';
@@ -13,15 +16,17 @@ import '../Turnos/turnoFechado.dart';
 import '../artigos.dart';
 import '../categorias.dart';
 import '../Turnos/turno.dart';
+import '../Configuracoes/configuracoes.dart';
 import '../vendas.dart';
 
-class Pedidos extends StatefulWidget {
+class PedidosPage extends StatefulWidget {
   List<PedidoObj> pedidos = database.getAllPedidos();
   TurnoObj turno = database.getAllTurnos()[0];
+  SetupObj setup = database.getAllSetup()[0];
 
   List<String> metodosPagamento = ['DINHEIRO', 'MULTIBANCO', 'MB WAY'];
 
-  Pedidos({
+  PedidosPage({
     Key? key,
   }) : super(key: key);
 
@@ -30,10 +35,10 @@ class Pedidos extends StatefulWidget {
   }
 
   @override
-  State<Pedidos> createState() => _Pedidos();
+  State<PedidosPage> createState() => _PedidosPage();
 }
 
-class _Pedidos extends State<Pedidos> {
+class _PedidosPage extends State<PedidosPage> {
   // contruir ainda a forma como tratar a info da base de dados e perceber como vou receber API's e etc..
   // ainda a data para a base de dados
 
@@ -44,20 +49,20 @@ class _Pedidos extends State<Pedidos> {
           left: 20,
           bottom: 50,
         ),
-        child: const Column(
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Utilizador 01',
-              style: TextStyle(fontSize: 24, color: Colors.white),
+              database.getUtilizador(widget.setup.utilizadorID)!.nome,
+              style: const TextStyle(fontSize: 24, color: Colors.white),
             ),
             Text(
-              'Loja de Beja',
-              style: TextStyle(fontSize: 18, color: Colors.white),
+              widget.setup.nomeLoja,
+              style: const TextStyle(fontSize: 18, color: Colors.white),
             ),
             Text(
-              'POS 00',
-              style: TextStyle(fontSize: 18, color: Colors.white),
+              widget.setup.pos,
+              style: const TextStyle(fontSize: 18, color: Colors.white),
             ),
           ],
         ),
@@ -80,8 +85,8 @@ class _Pedidos extends State<Pedidos> {
               title: const Text('Vendas concluidas'),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) => Vendas()));
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => VendasPage()));
               },
             ),
             ListTile(
@@ -89,14 +94,13 @@ class _Pedidos extends State<Pedidos> {
               title: const Text('Turno'),
               onTap: () {
                 Navigator.pop(context);
-                if (widget.turno.turnoAberto){
-                  Navigator.of(context)
-                      .push(MaterialPageRoute(builder: (context) => Turnos()));
+                if (widget.turno.turnoAberto) {
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => TurnosPage()));
                 } else {
-                  Navigator.of(context)
-                      .push(MaterialPageRoute(builder: (context) => TurnoFechado()));
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => TurnoFechado()));
                 }
-
               },
             ),
             ListTile(
@@ -104,8 +108,8 @@ class _Pedidos extends State<Pedidos> {
               title: const Text('Artigos'),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) => Artigos()));
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => ArtigosPage()));
               },
             ),
             ListTile(
@@ -114,7 +118,7 @@ class _Pedidos extends State<Pedidos> {
               onTap: () {
                 Navigator.pop(context);
                 Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => Categorias()));
+                    MaterialPageRoute(builder: (context) => CategoriasPage()));
               },
             ),
             const Divider(color: Colors.black54),
@@ -123,7 +127,7 @@ class _Pedidos extends State<Pedidos> {
               title: const Text('Back office'),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.pushReplacementNamed(context, '/recibos');
+                _launchURL('https://app.it4billing.com/Login');
               },
             ),
             ListTile(
@@ -131,7 +135,8 @@ class _Pedidos extends State<Pedidos> {
               title: const Text('Configurações'),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.pushReplacementNamed(context, '/recibos');
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => ConfiguracoesPage()));
               },
             ),
             ListTile(
@@ -139,12 +144,24 @@ class _Pedidos extends State<Pedidos> {
               title: const Text('Suporte'),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.pushReplacementNamed(context, '/recibos');
               },
             ),
           ],
         ),
       );
+
+  _launchURL(String url) async {
+    try {
+      final uri = Uri.parse(url);
+      await launchUrl(uri);
+    } catch (e) {
+      print('Erro ao lançar a URL: $e');
+    }
+  }
+
+
+
+
 
   Future<bool?> showMyDialog(BuildContext context) => showDialog<bool>(
       context: context,
@@ -169,6 +186,11 @@ class _Pedidos extends State<Pedidos> {
   void carregarLocais() {
     if (database.getAllLocal().isEmpty) {
       database.putDemoLocais();
+    }
+  }
+  void carregarClientes() {
+    if (database.getAllClientes().isEmpty) {
+      database.putDemoClientes();
     }
   }
 
@@ -227,13 +249,12 @@ class _Pedidos extends State<Pedidos> {
       print('Pedidos estam vazios');
     }
 
-    carregarUsers();
     carregarLocais();
+    carregarClientes();
     carregarCategorias();
     carregarArtigos();
 
     print('Esta aberto? -> ${widget.turno.turnoAberto}');
-
   }
 
   @override
@@ -280,7 +301,7 @@ class _Pedidos extends State<Pedidos> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => Pedido(
+                                    builder: (context) => PedidoPage(
                                           categorias:
                                               database.getAllCategorias(),
                                           pedidos: widget.pedidos,
@@ -324,7 +345,7 @@ class _Pedidos extends State<Pedidos> {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => PedidoAberto(
+                                        builder: (context) => PedidoAbertoPage(
                                               artigos: database.getAllArtigos(),
                                               categorias:
                                                   database.getAllCategorias(),
@@ -419,25 +440,28 @@ class _Pedidos extends State<Pedidos> {
                     SizedBox(
                       height: 50,
                       child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => TurnoFechado()));
-                      },
+                        onPressed: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => TurnoFechado()));
+                        },
                         style: ElevatedButton.styleFrom(
-                          primary: const Color(0xff00afe9),
+                          backgroundColor: const Color(0xff00afe9),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12.0),
                             side: const BorderSide(color: Colors.black),
                           ),
                         ),
-                      child: const Padding(
-                        padding:
-                        EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                        child: Text('ABRIR TURNO'),
+                        child: const Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 10),
+                          child: Text('ABRIR TURNO',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16.0,
+                              )),
+                        ),
                       ),
                     ),
-                    ),
-
                   ],
                 ),
               ),

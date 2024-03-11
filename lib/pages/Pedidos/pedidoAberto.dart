@@ -9,14 +9,14 @@ import '../../objetos/categoriaObj.dart';
 import '../../objetos/localObj.dart';
 import '../../objetos/pedidoObj.dart';
 
-class PedidoAberto extends StatefulWidget {
+class PedidoAbertoPage extends StatefulWidget {
   List<PedidoObj> pedidos = [];
   List<Categoria> categorias = [];
   List<Artigo> artigos = [];
   List<LocalObj> locais = [];
   PedidoObj pedido;
 
-  PedidoAberto({
+  PedidoAbertoPage({
     Key? key,
     required this.pedido,
     required this.pedidos,
@@ -25,10 +25,10 @@ class PedidoAberto extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _PedidoAberto createState() => _PedidoAberto();
+  _PedidoAbertoPage createState() => _PedidoAbertoPage();
 }
 
-class _PedidoAberto extends State<PedidoAberto> with TickerProviderStateMixin {
+class _PedidoAbertoPage extends State<PedidoAbertoPage> with TickerProviderStateMixin {
   Categoria categoriaSelecionada = Categoria(
     nome: 'Todos os artigos',
     description: '',
@@ -162,7 +162,7 @@ class _PedidoAberto extends State<PedidoAberto> with TickerProviderStateMixin {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => Carrinho(
+                              builder: (context) => CarrinhoPage(
                                     artigos: widget.artigos,
                                     categorias: widget.categorias,
                                     pedidos: widget.pedidos,
@@ -178,7 +178,7 @@ class _PedidoAberto extends State<PedidoAberto> with TickerProviderStateMixin {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => Carrinho(
+                                builder: (context) => CarrinhoPage(
                                       artigos: widget.artigos,
                                       categorias: widget.categorias,
                                       pedidos: widget.pedidos,
@@ -224,7 +224,7 @@ class _PedidoAberto extends State<PedidoAberto> with TickerProviderStateMixin {
                     database.removePedido(widget.pedido.id);
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) =>
-                            Pedidos()));
+                            PedidosPage()));
                   }
                 },
                 itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[

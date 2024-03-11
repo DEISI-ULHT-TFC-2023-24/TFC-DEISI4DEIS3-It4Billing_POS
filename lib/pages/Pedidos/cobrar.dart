@@ -26,7 +26,7 @@ class Cobrar extends StatefulWidget {
 }
 
 class _Cobrar extends State<Cobrar> {
-  List<String> metodos = Pedidos().getMetodosPagamento();
+  List<String> metodos = PedidosPage().getMetodosPagamento();
   final FocusNode _focusNode = FocusNode();
 
   // Controladores dos campos de texto
@@ -165,7 +165,7 @@ class _Cobrar extends State<Cobrar> {
 
                           },
                           style: ElevatedButton.styleFrom(
-                            primary: Colors.white,
+                            backgroundColor: Colors.white,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
                               side: const BorderSide(color: Colors.black),
@@ -205,15 +205,12 @@ class _Cobrar extends State<Cobrar> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) => ConcluirPedido(
-                                            pedidos: widget.pedidos,
                                             pedido: widget.pedido,
-                                            categorias: widget.categorias,
-                                            artigos: widget.artigos,
                                             troco: _trocoController.text,
                                           )));
                                 },
                                 style: ElevatedButton.styleFrom(
-                                  primary: Colors.white,
+                                  backgroundColor: Colors.white,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(12),
                                     side: const BorderSide(color: Colors.black),

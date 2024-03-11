@@ -3,42 +3,45 @@ import 'package:it4billing_pos/pages/artigos.dart';
 import 'package:it4billing_pos/pages/Turnos/turno.dart';
 import '../main.dart';
 import '../objetos/pedidoObj.dart';
+import '../objetos/setupObj.dart';
 import '../objetos/turnoObj.dart';
 import 'Pedidos/pedidos.dart';
 import 'Turnos/turnoFechado.dart';
 import 'categorias.dart';
+import 'Configuracoes/configuracoes.dart';
 
-class Vendas extends StatelessWidget {
+class VendasPage extends StatelessWidget {
   List<PedidoObj> pedidos = database.getAllPedidos();
   TurnoObj turno = database.getAllTurnos()[0];
+  SetupObj setup = database.getAllSetup()[0];
 
-  Vendas({Key? key}) : super(key: key);
+  VendasPage({Key? key}) : super(key: key);
 
   Widget buildHeader(BuildContext context) => Container(
-        color: const Color(0xff00afe9),
-        padding: EdgeInsets.only(
-          top: 50 + MediaQuery.of(context).padding.top,
-          left: 20,
-          bottom: 50,
+    color: const Color(0xff00afe9),
+    padding: EdgeInsets.only(
+      top: 50 + MediaQuery.of(context).padding.top,
+      left: 20,
+      bottom: 50,
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          database.getUtilizador(setup.utilizadorID)!.nome,
+          style: const TextStyle(fontSize: 24, color: Colors.white),
         ),
-        child: const Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Utilizador 01',
-              style: TextStyle(fontSize: 24, color: Colors.white),
-            ),
-            Text(
-              'Loja de Beja',
-              style: TextStyle(fontSize: 18, color: Colors.white),
-            ),
-            Text(
-              'POS 00',
-              style: TextStyle(fontSize: 18, color: Colors.white),
-            ),
-          ],
+        Text(
+          setup.nomeLoja,
+          style: const TextStyle(fontSize: 18, color: Colors.white),
         ),
-      );
+        Text(
+          setup.pos,
+          style: const TextStyle(fontSize: 18, color: Colors.white),
+        ),
+      ],
+    ),
+  );
 
   Widget buildMenuItems(BuildContext context) => Container(
         padding: const EdgeInsets.all(12),
@@ -51,7 +54,7 @@ class Vendas extends StatelessWidget {
               onTap: () {
                 Navigator.pop(context);
                 Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) => Pedidos()));
+                    .push(MaterialPageRoute(builder: (context) => PedidosPage()));
               },
             ),
             ListTile(
@@ -68,7 +71,7 @@ class Vendas extends StatelessWidget {
                 Navigator.pop(context);
                 if (turno.turnoAberto) {
                   Navigator.of(context)
-                      .push(MaterialPageRoute(builder: (context) => Turnos()));
+                      .push(MaterialPageRoute(builder: (context) => TurnosPage()));
                 } else {
                   Navigator.of(context).push(
                       MaterialPageRoute(builder: (context) => TurnoFechado()));
@@ -81,7 +84,7 @@ class Vendas extends StatelessWidget {
               onTap: () {
                 Navigator.pop(context);
                 Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) => Artigos()));
+                    .push(MaterialPageRoute(builder: (context) => ArtigosPage()));
               },
             ),
             ListTile(
@@ -90,7 +93,7 @@ class Vendas extends StatelessWidget {
               onTap: () {
                 Navigator.pop(context);
                 Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => Categorias()));
+                    MaterialPageRoute(builder: (context) => CategoriasPage()));
               },
             ),
             const Divider(color: Colors.black54),
@@ -99,7 +102,6 @@ class Vendas extends StatelessWidget {
               title: const Text('Back office'),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.pushReplacementNamed(context, '/recibos');
               },
             ),
             ListTile(
@@ -107,7 +109,8 @@ class Vendas extends StatelessWidget {
               title: const Text('Configurações'),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.pushReplacementNamed(context, '/recibos');
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => ConfiguracoesPage()));
               },
             ),
             ListTile(
@@ -115,9 +118,8 @@ class Vendas extends StatelessWidget {
               title: const Text('Suporte'),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.pushReplacementNamed(context, '/recibos');
               },
-            ),
+            )
           ],
         ),
       );
@@ -141,9 +143,7 @@ class Vendas extends StatelessWidget {
         backgroundColor: const Color(0xff00afe9),
       ),
       body: const Column(
-        children: [
-
-        ],
+        children: [],
       ),
     );
   }

@@ -153,7 +153,7 @@ class _EditCarrinhoState extends State<EditCarrinho> {
                       const SizedBox(width: 20),
 // Espaçamento entre os elementos
                       SizedBox(
-                        width: 100,
+                        width: 110,
                         child: ElevatedButton(
                           onPressed: () {
                             setState(() {
@@ -162,7 +162,7 @@ class _EditCarrinhoState extends State<EditCarrinho> {
                             });
                           },
                           style: ElevatedButton.styleFrom(
-                            primary: _updatedP
+                            backgroundColor: _updatedP
                                 ? Colors.grey
                                 : const Color(0xff00afe9),
                           ),
@@ -185,7 +185,7 @@ class _EditCarrinhoState extends State<EditCarrinho> {
                       SizedBox(width: 20),
 // Espaçamento entre os elementos
                       SizedBox(
-                        width: 100,
+                        width: 110,
                         child: ElevatedButton(
                           onPressed: () {
                             setState(() {
@@ -194,7 +194,7 @@ class _EditCarrinhoState extends State<EditCarrinho> {
                             });
                           },
                           style: ElevatedButton.styleFrom(
-                            primary: _updatedD
+                            backgroundColor: _updatedD
                                 ? Colors.grey
                                 : const Color(0xff00afe9),
                           ),
@@ -222,7 +222,7 @@ class _EditCarrinhoState extends State<EditCarrinho> {
                   const SizedBox(height: 8),
                   TextField(
                     decoration: const InputDecoration(
-                      hintText: 'Digite as suas observações...\n\n\n\n\n\n\n\n\n\n',
+                      hintText: 'Digite as suas observações...\n\n\n\n\n\n',
                       border: OutlineInputBorder(),
                     ),
                     maxLines: null, // ou qualquer valor maior que 1
@@ -274,7 +274,7 @@ class _EditCarrinhoState extends State<EditCarrinho> {
                           Navigator.of(context).pop();
                           Navigator.of(context)
                               .pushReplacement(MaterialPageRoute(
-                            builder: (BuildContext context) => Carrinho(
+                            builder: (BuildContext context) => CarrinhoPage(
                                 pedidos: widget.pedidos,
                                 categorias: widget.categorias,
                                 artigos: widget.artigos,
@@ -282,7 +282,7 @@ class _EditCarrinhoState extends State<EditCarrinho> {
                           ));
                         },
                         style: ElevatedButton.styleFrom(
-                          primary: Colors.grey,
+                          backgroundColor: Colors.grey,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                             side: const BorderSide(color: Colors.black),
@@ -315,7 +315,7 @@ class _EditCarrinhoState extends State<EditCarrinho> {
                           Navigator.of(context).pop();
                           Navigator.of(context)
                               .pushReplacement(MaterialPageRoute(
-                            builder: (BuildContext context) => Carrinho(
+                            builder: (BuildContext context) => CarrinhoPage(
                                 pedidos: widget.pedidos,
                                 categorias: widget.categorias,
                                 artigos: widget.artigos,
@@ -324,7 +324,7 @@ class _EditCarrinhoState extends State<EditCarrinho> {
 
                         },
                         style: ElevatedButton.styleFrom(
-                          primary: const Color(0xff00afe9),
+                          backgroundColor: const Color(0xff00afe9),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                             side: const BorderSide(color: Colors.black),

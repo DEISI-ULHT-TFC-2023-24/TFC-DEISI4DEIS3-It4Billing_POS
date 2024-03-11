@@ -3,16 +3,18 @@ import 'package:it4billing_pos/pages/Turnos/turno.dart';
 import 'package:it4billing_pos/pages/vendas.dart';
 import '../main.dart';
 import '../objetos/categoriaObj.dart';
+import '../objetos/setupObj.dart';
 import '../objetos/turnoObj.dart';
 import 'Pedidos/pedidos.dart';
 import 'Turnos/turnoFechado.dart';
 import 'artigos.dart';
+import 'Configuracoes/configuracoes.dart';
 
-class Categorias extends StatelessWidget {
+class CategoriasPage extends StatelessWidget {
   List<Categoria> categorias = database.getAllCategorias();
   TurnoObj turno = database.getAllTurnos()[0];
-
-  Categorias({Key? key }) : super(key: key);
+  SetupObj setup = database.getAllSetup()[0];
+  CategoriasPage({Key? key }) : super(key: key);
 
   Widget buildHeader(BuildContext context) => Container(
     color: const Color(0xff00afe9),
@@ -21,20 +23,20 @@ class Categorias extends StatelessWidget {
       left: 20,
       bottom: 50,
     ),
-    child: const Column(
+    child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Utilizador 01',
-          style: TextStyle(fontSize: 24, color: Colors.white),
+          database.getUtilizador(setup.utilizadorID)!.nome,
+          style: const TextStyle(fontSize: 24, color: Colors.white),
         ),
         Text(
-          'Loja de Beja',
-          style: TextStyle(fontSize: 18, color: Colors.white),
+          setup.nomeLoja,
+          style: const TextStyle(fontSize: 18, color: Colors.white),
         ),
         Text(
-          'POS 00',
-          style: TextStyle(fontSize: 18, color: Colors.white),
+          setup.pos,
+          style: const TextStyle(fontSize: 18, color: Colors.white),
         ),
       ],
     ),
@@ -50,7 +52,7 @@ class Categorias extends StatelessWidget {
           title: const Text('Pedidos'),
           onTap: () {
             Navigator.pop(context);
-            Navigator.of(context).push(MaterialPageRoute(builder: (context) => Pedidos()));
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => PedidosPage()));
           },
         ),
         ListTile(
@@ -58,7 +60,7 @@ class Categorias extends StatelessWidget {
           title: const Text('Vendas concluidas'),
           onTap: () {
             Navigator.pop(context);
-            Navigator.of(context).push(MaterialPageRoute(builder: (context) => Vendas()));
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => VendasPage()));
           },
         ),
         ListTile(
@@ -68,7 +70,7 @@ class Categorias extends StatelessWidget {
             Navigator.pop(context);
             if (turno.turnoAberto){
               Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => Turnos()));
+                  .push(MaterialPageRoute(builder: (context) => TurnosPage()));
             } else {
               Navigator.of(context)
                   .push(MaterialPageRoute(builder: (context) => TurnoFechado()));
@@ -80,7 +82,7 @@ class Categorias extends StatelessWidget {
           title: const Text('Artigos'),
           onTap: () {
             Navigator.pop(context);
-            Navigator.of(context).push(MaterialPageRoute(builder: (context) => Artigos()));
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => ArtigosPage()));
           },
         ),
         ListTile(
@@ -97,23 +99,24 @@ class Categorias extends StatelessWidget {
           leading: const Icon(Icons.bar_chart_outlined),
           title: const Text('Back office'),
           onTap: () {
-            Navigator.pushReplacementNamed(context, '/recibos');
+            Navigator.pop(context);
           },
         ),
         ListTile(
           leading: const Icon(Icons.settings),
           title: const Text('Configurações'),
           onTap: () {
-            Navigator.pushReplacementNamed(context,'/recibos');
+            Navigator.pop(context);
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => ConfiguracoesPage()));
           },
         ),
         ListTile(
           leading: const Icon(Icons.info_outline),
           title: const Text('Suporte'),
           onTap: () {
-            Navigator.pushReplacementNamed(context,'/recibos');
+            Navigator.pop(context);
           },
-        ),
+        )
       ],
     ),
   );

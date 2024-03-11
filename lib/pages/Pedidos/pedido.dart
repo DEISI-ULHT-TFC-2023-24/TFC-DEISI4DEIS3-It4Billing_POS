@@ -7,22 +7,22 @@ import '../../objetos/artigoObj.dart';
 import '../../objetos/categoriaObj.dart';
 import '../../objetos/pedidoObj.dart';
 
-class Pedido extends StatefulWidget {
+class PedidoPage extends StatefulWidget {
   List<PedidoObj> pedidos = [];
   List<Categoria> categorias = [];
   List<Artigo> artigos = database.getAllArtigos();
 
-  Pedido({
+  PedidoPage({
     Key? key,
     required this.pedidos,
     required this.categorias,
   }) : super(key: key);
 
   @override
-  _Pedido createState() => _Pedido();
+  _PedidoPage createState() => _PedidoPage();
 }
 
-class _Pedido extends State<Pedido> with TickerProviderStateMixin {
+class _PedidoPage extends State<PedidoPage> with TickerProviderStateMixin {
   Categoria categoriaSelecionada = Categoria(
     nome: 'Todos os artigos',
     description: '',
@@ -107,6 +107,7 @@ class _Pedido extends State<Pedido> with TickerProviderStateMixin {
   Future<void> addUserAoPedido() async {
     /// isto vai ser alterrado porque tenho de ter o utilizador da seção
     pedido.funcionarioID = database.getAllUtilizadores()[0].id;
+    print('estive aqui e entao o pedido tem utilizador ${pedido.funcionarioID}');
     ///este zer0 tera de ser mudado ele escolhe qual é o utilizador
   }
 
@@ -131,13 +132,13 @@ class _Pedido extends State<Pedido> with TickerProviderStateMixin {
                   ),
                   child: const Icon(Icons.shopping_cart_outlined),
                 ),
-                onPressed: () {
+                onPressed: () async {
                   pedido.total = 0;
-                  addUserAoPedido();
+                  await addUserAoPedido();
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => Carrinho(
+                          builder: (context) => CarrinhoPage(
                                 artigos: widget.artigos,
                                 categorias: widget.categorias,
                                 pedidos: widget.pedidos,
@@ -153,7 +154,7 @@ class _Pedido extends State<Pedido> with TickerProviderStateMixin {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => Carrinho(
+                            builder: (context) => CarrinhoPage(
                                   artigos: widget.artigos,
                                   categorias: widget.categorias,
                                   pedidos: widget.pedidos,

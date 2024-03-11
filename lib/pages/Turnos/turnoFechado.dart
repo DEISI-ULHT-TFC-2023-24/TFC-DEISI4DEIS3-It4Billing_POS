@@ -4,13 +4,16 @@ import 'package:it4billing_pos/main.dart';
 import 'package:it4billing_pos/objetos/turnoObj.dart';
 import 'package:it4billing_pos/pages/Turnos/turno.dart';
 
+import '../../objetos/setupObj.dart';
 import '../Pedidos/pedidos.dart';
 import '../artigos.dart';
 import '../categorias.dart';
+import '../Configuracoes/configuracoes.dart';
 import '../vendas.dart';
 
 class TurnoFechado extends StatelessWidget {
   TurnoObj turno = database.getAllTurnos()[0];
+  SetupObj setup = database.getAllSetup()[0];
 
   Widget buildHeader(BuildContext context) => Container(
     color: const Color(0xff00afe9),
@@ -19,20 +22,20 @@ class TurnoFechado extends StatelessWidget {
       left: 20,
       bottom: 50,
     ),
-    child: const Column(
+    child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Utilizador 01',
-          style: TextStyle(fontSize: 24, color: Colors.white),
+          database.getUtilizador(setup.utilizadorID)!.nome,
+          style: const TextStyle(fontSize: 24, color: Colors.white),
         ),
         Text(
-          'Loja de Beja',
-          style: TextStyle(fontSize: 18, color: Colors.white),
+          setup.nomeLoja,
+          style: const TextStyle(fontSize: 18, color: Colors.white),
         ),
         Text(
-          'POS 00',
-          style: TextStyle(fontSize: 18, color: Colors.white),
+          setup.pos,
+          style: const TextStyle(fontSize: 18, color: Colors.white),
         ),
       ],
     ),
@@ -49,7 +52,7 @@ class TurnoFechado extends StatelessWidget {
           onTap: () {
             Navigator.pop(context);
             Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => Pedidos()));
+                .push(MaterialPageRoute(builder: (context) => PedidosPage()));
           },
         ),
         ListTile(
@@ -58,7 +61,7 @@ class TurnoFechado extends StatelessWidget {
           onTap: () {
             Navigator.pop(context);
             Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => Vendas()));
+                .push(MaterialPageRoute(builder: (context) => VendasPage()));
           },
         ),
         ListTile(
@@ -74,7 +77,7 @@ class TurnoFechado extends StatelessWidget {
           onTap: () {
             Navigator.pop(context);
             Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) => Artigos()));
+                .push(MaterialPageRoute(builder: (context) => ArtigosPage()));
           },
         ),
         ListTile(
@@ -83,7 +86,7 @@ class TurnoFechado extends StatelessWidget {
           onTap: () {
             Navigator.pop(context);
             Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => Categorias()));
+                MaterialPageRoute(builder: (context) => CategoriasPage()));
           },
         ),
         const Divider(color: Colors.black54),
@@ -91,21 +94,22 @@ class TurnoFechado extends StatelessWidget {
           leading: const Icon(Icons.bar_chart_outlined),
           title: const Text('Back office'),
           onTap: () {
-            Navigator.pushReplacementNamed(context, '/recibos');
+            Navigator.pop(context);
           },
         ),
         ListTile(
           leading: const Icon(Icons.settings),
           title: const Text('Configurações'),
           onTap: () {
-            Navigator.pushReplacementNamed(context, '/recibos');
+            Navigator.pop(context);
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => ConfiguracoesPage()));
           },
         ),
         ListTile(
           leading: const Icon(Icons.info_outline),
           title: const Text('Suporte'),
           onTap: () {
-            Navigator.pushReplacementNamed(context, '/recibos');
+            Navigator.pop(context);
           },
         ),
       ],
@@ -170,20 +174,21 @@ class TurnoFechado extends StatelessWidget {
                   child: SizedBox(
                     height: 50.0,
                     child: ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
                         // Lógica para abrir o turno aqui
 
                         turno.turnoAberto = true;
+                        await database.removeAllTurnos();
                         database.addTurno(turno);
                         print('Esta aberto? DEVIA!! -> ${database.getAllTurnos()[0].turnoAberto}');
 
                         /// Logica oara a BD local Zé
 
                         Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => Turnos()));
+                            MaterialPageRoute(builder: (context) => TurnosPage()));
                       },
                       style: ElevatedButton.styleFrom(
-                        primary: const Color(0xff00afe9),
+                        backgroundColor: const Color(0xff00afe9),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12.0),
                           side: const BorderSide(color: Colors.black),

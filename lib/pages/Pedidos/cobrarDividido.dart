@@ -8,23 +8,23 @@ import '../../objetos/categoriaObj.dart';
 import '../../objetos/pedidoObj.dart';
 import 'concluircobrancaDividida.dart';
 
-class CobrarDividido extends StatefulWidget {
+class CobrarDivididoPage extends StatefulWidget {
   late List<PedidoObj> pedidos = [];
   late List<Categoria> categorias = [];
   late List<Artigo> artigos = [];
   late PedidoObj pedido;
 
-  CobrarDividido({
+  CobrarDivididoPage({
     Key? key,
     required this.pedido,
   }) : super(key: key);
 
   @override
-  _CobrarDividido createState() => _CobrarDividido();
+  _CobrarDivididoPage createState() => _CobrarDivididoPage();
 }
 
-class _CobrarDividido extends State<CobrarDividido> {
-  List<String> metodos = Pedidos().getMetodosPagamento();
+class _CobrarDivididoPage extends State<CobrarDivididoPage> {
+  List<String> metodos = PedidosPage().getMetodosPagamento();
   final FocusNode _focusNode = FocusNode();
 
   // Controladores dos campos de texto
@@ -171,7 +171,7 @@ class _CobrarDividido extends State<CobrarDividido> {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => ConcluircobrancaDividida(
+                                          builder: (context) => ConcluircobrancaDivididaPage(
                                             pedidos: widget.pedidos,
                                             pedido: widget.pedido,
                                             categorias: widget.categorias,
@@ -180,7 +180,7 @@ class _CobrarDividido extends State<CobrarDividido> {
                                           )));
                                 },
                                 style: ElevatedButton.styleFrom(
-                                  primary: Colors.white,
+                                  backgroundColor: Colors.white,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(12),
                                     side: const BorderSide(color: Colors.black),

@@ -1,6 +1,5 @@
 import 'package:objectbox/objectbox.dart';
 import '../database/objectbox.g.dart';
-import 'categoriaObj.dart';
 
 
 @Entity()

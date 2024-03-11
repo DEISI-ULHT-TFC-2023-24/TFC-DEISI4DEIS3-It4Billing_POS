@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:it4billing_pos/main.dart';
 import 'package:it4billing_pos/objetos/turnoObj.dart';
+import '../../objetos/setupObj.dart';
 import '../Pedidos/pedidos.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+  SetupObj setup;
+  LoginPage({Key? key, required this.setup}) : super(key: key);
 
   @override
   _LoginPageState createState() => _LoginPageState();
@@ -12,29 +14,37 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   @override
+  void setState(VoidCallback fn) {
+    if (database.getAllSetup().isNotEmpty){
+      widget.setup = database.getAllSetup()[0];
+    }
+    super.setState(fn);
+  }
+
+  @override
   Widget build(BuildContext context) {
     final bool isSmallScreen = MediaQuery.of(context).size.width < 600;
 
     return Scaffold(
         body: Center(
             child: isSmallScreen
-                ? const Column(
+                ? Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      _Logo(),
-                      _FormContent(),
+                      const _Logo(),
+                      _FormContent(setup: widget.setup,),
                     ],
                   )
                 : Container(
                     padding: const EdgeInsets.all(32.0),
                     constraints: const BoxConstraints(maxWidth: 800),
-                    child: const Row(
+                    child: Row(
                       children: [
                         Expanded(child: _Logo()),
                         Expanded(
                           child: Scrollbar(
                             child: SingleChildScrollView(
-                              child: _FormContent(),
+                              child: _FormContent(setup: widget.setup,),
                             ),
                           ),
                         ),
@@ -81,13 +91,15 @@ class _Logo extends StatelessWidget {
 }
 
 class _FormContent extends StatefulWidget {
-  const _FormContent({Key? key}) : super(key: key);
+  SetupObj setup;
+  _FormContent({Key? key, required this.setup}) : super(key: key);
 
   @override
   State<_FormContent> createState() => __FormContentState();
 }
 
 class __FormContentState extends State<_FormContent> {
+
   bool _isPasswordVisible = false;
   bool _showConfirmation = false;
 
@@ -138,7 +150,7 @@ class __FormContentState extends State<_FormContent> {
                 height: 50,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    primary: const Color(0xff00afe9),
+                    backgroundColor: const Color(0xff00afe9),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                       side: const BorderSide(color: Colors.black),
@@ -147,8 +159,11 @@ class __FormContentState extends State<_FormContent> {
                   child: const Padding(
                     padding: EdgeInsets.all(10.0),
                     child: Text(
-                      'Entrar',
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      'ENTRAR',
+                        style: TextStyle(
+                          color: Colors.white,fontWeight: FontWeight.bold,
+                          fontSize: 16.0,
+                        )
                     ),
                   ),
                   onPressed: () async {
@@ -158,12 +173,23 @@ class __FormContentState extends State<_FormContent> {
                       });
 
                       /// Tenho de fazer a verificação do pin com os empregados registados
-
+                      /// digamos que vai ser o id 1
                       await criarTurno();
+                      widget.setup.utilizadorID = database.getAllUtilizadores()[0].id;
+                      print(database.getAllSetup().length);
+                        print(database.getAllSetup().length);
 
+                        if (database.getAllSetup().isEmpty){
+                          await database.addSetup(widget.setup);
+                          print('Não tenho setup');
+                        } else {
+                          print('Tenho setup e não criei outro'); /// para teste
+                        }
+
+                      print(database.getAllSetup().length);
                       Navigator.of(context).pushAndRemoveUntil(
                           MaterialPageRoute(
-                              builder: (BuildContext context) => Pedidos()),
+                              builder: (BuildContext context) => PedidosPage()),
                               (route) => false);
                     }
                   },
@@ -178,7 +204,11 @@ class __FormContentState extends State<_FormContent> {
 
   Future<void> criarTurno() async {
     TurnoObj turno = TurnoObj();
+    turno.funcionarioID = database.getAllUtilizadores()[0].id;
+    /// verificar a possibilidade de outro utilizador querer usar enquanto esta outra conta logada
+    // para o teste
 
+    /// verificar a possibilidade de outro utilizador querer usar enquanto esta outra conta logada
     if (database.getAllTurnos().isEmpty){
       print('tenho turno');
       await database.addTurno(turno);

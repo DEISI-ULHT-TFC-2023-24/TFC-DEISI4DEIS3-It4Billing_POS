@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:it4billing_pos/objetos/setupObj.dart';
 import 'package:it4billing_pos/pages/Login/loginPage.dart';
 
+import '../../main.dart';
+
 class SetupPOSPage extends StatefulWidget {
-  const SetupPOSPage({Key? key}) : super(key: key);
+  SetupObj setup;
+
+  SetupPOSPage({Key? key, required this.setup}) : super(key: key);
 
   @override
   _SetupPOSPageState createState() => _SetupPOSPageState();
@@ -16,21 +21,21 @@ class _SetupPOSPageState extends State<SetupPOSPage> {
     return Scaffold(
         body: Center(
             child: isSmallScreen
-                ? const Column(
+                ? Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      _FormContent(),
+                      _FormContent(setup: widget.setup,),
                     ],
                   )
                 : Container(
                     padding: const EdgeInsets.all(32.0),
                     constraints: const BoxConstraints(maxWidth: 800),
-                    child: const Row(
+                    child:  Row(
                       children: [
                         Expanded(
                           child: Scrollbar(
                             child: SingleChildScrollView(
-                              child: _FormContent(),
+                              child: _FormContent(setup: widget.setup,),
                             ),
                           ),
                         ),
@@ -41,7 +46,8 @@ class _SetupPOSPageState extends State<SetupPOSPage> {
 }
 
 class _FormContent extends StatefulWidget {
-  const _FormContent({Key? key}) : super(key: key);
+  SetupObj setup;
+  _FormContent({Key? key, required this.setup}) : super(key: key);
 
   @override
   State<_FormContent> createState() => __FormContentState();
@@ -58,12 +64,7 @@ class __FormContentState extends State<_FormContent> {
     'F 2',
     'F 3'
   ];
-  final List<String> _refunds = [
-    'Documento do reembolso',
-    'R 1',
-    'R 2',
-    'R 3'
-  ];
+  final List<String> _refunds = ['Documento do reembolso', 'R 1', 'R 2', 'R 3'];
   final List<String> _cunrrentAccount = [
     'Documento da conta corrente',
     'Cc 1',
@@ -157,41 +158,44 @@ class __FormContentState extends State<_FormContent> {
               height: 50,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  primary: const Color(0xff00afe9),
+                  backgroundColor: const Color(0xff00afe9),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                     side: const BorderSide(color: Colors.black),
                   ),
                 ),
-                onPressed: () {
+                onPressed: () async {
                   if (_selectedDocInvoice != null &&
                       _selectedDocInvoice != 'Documento da faturação' &&
                       _selectedDocRefund != null &&
                       _selectedDocRefund != 'Documento do reembolso' &&
                       _selectedDocCurrentAccount != null &&
-                      _selectedDocCurrentAccount != 'Documento da conta corrente') {
+                      _selectedDocCurrentAccount !=
+                          'Documento da conta corrente') {
                     // Lógica para confirmar seleção os docs.
 
-
                     /// tem de guardar o tipo de doc na bd local
-
-
+                    widget.setup.faturacao = _selectedDocInvoice!;
+                    widget.setup.reembolso = _selectedDocRefund!;
+                    widget.setup.contaCorrente = _selectedDocCurrentAccount!;
                     Navigator.of(context).pushAndRemoveUntil(
                         MaterialPageRoute(
                             builder: (BuildContext context) =>
-                                const LoginPage()),
+                                LoginPage(setup: widget.setup,)),
                         (route) => false);
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
-                        content: Text('Por favor, selecione todos os documentos.'),
+                        content:
+                            Text('Por favor, selecione todos os documentos.'),
                         duration: Duration(seconds: 3),
                       ),
                     );
                   }
                 },
-                child: const Text('Confirmar Seleções', style: TextStyle(
-                    fontSize: 16, fontWeight: FontWeight.bold)),
+                child: const Text('Confirmar Seleções',
+                    style:
+                        TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.bold)),
               ),
             ),
           ],

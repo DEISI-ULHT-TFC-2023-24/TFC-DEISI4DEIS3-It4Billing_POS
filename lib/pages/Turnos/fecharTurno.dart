@@ -141,10 +141,11 @@ class _FecharTurnoState extends State<FecharTurno> {
             width: double.infinity,
             height: 50.0,
             child: ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 // Ação ao pressionar o botão de fechar turno
 
                 turno.turnoAberto = false;
+                await database.removeAllTurnos();
                 database.addTurno(turno);
                 print('Esta aberto? DEVIA!! -> ${database.getAllTurnos()[0].turnoAberto}');
 
@@ -161,7 +162,7 @@ class _FecharTurnoState extends State<FecharTurno> {
 
               },
               style: ElevatedButton.styleFrom(
-                primary: const Color(0xffad171b),
+                backgroundColor: const Color(0xffad171b),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12.0),
                   side: const BorderSide(color: Colors.black),

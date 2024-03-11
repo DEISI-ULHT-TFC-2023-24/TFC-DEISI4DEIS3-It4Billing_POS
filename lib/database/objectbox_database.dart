@@ -1,4 +1,5 @@
 import 'package:it4billing_pos/main.dart';
+import 'package:it4billing_pos/objetos/clienteObj.dart';
 import 'package:it4billing_pos/objetos/setupObj.dart';
 import 'package:it4billing_pos/objetos/turnoObj.dart';
 import 'package:path_provider/path_provider.dart';
@@ -23,10 +24,12 @@ class ObjectBoxDatabase {
   late final Box<PedidoObj> _pedidosBox;
   late final Box<VendaObj> _vendasBox;
   late final Box<Utilizador> _utilizadoresBox;
+  late final Box<ClienteObj> _clientesBox;
   late final Box<LocalObj> _locaisBox;
   late final Box<Categoria> _categoriasBox;
   late final Box<Artigo> _artigosBox;
 
+  late final Box<SetupObj> _setupBox;
   late final Box<TurnoObj> _turnosBox;
 
   ObjectBoxDatabase._create(this._store) {
@@ -34,11 +37,13 @@ class ObjectBoxDatabase {
     _pedidosBox = Box<PedidoObj>(_store);
     _vendasBox = Box<VendaObj>(_store);
     _utilizadoresBox = Box<Utilizador>(_store);
+    _clientesBox = Box<ClienteObj>(_store);
 
     _locaisBox = Box<LocalObj>(_store);
     _categoriasBox = Box<Categoria>(_store);
     _artigosBox = Box<Artigo>(_store);
 
+    _setupBox = Box<SetupObj>(_store);
     _turnosBox = Box<TurnoObj>(_store);
   }
 
@@ -57,6 +62,18 @@ class ObjectBoxDatabase {
       Utilizador('User 064', 9849),
     ];
     await _utilizadoresBox.putManyAsync(demoUsers);
+  }
+
+  Future<void> putDemoClientes() async {
+    final demoClients = [
+      ClienteObj('Consumidor Final', 999999990, 'N/D', 'N/D', '0000-000', 'N/D', 'N/D', 987654321, 'N/D'),
+      ClienteObj('Beatriz Silva', 240548921, 'Portugal', 'N/D', '0000-000', 'Lisboa', 'email001@gmail.com', 926545742, 'N/D'),
+      ClienteObj('Diogo Figueira', 270785524, 'Portugal', 'Av. de Berna 4 1D', '2478-654', 'Porto', 'email002@gmail.com', 926595552, 'N/D'),
+      ClienteObj('Filipa Silva', 230784532, 'Espanha', 'N/D', '4562-488', 'Madrid', 'N/D', 924826542, 'N/D'),
+      ClienteObj('João Neves', 191978465, 'Portugal', 'N/D', '0000-000', 'Lisboa', 'email004@gmail.com', 926952148, 'N/D'),
+
+    ];
+    await _clientesBox.putManyAsync(demoClients);
   }
 
   void putDemoLocais() {
@@ -290,6 +307,44 @@ class ObjectBoxDatabase {
   Future<void> removeAllVendas() async {
     await _vendasBox.removeAll();
   }
+
+
+  ///---------------------------------------------------------
+  // Funções para manipular o Setup
+  Future<void> addSetup(SetupObj setup) async {
+    await _setupBox.put(setup);
+  }
+
+  SetupObj? getSetup(int id) {
+    return _setupBox.get(id);
+  }
+
+  List<SetupObj> getAllSetup() {
+    return _setupBox.getAll();
+  }
+
+  Future<void> removeAllSetup() async {
+    await _setupBox.removeAll();
+  }
+
+  ///---------------------------------------------------------
+  // Funções para manipular o Setup
+  Future<void> addCliente(ClienteObj cliente) async {
+    await _clientesBox.put(cliente);
+  }
+
+  ClienteObj? getCliente(int id) {
+    return _clientesBox.get(id);
+  }
+
+  List<ClienteObj> getAllClientes() {
+    return _clientesBox.getAll();
+  }
+
+  Future<void> removeAllClientes() async {
+    await _clientesBox.removeAll();
+  }
+
 
 
 }

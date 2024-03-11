@@ -6,14 +6,14 @@ import '../../objetos/artigoObj.dart';
 import '../../objetos/categoriaObj.dart';
 import '../../objetos/pedidoObj.dart';
 
-class ConcluircobrancaDividida extends StatefulWidget {
+class ConcluircobrancaDivididaPage extends StatefulWidget {
   late List<PedidoObj> pedidos = [];
   late List<Categoria> categorias = [];
   late List<Artigo> artigos = [];
   late PedidoObj pedido;
   late String troco;
 
-  ConcluircobrancaDividida({
+  ConcluircobrancaDivididaPage({
     Key? key,
     required this.pedidos,
     required this.categorias,
@@ -23,10 +23,10 @@ class ConcluircobrancaDividida extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _ConcluircobrancaDividida createState() => _ConcluircobrancaDividida();
+  _ConcluircobrancaDivididaPage createState() => _ConcluircobrancaDivididaPage();
 }
 
-class _ConcluircobrancaDividida extends State<ConcluircobrancaDividida> {
+class _ConcluircobrancaDivididaPage extends State<ConcluircobrancaDivididaPage> {
 
 
   @override
@@ -108,7 +108,7 @@ class _ConcluircobrancaDividida extends State<ConcluircobrancaDividida> {
               Navigator.pop(context);
             },
             style: ElevatedButton.styleFrom(
-              primary: const Color(0xff00afe9),
+              backgroundColor: const Color(0xff00afe9),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
                 side: const BorderSide(color: Colors.black),

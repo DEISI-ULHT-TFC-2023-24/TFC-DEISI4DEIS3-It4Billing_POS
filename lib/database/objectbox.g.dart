@@ -18,6 +18,7 @@ import 'package:objectbox_flutter_libs/objectbox_flutter_libs.dart';
 import '../objetos/VendaObj.dart';
 import '../objetos/artigoObj.dart';
 import '../objetos/categoriaObj.dart';
+import '../objetos/clienteObj.dart';
 import '../objetos/localObj.dart';
 import '../objetos/pedidoObj.dart';
 import '../objetos/setupObj.dart';
@@ -253,85 +254,6 @@ final _entities = <obx_int.ModelEntity>[
       relations: <obx_int.ModelRelation>[],
       backlinks: <obx_int.ModelBacklink>[]),
   obx_int.ModelEntity(
-      id: const obx_int.IdUid(7, 760885638717546983),
-      name: 'Setup',
-      lastPropertyId: const obx_int.IdUid(14, 6556494904146860720),
-      flags: 0,
-      properties: <obx_int.ModelProperty>[
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(1, 2792818346677926916),
-            name: 'id',
-            type: 6,
-            flags: 1),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(2, 260075754396814068),
-            name: 'url',
-            type: 9,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(3, 7585348376496159755),
-            name: 'password',
-            type: 9,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(4, 4707725486126072595),
-            name: 'lojaID',
-            type: 6,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(5, 2668378425142982470),
-            name: 'nomeLoja',
-            type: 9,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(6, 4142978399308346823),
-            name: 'posID',
-            type: 6,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(7, 1262283674318796450),
-            name: 'pos',
-            type: 9,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(8, 6054098541531560331),
-            name: 'utilizadorID',
-            type: 6,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(9, 5566946018571818589),
-            name: 'faturacaoID',
-            type: 6,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(10, 1809128679097544643),
-            name: 'faturacao',
-            type: 9,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(11, 1330753141360703355),
-            name: 'reembolsoID',
-            type: 6,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(12, 2708372927138612788),
-            name: 'reembolso',
-            type: 9,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(13, 3672436035991890288),
-            name: 'contaCorrenteID',
-            type: 6,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(14, 6556494904146860720),
-            name: 'contaCorrente',
-            type: 9,
-            flags: 0)
-      ],
-      relations: <obx_int.ModelRelation>[],
-      backlinks: <obx_int.ModelBacklink>[]),
-  obx_int.ModelEntity(
       id: const obx_int.IdUid(9, 6051910675640835218),
       name: 'TurnoObj',
       lastPropertyId: const obx_int.IdUid(17, 2922750027210177741),
@@ -473,6 +395,144 @@ final _entities = <obx_int.ModelEntity>[
             flags: 0)
       ],
       relations: <obx_int.ModelRelation>[],
+      backlinks: <obx_int.ModelBacklink>[]),
+  obx_int.ModelEntity(
+      id: const obx_int.IdUid(11, 5421798492171887830),
+      name: 'SetupObj',
+      lastPropertyId: const obx_int.IdUid(14, 6749323647515317920),
+      flags: 0,
+      properties: <obx_int.ModelProperty>[
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(1, 1835574051051359056),
+            name: 'id',
+            type: 6,
+            flags: 1),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(2, 2465461869621417275),
+            name: 'url',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(3, 1579373199494922195),
+            name: 'password',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(4, 3448898297087257404),
+            name: 'lojaID',
+            type: 6,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(5, 2711181695648042740),
+            name: 'nomeLoja',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(6, 5581184635745795356),
+            name: 'posID',
+            type: 6,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(7, 2840280473894480183),
+            name: 'pos',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(8, 7760452733796280113),
+            name: 'utilizadorID',
+            type: 6,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(9, 7502764982237474806),
+            name: 'faturacaoID',
+            type: 6,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(10, 4528516706774814468),
+            name: 'faturacao',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(11, 4911513808943929232),
+            name: 'reembolsoID',
+            type: 6,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(12, 99994130428993219),
+            name: 'reembolso',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(13, 8843531822093028952),
+            name: 'contaCorrenteID',
+            type: 6,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(14, 6749323647515317920),
+            name: 'contaCorrente',
+            type: 9,
+            flags: 0)
+      ],
+      relations: <obx_int.ModelRelation>[],
+      backlinks: <obx_int.ModelBacklink>[]),
+  obx_int.ModelEntity(
+      id: const obx_int.IdUid(12, 8591189250015938569),
+      name: 'ClienteObj',
+      lastPropertyId: const obx_int.IdUid(10, 1208350643217085365),
+      flags: 0,
+      properties: <obx_int.ModelProperty>[
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(1, 602345723904084332),
+            name: 'id',
+            type: 6,
+            flags: 1),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(2, 747994993186910857),
+            name: 'nome',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(3, 4838610927381324963),
+            name: 'NIF',
+            type: 6,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(4, 7059410636991576450),
+            name: 'country',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(5, 8311072654930591514),
+            name: 'address',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(6, 8646143015779655074),
+            name: 'postcode',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(7, 4866173021787565114),
+            name: 'city',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(8, 4005168044020356193),
+            name: 'email',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(9, 6687279873876679783),
+            name: 'phone',
+            type: 6,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(10, 1208350643217085365),
+            name: 'obeservations',
+            type: 9,
+            flags: 0)
+      ],
+      relations: <obx_int.ModelRelation>[],
       backlinks: <obx_int.ModelBacklink>[])
 ];
 
@@ -511,11 +571,15 @@ Future<obx.Store> openStore(
 obx_int.ModelDefinition getObjectBoxModel() {
   final model = obx_int.ModelInfo(
       entities: _entities,
-      lastEntityId: const obx_int.IdUid(10, 969872590487839664),
+      lastEntityId: const obx_int.IdUid(12, 8591189250015938569),
       lastIndexId: const obx_int.IdUid(1, 2709143836952813707),
       lastRelationId: const obx_int.IdUid(1, 7466652304049170735),
       lastSequenceId: const obx_int.IdUid(0, 0),
-      retiredEntityUids: const [4772283387577696936, 2030655850358947858],
+      retiredEntityUids: const [
+        4772283387577696936,
+        2030655850358947858,
+        760885638717546983
+      ],
       retiredIndexUids: const [],
       retiredPropertyUids: const [
         5920608008104397494,
@@ -526,7 +590,21 @@ obx_int.ModelDefinition getObjectBoxModel() {
         4348102591809595840,
         6539675531570823517,
         2891275562117548631,
-        7552558037840988166
+        7552558037840988166,
+        2792818346677926916,
+        260075754396814068,
+        7585348376496159755,
+        4707725486126072595,
+        2668378425142982470,
+        4142978399308346823,
+        1262283674318796450,
+        6054098541531560331,
+        5566946018571818589,
+        1809128679097544643,
+        1330753141360703355,
+        2708372927138612788,
+        3672436035991890288,
+        6556494904146860720
       ],
       retiredRelationUids: const [7466652304049170735],
       modelVersion: 5,
@@ -783,76 +861,8 @@ obx_int.ModelDefinition getObjectBoxModel() {
 
           return object;
         }),
-    Setup: obx_int.EntityDefinition<Setup>(
-        model: _entities[5],
-        toOneRelations: (Setup object) => [],
-        toManyRelations: (Setup object) => {},
-        getId: (Setup object) => object.id,
-        setId: (Setup object, int id) {
-          object.id = id;
-        },
-        objectToFB: (Setup object, fb.Builder fbb) {
-          final urlOffset = fbb.writeString(object.url);
-          final passwordOffset = fbb.writeString(object.password);
-          final nomeLojaOffset = fbb.writeString(object.nomeLoja);
-          final posOffset = fbb.writeString(object.pos);
-          final faturacaoOffset = fbb.writeString(object.faturacao);
-          final reembolsoOffset = fbb.writeString(object.reembolso);
-          final contaCorrenteOffset = fbb.writeString(object.contaCorrente);
-          fbb.startTable(15);
-          fbb.addInt64(0, object.id);
-          fbb.addOffset(1, urlOffset);
-          fbb.addOffset(2, passwordOffset);
-          fbb.addInt64(3, object.lojaID);
-          fbb.addOffset(4, nomeLojaOffset);
-          fbb.addInt64(5, object.posID);
-          fbb.addOffset(6, posOffset);
-          fbb.addInt64(7, object.utilizadorID);
-          fbb.addInt64(8, object.faturacaoID);
-          fbb.addOffset(9, faturacaoOffset);
-          fbb.addInt64(10, object.reembolsoID);
-          fbb.addOffset(11, reembolsoOffset);
-          fbb.addInt64(12, object.contaCorrenteID);
-          fbb.addOffset(13, contaCorrenteOffset);
-          fbb.finish(fbb.endTable());
-          return object.id;
-        },
-        objectFromFB: (obx.Store store, ByteData fbData) {
-          final buffer = fb.BufferContext(fbData);
-          final rootOffset = buffer.derefObject(0);
-          final urlParam = const fb.StringReader(asciiOptimization: true)
-              .vTableGet(buffer, rootOffset, 6, '');
-          final passwordParam = const fb.StringReader(asciiOptimization: true)
-              .vTableGet(buffer, rootOffset, 8, '');
-          final object = Setup(url: urlParam, password: passwordParam)
-            ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0)
-            ..lojaID =
-                const fb.Int64Reader().vTableGet(buffer, rootOffset, 10, 0)
-            ..nomeLoja = const fb.StringReader(asciiOptimization: true)
-                .vTableGet(buffer, rootOffset, 12, '')
-            ..posID =
-                const fb.Int64Reader().vTableGet(buffer, rootOffset, 14, 0)
-            ..pos = const fb.StringReader(asciiOptimization: true)
-                .vTableGet(buffer, rootOffset, 16, '')
-            ..utilizadorID =
-                const fb.Int64Reader().vTableGet(buffer, rootOffset, 18, 0)
-            ..faturacaoID =
-                const fb.Int64Reader().vTableGet(buffer, rootOffset, 20, 0)
-            ..faturacao = const fb.StringReader(asciiOptimization: true)
-                .vTableGet(buffer, rootOffset, 22, '')
-            ..reembolsoID =
-                const fb.Int64Reader().vTableGet(buffer, rootOffset, 24, 0)
-            ..reembolso = const fb.StringReader(asciiOptimization: true)
-                .vTableGet(buffer, rootOffset, 26, '')
-            ..contaCorrenteID =
-                const fb.Int64Reader().vTableGet(buffer, rootOffset, 28, 0)
-            ..contaCorrente = const fb.StringReader(asciiOptimization: true)
-                .vTableGet(buffer, rootOffset, 30, '');
-
-          return object;
-        }),
     TurnoObj: obx_int.EntityDefinition<TurnoObj>(
-        model: _entities[6],
+        model: _entities[5],
         toOneRelations: (TurnoObj object) => [],
         toManyRelations: (TurnoObj object) => {},
         getId: (TurnoObj object) => object.id,
@@ -923,7 +933,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           return object;
         }),
     VendaObj: obx_int.EntityDefinition<VendaObj>(
-        model: _entities[7],
+        model: _entities[6],
         toOneRelations: (VendaObj object) => [],
         toManyRelations: (VendaObj object) => {},
         getId: (VendaObj object) => object.id,
@@ -971,6 +981,141 @@ obx_int.ModelDefinition getObjectBoxModel() {
                     .vTableGet(buffer, rootOffset, 10, [])
             ..nrArtigos =
                 const fb.Int64Reader().vTableGet(buffer, rootOffset, 18, 0);
+
+          return object;
+        }),
+    SetupObj: obx_int.EntityDefinition<SetupObj>(
+        model: _entities[7],
+        toOneRelations: (SetupObj object) => [],
+        toManyRelations: (SetupObj object) => {},
+        getId: (SetupObj object) => object.id,
+        setId: (SetupObj object, int id) {
+          object.id = id;
+        },
+        objectToFB: (SetupObj object, fb.Builder fbb) {
+          final urlOffset = fbb.writeString(object.url);
+          final passwordOffset = fbb.writeString(object.password);
+          final nomeLojaOffset = fbb.writeString(object.nomeLoja);
+          final posOffset = fbb.writeString(object.pos);
+          final faturacaoOffset = fbb.writeString(object.faturacao);
+          final reembolsoOffset = fbb.writeString(object.reembolso);
+          final contaCorrenteOffset = fbb.writeString(object.contaCorrente);
+          fbb.startTable(15);
+          fbb.addInt64(0, object.id);
+          fbb.addOffset(1, urlOffset);
+          fbb.addOffset(2, passwordOffset);
+          fbb.addInt64(3, object.lojaID);
+          fbb.addOffset(4, nomeLojaOffset);
+          fbb.addInt64(5, object.posID);
+          fbb.addOffset(6, posOffset);
+          fbb.addInt64(7, object.utilizadorID);
+          fbb.addInt64(8, object.faturacaoID);
+          fbb.addOffset(9, faturacaoOffset);
+          fbb.addInt64(10, object.reembolsoID);
+          fbb.addOffset(11, reembolsoOffset);
+          fbb.addInt64(12, object.contaCorrenteID);
+          fbb.addOffset(13, contaCorrenteOffset);
+          fbb.finish(fbb.endTable());
+          return object.id;
+        },
+        objectFromFB: (obx.Store store, ByteData fbData) {
+          final buffer = fb.BufferContext(fbData);
+          final rootOffset = buffer.derefObject(0);
+
+          final object = SetupObj()
+            ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0)
+            ..url = const fb.StringReader(asciiOptimization: true)
+                .vTableGet(buffer, rootOffset, 6, '')
+            ..password = const fb.StringReader(asciiOptimization: true)
+                .vTableGet(buffer, rootOffset, 8, '')
+            ..lojaID =
+                const fb.Int64Reader().vTableGet(buffer, rootOffset, 10, 0)
+            ..nomeLoja = const fb.StringReader(asciiOptimization: true)
+                .vTableGet(buffer, rootOffset, 12, '')
+            ..posID =
+                const fb.Int64Reader().vTableGet(buffer, rootOffset, 14, 0)
+            ..pos = const fb.StringReader(asciiOptimization: true)
+                .vTableGet(buffer, rootOffset, 16, '')
+            ..utilizadorID =
+                const fb.Int64Reader().vTableGet(buffer, rootOffset, 18, 0)
+            ..faturacaoID =
+                const fb.Int64Reader().vTableGet(buffer, rootOffset, 20, 0)
+            ..faturacao = const fb.StringReader(asciiOptimization: true)
+                .vTableGet(buffer, rootOffset, 22, '')
+            ..reembolsoID =
+                const fb.Int64Reader().vTableGet(buffer, rootOffset, 24, 0)
+            ..reembolso = const fb.StringReader(asciiOptimization: true)
+                .vTableGet(buffer, rootOffset, 26, '')
+            ..contaCorrenteID =
+                const fb.Int64Reader().vTableGet(buffer, rootOffset, 28, 0)
+            ..contaCorrente = const fb.StringReader(asciiOptimization: true)
+                .vTableGet(buffer, rootOffset, 30, '');
+
+          return object;
+        }),
+    ClienteObj: obx_int.EntityDefinition<ClienteObj>(
+        model: _entities[8],
+        toOneRelations: (ClienteObj object) => [],
+        toManyRelations: (ClienteObj object) => {},
+        getId: (ClienteObj object) => object.id,
+        setId: (ClienteObj object, int id) {
+          object.id = id;
+        },
+        objectToFB: (ClienteObj object, fb.Builder fbb) {
+          final nomeOffset = fbb.writeString(object.nome);
+          final countryOffset = fbb.writeString(object.country);
+          final addressOffset = fbb.writeString(object.address);
+          final postcodeOffset = fbb.writeString(object.postcode);
+          final cityOffset = fbb.writeString(object.city);
+          final emailOffset = fbb.writeString(object.email);
+          final obeservationsOffset = fbb.writeString(object.obeservations);
+          fbb.startTable(11);
+          fbb.addInt64(0, object.id);
+          fbb.addOffset(1, nomeOffset);
+          fbb.addInt64(2, object.NIF);
+          fbb.addOffset(3, countryOffset);
+          fbb.addOffset(4, addressOffset);
+          fbb.addOffset(5, postcodeOffset);
+          fbb.addOffset(6, cityOffset);
+          fbb.addOffset(7, emailOffset);
+          fbb.addInt64(8, object.phone);
+          fbb.addOffset(9, obeservationsOffset);
+          fbb.finish(fbb.endTable());
+          return object.id;
+        },
+        objectFromFB: (obx.Store store, ByteData fbData) {
+          final buffer = fb.BufferContext(fbData);
+          final rootOffset = buffer.derefObject(0);
+          final nomeParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGet(buffer, rootOffset, 6, '');
+          final NIFParam =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 8, 0);
+          final countryParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGet(buffer, rootOffset, 10, '');
+          final addressParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGet(buffer, rootOffset, 12, '');
+          final postcodeParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGet(buffer, rootOffset, 14, '');
+          final cityParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGet(buffer, rootOffset, 16, '');
+          final emailParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGet(buffer, rootOffset, 18, '');
+          final phoneParam =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 20, 0);
+          final obeservationsParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGet(buffer, rootOffset, 22, '');
+          final object = ClienteObj(
+              nomeParam,
+              NIFParam,
+              countryParam,
+              addressParam,
+              postcodeParam,
+              cityParam,
+              emailParam,
+              phoneParam,
+              obeservationsParam)
+            ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
 
           return object;
         })
@@ -1138,164 +1283,210 @@ class Utilizador_ {
       obx.QueryIntegerProperty<Utilizador>(_entities[4].properties[2]);
 }
 
-/// [Setup] entity fields to define ObjectBox queries.
-class Setup_ {
-  /// see [Setup.id]
-  static final id = obx.QueryIntegerProperty<Setup>(_entities[5].properties[0]);
-
-  /// see [Setup.url]
-  static final url = obx.QueryStringProperty<Setup>(_entities[5].properties[1]);
-
-  /// see [Setup.password]
-  static final password =
-      obx.QueryStringProperty<Setup>(_entities[5].properties[2]);
-
-  /// see [Setup.lojaID]
-  static final lojaID =
-      obx.QueryIntegerProperty<Setup>(_entities[5].properties[3]);
-
-  /// see [Setup.nomeLoja]
-  static final nomeLoja =
-      obx.QueryStringProperty<Setup>(_entities[5].properties[4]);
-
-  /// see [Setup.posID]
-  static final posID =
-      obx.QueryIntegerProperty<Setup>(_entities[5].properties[5]);
-
-  /// see [Setup.pos]
-  static final pos = obx.QueryStringProperty<Setup>(_entities[5].properties[6]);
-
-  /// see [Setup.utilizadorID]
-  static final utilizadorID =
-      obx.QueryIntegerProperty<Setup>(_entities[5].properties[7]);
-
-  /// see [Setup.faturacaoID]
-  static final faturacaoID =
-      obx.QueryIntegerProperty<Setup>(_entities[5].properties[8]);
-
-  /// see [Setup.faturacao]
-  static final faturacao =
-      obx.QueryStringProperty<Setup>(_entities[5].properties[9]);
-
-  /// see [Setup.reembolsoID]
-  static final reembolsoID =
-      obx.QueryIntegerProperty<Setup>(_entities[5].properties[10]);
-
-  /// see [Setup.reembolso]
-  static final reembolso =
-      obx.QueryStringProperty<Setup>(_entities[5].properties[11]);
-
-  /// see [Setup.contaCorrenteID]
-  static final contaCorrenteID =
-      obx.QueryIntegerProperty<Setup>(_entities[5].properties[12]);
-
-  /// see [Setup.contaCorrente]
-  static final contaCorrente =
-      obx.QueryStringProperty<Setup>(_entities[5].properties[13]);
-}
-
 /// [TurnoObj] entity fields to define ObjectBox queries.
 class TurnoObj_ {
   /// see [TurnoObj.id]
   static final id =
-      obx.QueryIntegerProperty<TurnoObj>(_entities[6].properties[0]);
+      obx.QueryIntegerProperty<TurnoObj>(_entities[5].properties[0]);
 
   /// see [TurnoObj.turnoAberto]
   static final turnoAberto =
-      obx.QueryBooleanProperty<TurnoObj>(_entities[6].properties[1]);
+      obx.QueryBooleanProperty<TurnoObj>(_entities[5].properties[1]);
 
   /// see [TurnoObj.horaAbertura]
   static final horaAbertura =
-      obx.QueryDateProperty<TurnoObj>(_entities[6].properties[2]);
+      obx.QueryDateProperty<TurnoObj>(_entities[5].properties[2]);
 
   /// see [TurnoObj.horaFecho]
   static final horaFecho =
-      obx.QueryDateProperty<TurnoObj>(_entities[6].properties[3]);
+      obx.QueryDateProperty<TurnoObj>(_entities[5].properties[3]);
 
   /// see [TurnoObj.vendasBrutas]
   static final vendasBrutas =
-      obx.QueryDoubleProperty<TurnoObj>(_entities[6].properties[4]);
+      obx.QueryDoubleProperty<TurnoObj>(_entities[5].properties[4]);
 
   /// see [TurnoObj.reembolsos]
   static final reembolsos =
-      obx.QueryDoubleProperty<TurnoObj>(_entities[6].properties[5]);
+      obx.QueryDoubleProperty<TurnoObj>(_entities[5].properties[5]);
 
   /// see [TurnoObj.descontos]
   static final descontos =
-      obx.QueryDoubleProperty<TurnoObj>(_entities[6].properties[6]);
+      obx.QueryDoubleProperty<TurnoObj>(_entities[5].properties[6]);
 
   /// see [TurnoObj.vendasliquidas]
   static final vendasliquidas =
-      obx.QueryDoubleProperty<TurnoObj>(_entities[6].properties[7]);
+      obx.QueryDoubleProperty<TurnoObj>(_entities[5].properties[7]);
 
   /// see [TurnoObj.dinheiro]
   static final dinheiro =
-      obx.QueryDoubleProperty<TurnoObj>(_entities[6].properties[8]);
+      obx.QueryDoubleProperty<TurnoObj>(_entities[5].properties[8]);
 
   /// see [TurnoObj.multibanco]
   static final multibanco =
-      obx.QueryDoubleProperty<TurnoObj>(_entities[6].properties[9]);
+      obx.QueryDoubleProperty<TurnoObj>(_entities[5].properties[9]);
 
   /// see [TurnoObj.mbWay]
   static final mbWay =
-      obx.QueryDoubleProperty<TurnoObj>(_entities[6].properties[10]);
+      obx.QueryDoubleProperty<TurnoObj>(_entities[5].properties[10]);
 
   /// see [TurnoObj.dinheiroInicial]
   static final dinheiroInicial =
-      obx.QueryDoubleProperty<TurnoObj>(_entities[6].properties[11]);
+      obx.QueryDoubleProperty<TurnoObj>(_entities[5].properties[11]);
 
   /// see [TurnoObj.pagamentosDinheiro]
   static final pagamentosDinheiro =
-      obx.QueryDoubleProperty<TurnoObj>(_entities[6].properties[12]);
+      obx.QueryDoubleProperty<TurnoObj>(_entities[5].properties[12]);
 
   /// see [TurnoObj.suprimento]
   static final suprimento =
-      obx.QueryDoubleProperty<TurnoObj>(_entities[6].properties[13]);
+      obx.QueryDoubleProperty<TurnoObj>(_entities[5].properties[13]);
 
   /// see [TurnoObj.sangria]
   static final sangria =
-      obx.QueryDoubleProperty<TurnoObj>(_entities[6].properties[14]);
+      obx.QueryDoubleProperty<TurnoObj>(_entities[5].properties[14]);
 
   /// see [TurnoObj.dinheiroEsperado]
   static final dinheiroEsperado =
-      obx.QueryDoubleProperty<TurnoObj>(_entities[6].properties[15]);
+      obx.QueryDoubleProperty<TurnoObj>(_entities[5].properties[15]);
 
   /// see [TurnoObj.funcionarioID]
   static final funcionarioID =
-      obx.QueryIntegerProperty<TurnoObj>(_entities[6].properties[16]);
+      obx.QueryIntegerProperty<TurnoObj>(_entities[5].properties[16]);
 }
 
 /// [VendaObj] entity fields to define ObjectBox queries.
 class VendaObj_ {
   /// see [VendaObj.id]
   static final id =
-      obx.QueryIntegerProperty<VendaObj>(_entities[7].properties[0]);
+      obx.QueryIntegerProperty<VendaObj>(_entities[6].properties[0]);
 
   /// see [VendaObj.nome]
   static final nome =
-      obx.QueryStringProperty<VendaObj>(_entities[7].properties[1]);
+      obx.QueryStringProperty<VendaObj>(_entities[6].properties[1]);
 
   /// see [VendaObj.hora]
   static final hora =
-      obx.QueryDateProperty<VendaObj>(_entities[7].properties[2]);
+      obx.QueryDateProperty<VendaObj>(_entities[6].properties[2]);
 
   /// see [VendaObj.artigosPedidoIds]
   static final artigosPedidoIds =
-      obx.QueryIntegerVectorProperty<VendaObj>(_entities[7].properties[3]);
+      obx.QueryIntegerVectorProperty<VendaObj>(_entities[6].properties[3]);
 
   /// see [VendaObj.funcionarioID]
   static final funcionarioID =
-      obx.QueryIntegerProperty<VendaObj>(_entities[7].properties[4]);
+      obx.QueryIntegerProperty<VendaObj>(_entities[6].properties[4]);
 
   /// see [VendaObj.localId]
   static final localId =
-      obx.QueryIntegerProperty<VendaObj>(_entities[7].properties[5]);
+      obx.QueryIntegerProperty<VendaObj>(_entities[6].properties[5]);
 
   /// see [VendaObj.total]
   static final total =
-      obx.QueryDoubleProperty<VendaObj>(_entities[7].properties[6]);
+      obx.QueryDoubleProperty<VendaObj>(_entities[6].properties[6]);
 
   /// see [VendaObj.nrArtigos]
   static final nrArtigos =
-      obx.QueryIntegerProperty<VendaObj>(_entities[7].properties[7]);
+      obx.QueryIntegerProperty<VendaObj>(_entities[6].properties[7]);
+}
+
+/// [SetupObj] entity fields to define ObjectBox queries.
+class SetupObj_ {
+  /// see [SetupObj.id]
+  static final id =
+      obx.QueryIntegerProperty<SetupObj>(_entities[7].properties[0]);
+
+  /// see [SetupObj.url]
+  static final url =
+      obx.QueryStringProperty<SetupObj>(_entities[7].properties[1]);
+
+  /// see [SetupObj.password]
+  static final password =
+      obx.QueryStringProperty<SetupObj>(_entities[7].properties[2]);
+
+  /// see [SetupObj.lojaID]
+  static final lojaID =
+      obx.QueryIntegerProperty<SetupObj>(_entities[7].properties[3]);
+
+  /// see [SetupObj.nomeLoja]
+  static final nomeLoja =
+      obx.QueryStringProperty<SetupObj>(_entities[7].properties[4]);
+
+  /// see [SetupObj.posID]
+  static final posID =
+      obx.QueryIntegerProperty<SetupObj>(_entities[7].properties[5]);
+
+  /// see [SetupObj.pos]
+  static final pos =
+      obx.QueryStringProperty<SetupObj>(_entities[7].properties[6]);
+
+  /// see [SetupObj.utilizadorID]
+  static final utilizadorID =
+      obx.QueryIntegerProperty<SetupObj>(_entities[7].properties[7]);
+
+  /// see [SetupObj.faturacaoID]
+  static final faturacaoID =
+      obx.QueryIntegerProperty<SetupObj>(_entities[7].properties[8]);
+
+  /// see [SetupObj.faturacao]
+  static final faturacao =
+      obx.QueryStringProperty<SetupObj>(_entities[7].properties[9]);
+
+  /// see [SetupObj.reembolsoID]
+  static final reembolsoID =
+      obx.QueryIntegerProperty<SetupObj>(_entities[7].properties[10]);
+
+  /// see [SetupObj.reembolso]
+  static final reembolso =
+      obx.QueryStringProperty<SetupObj>(_entities[7].properties[11]);
+
+  /// see [SetupObj.contaCorrenteID]
+  static final contaCorrenteID =
+      obx.QueryIntegerProperty<SetupObj>(_entities[7].properties[12]);
+
+  /// see [SetupObj.contaCorrente]
+  static final contaCorrente =
+      obx.QueryStringProperty<SetupObj>(_entities[7].properties[13]);
+}
+
+/// [ClienteObj] entity fields to define ObjectBox queries.
+class ClienteObj_ {
+  /// see [ClienteObj.id]
+  static final id =
+      obx.QueryIntegerProperty<ClienteObj>(_entities[8].properties[0]);
+
+  /// see [ClienteObj.nome]
+  static final nome =
+      obx.QueryStringProperty<ClienteObj>(_entities[8].properties[1]);
+
+  /// see [ClienteObj.NIF]
+  static final NIF =
+      obx.QueryIntegerProperty<ClienteObj>(_entities[8].properties[2]);
+
+  /// see [ClienteObj.country]
+  static final country =
+      obx.QueryStringProperty<ClienteObj>(_entities[8].properties[3]);
+
+  /// see [ClienteObj.address]
+  static final address =
+      obx.QueryStringProperty<ClienteObj>(_entities[8].properties[4]);
+
+  /// see [ClienteObj.postcode]
+  static final postcode =
+      obx.QueryStringProperty<ClienteObj>(_entities[8].properties[5]);
+
+  /// see [ClienteObj.city]
+  static final city =
+      obx.QueryStringProperty<ClienteObj>(_entities[8].properties[6]);
+
+  /// see [ClienteObj.email]
+  static final email =
+      obx.QueryStringProperty<ClienteObj>(_entities[8].properties[7]);
+
+  /// see [ClienteObj.phone]
+  static final phone =
+      obx.QueryIntegerProperty<ClienteObj>(_entities[8].properties[8]);
+
+  /// see [ClienteObj.obeservations]
+  static final obeservations =
+      obx.QueryStringProperty<ClienteObj>(_entities[8].properties[9]);
 }

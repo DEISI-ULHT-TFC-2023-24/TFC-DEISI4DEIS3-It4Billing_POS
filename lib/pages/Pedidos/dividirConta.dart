@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:it4billing_pos/pages/Pedidos/pedidos.dart';
 
+import '../../main.dart';
+import '../../objetos/VendaObj.dart';
 import '../../objetos/pedidoObj.dart';
 import 'cobrarDividido.dart';
 
@@ -33,8 +36,10 @@ class _DividirConta extends State<DividirConta> {
     double totalPedido = widget.pedido.total;
     setState(() {
       valoresIndividuais.clear();
-      double valorIndividual = double.parse((totalPedido / numPessoas).toStringAsFixed(2)); // Arredondar para 2 casas decimais
-      double totalFixo = double.parse((valorIndividual * numPessoas).toStringAsFixed(2));
+      double valorIndividual = double.parse((totalPedido / numPessoas)
+          .toStringAsFixed(2)); // Arredondar para 2 casas decimais
+      double totalFixo =
+          double.parse((valorIndividual * numPessoas).toStringAsFixed(2));
       double diferenca = totalPedido - totalFixo;
       double diferencaPorPessoa = (diferenca / 0.01).abs();
 
@@ -50,12 +55,13 @@ class _DividirConta extends State<DividirConta> {
           diferenca += 0.01;
           diferencaPorPessoa--;
         }
-        valoresIndividuais.add(double.parse(valor.toStringAsFixed(2))); // Garantir 2 casas decimais
+        valoresIndividuais.add(double.parse(
+            valor.toStringAsFixed(2))); // Garantir 2 casas decimais
       }
 
       // Ajuste para garantir que a soma seja igual ao total do pedido
-      valoresIndividuais[0] += totalPedido - valoresIndividuais.reduce((value, element) => value + element);
-
+      valoresIndividuais[0] += totalPedido -
+          valoresIndividuais.reduce((value, element) => value + element);
     });
   }
 
@@ -63,7 +69,8 @@ class _DividirConta extends State<DividirConta> {
     setState(() {
       numPessoas++;
       botaoPressionado.add(false);
-      mostrarBotaoConcluir = false; // Se aumentar o número de pessoas, o botão "Concluir Venda" deve desaparecer
+      mostrarBotaoConcluir =
+          false; // Se aumentar o número de pessoas, o botão "Concluir Venda" deve desaparecer
       calcularValoresIndividuais();
     });
   }
@@ -77,7 +84,6 @@ class _DividirConta extends State<DividirConta> {
       });
     }
   }
-
 
   //void cobrarValor(int index) {
   //  setState(() {
@@ -97,8 +103,11 @@ class _DividirConta extends State<DividirConta> {
   }
 
   void cobrarValor(int index) {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => CobrarDividido(pedido: widget.pedido)))
-        .then((_) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                CobrarDivididoPage(pedido: widget.pedido))).then((_) {
       setState(() {
         botaoPressionado[index] = true;
         if (countPressedButtons() == numPessoas) {
@@ -110,9 +119,26 @@ class _DividirConta extends State<DividirConta> {
 
   void concluirVenda() {
     // Lógica para concluir a venda
+    VendaObj venda = VendaObj(
+        nome: widget.pedido.nome,
+        hora: widget.pedido.hora,
+        funcionarioID: widget.pedido.funcionarioID,
+        localId: widget.pedido.localId,
+        total: widget.pedido.total);
+    venda.artigosPedidoIds = widget.pedido.artigosPedidoIds;
+    venda.nrArtigos = widget.pedido.nrArtigos;
+
+    database.addVenda(venda);
+    database.removePedido(widget.pedido.id);
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PedidosPage(),
+      ),
+    );
     print('Venda concluída!');
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -152,12 +178,18 @@ class _DividirConta extends State<DividirConta> {
               itemCount: numPessoas,
               itemBuilder: (context, index) {
                 return ListTile(
-                  title: Text('Valor do cliente ${index + 1}: ${valoresIndividuais[index].toStringAsFixed(2)} €'),
+                  title: Text(
+                      'Valor do cliente ${index + 1}: ${valoresIndividuais[index].toStringAsFixed(2)} €'),
                   trailing: ElevatedButton(
-                    onPressed:  botaoPressionado[index] ? null : () => cobrarValor(index),
+                    onPressed: botaoPressionado[index]
+                        ? null
+                        : () => cobrarValor(index),
                     style: ElevatedButton.styleFrom(
-                      primary: botaoPressionado[index] ? Colors.grey : const Color(0xff00afe9),
-                      onPrimary:botaoPressionado[index] ? Colors.black : Colors.white,
+                      foregroundColor:
+                          botaoPressionado[index] ? Colors.black : Colors.white,
+                      backgroundColor: botaoPressionado[index]
+                          ? Colors.grey
+                          : const Color(0xff00afe9),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                         side: const BorderSide(color: Colors.black),
@@ -169,7 +201,21 @@ class _DividirConta extends State<DividirConta> {
               },
             ),
           ),
-          if (mostrarBotaoConcluir == true) ElevatedButton(onPressed: concluirVenda, child: const Text('Concluir Venda'),),
+          if (mostrarBotaoConcluir == true)
+            SizedBox(
+                height: 50.0,
+                child: ElevatedButton(
+                  onPressed: concluirVenda,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xff00afe9),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12.0),
+                      side: const BorderSide(color: Colors.black),
+                    ),
+                  ),
+                  child: const Text('CONCLUIR VENDA'),
+                )),
+          const SizedBox(height: 20),
         ],
       ),
     );
