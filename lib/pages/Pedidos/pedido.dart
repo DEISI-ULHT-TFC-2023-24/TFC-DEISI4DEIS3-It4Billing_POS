@@ -89,7 +89,8 @@ class _PedidoPage extends State<PedidoPage> with TickerProviderStateMixin {
       hora: DateTime.now(),
       funcionarioID: 0,
       total: 0,
-      localId: -1);
+      localId: -1,
+      clienteID: 0);
 
   // estudar a parte de voltar a entrar dentro do pedido
   // como vou carregar toda a info ??devo adicionar mais variaveis ao pedido por exemplo
@@ -107,7 +108,9 @@ class _PedidoPage extends State<PedidoPage> with TickerProviderStateMixin {
   Future<void> addUserAoPedido() async {
     /// isto vai ser alterrado porque tenho de ter o utilizador da seção
     pedido.funcionarioID = database.getAllUtilizadores()[0].id;
-    print('estive aqui e entao o pedido tem utilizador ${pedido.funcionarioID}');
+    print(
+        'estive aqui e entao o pedido tem utilizador ${pedido.funcionarioID}');
+
     ///este zer0 tera de ser mudado ele escolhe qual é o utilizador
   }
 

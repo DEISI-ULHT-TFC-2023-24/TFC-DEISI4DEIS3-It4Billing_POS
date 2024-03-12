@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:it4billing_pos/main.dart';
 import 'package:it4billing_pos/objetos/turnoObj.dart';
 import 'package:it4billing_pos/pages/Turnos/turno.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../objetos/setupObj.dart';
 import '../Pedidos/pedidos.dart';
@@ -95,6 +96,7 @@ class TurnoFechado extends StatelessWidget {
           title: const Text('Back office'),
           onTap: () {
             Navigator.pop(context);
+            _launchURL('https://app.it4billing.com/Login');
           },
         ),
         ListTile(
@@ -102,7 +104,8 @@ class TurnoFechado extends StatelessWidget {
           title: const Text('Configurações'),
           onTap: () {
             Navigator.pop(context);
-            Navigator.of(context).push(MaterialPageRoute(builder: (context) => ConfiguracoesPage()));
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => ConfiguracoesPage()));
           },
         ),
         ListTile(
@@ -115,6 +118,15 @@ class TurnoFechado extends StatelessWidget {
       ],
     ),
   );
+
+  _launchURL(String url) async {
+    try {
+      final uri = Uri.parse(url);
+      await launchUrl(uri);
+    } catch (e) {
+      print('Erro ao lançar a URL: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

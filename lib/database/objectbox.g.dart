@@ -183,7 +183,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
       id: const obx_int.IdUid(4, 7104298556461174362),
       name: 'PedidoObj',
-      lastPropertyId: const obx_int.IdUid(9, 1484090413830281754),
+      lastPropertyId: const obx_int.IdUid(10, 1235578495373841915),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
@@ -224,6 +224,11 @@ final _entities = <obx_int.ModelEntity>[
         obx_int.ModelProperty(
             id: const obx_int.IdUid(9, 1484090413830281754),
             name: 'funcionarioID',
+            type: 6,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(10, 1235578495373841915),
+            name: 'clienteID',
             type: 6,
             flags: 0)
       ],
@@ -399,7 +404,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
       id: const obx_int.IdUid(11, 5421798492171887830),
       name: 'SetupObj',
-      lastPropertyId: const obx_int.IdUid(14, 6749323647515317920),
+      lastPropertyId: const obx_int.IdUid(16, 1911982912368214324),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
@@ -471,6 +476,16 @@ final _entities = <obx_int.ModelEntity>[
             id: const obx_int.IdUid(14, 6749323647515317920),
             name: 'contaCorrente',
             type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(15, 3611576054806822963),
+            name: 'imprimir',
+            type: 1,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(16, 1911982912368214324),
+            name: 'email',
+            type: 1,
             flags: 0)
       ],
       relations: <obx_int.ModelRelation>[],
@@ -792,7 +807,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           final nomeOffset = fbb.writeString(object.nome);
           final artigosPedidoIdsOffset =
               fbb.writeListInt64(object.artigosPedidoIds);
-          fbb.startTable(10);
+          fbb.startTable(11);
           fbb.addInt64(0, object.id);
           fbb.addOffset(1, nomeOffset);
           fbb.addInt64(2, object.hora.millisecondsSinceEpoch);
@@ -801,6 +816,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           fbb.addInt64(6, object.localId);
           fbb.addOffset(7, artigosPedidoIdsOffset);
           fbb.addInt64(8, object.funcionarioID);
+          fbb.addInt64(9, object.clienteID);
           fbb.finish(fbb.endTable());
           return object.id;
         },
@@ -813,6 +829,8 @@ obx_int.ModelDefinition getObjectBoxModel() {
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 8, 0));
           final funcionarioIDParam =
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 20, 0);
+          final clienteIDParam =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 22, 0);
           final localIdParam =
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 16, 0);
           final totalParam =
@@ -821,6 +839,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
               nome: nomeParam,
               hora: horaParam,
               funcionarioID: funcionarioIDParam,
+              clienteID: clienteIDParam,
               localId: localIdParam,
               total: totalParam)
             ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0)
@@ -1000,7 +1019,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           final faturacaoOffset = fbb.writeString(object.faturacao);
           final reembolsoOffset = fbb.writeString(object.reembolso);
           final contaCorrenteOffset = fbb.writeString(object.contaCorrente);
-          fbb.startTable(15);
+          fbb.startTable(17);
           fbb.addInt64(0, object.id);
           fbb.addOffset(1, urlOffset);
           fbb.addOffset(2, passwordOffset);
@@ -1015,6 +1034,8 @@ obx_int.ModelDefinition getObjectBoxModel() {
           fbb.addOffset(11, reembolsoOffset);
           fbb.addInt64(12, object.contaCorrenteID);
           fbb.addOffset(13, contaCorrenteOffset);
+          fbb.addBool(14, object.imprimir);
+          fbb.addBool(15, object.email);
           fbb.finish(fbb.endTable());
           return object.id;
         },
@@ -1049,7 +1070,11 @@ obx_int.ModelDefinition getObjectBoxModel() {
             ..contaCorrenteID =
                 const fb.Int64Reader().vTableGet(buffer, rootOffset, 28, 0)
             ..contaCorrente = const fb.StringReader(asciiOptimization: true)
-                .vTableGet(buffer, rootOffset, 30, '');
+                .vTableGet(buffer, rootOffset, 30, '')
+            ..imprimir =
+                const fb.BoolReader().vTableGet(buffer, rootOffset, 32, false)
+            ..email =
+                const fb.BoolReader().vTableGet(buffer, rootOffset, 34, false);
 
           return object;
         }),
@@ -1266,6 +1291,10 @@ class PedidoObj_ {
   /// see [PedidoObj.funcionarioID]
   static final funcionarioID =
       obx.QueryIntegerProperty<PedidoObj>(_entities[3].properties[7]);
+
+  /// see [PedidoObj.clienteID]
+  static final clienteID =
+      obx.QueryIntegerProperty<PedidoObj>(_entities[3].properties[8]);
 }
 
 /// [Utilizador] entity fields to define ObjectBox queries.
@@ -1446,6 +1475,14 @@ class SetupObj_ {
   /// see [SetupObj.contaCorrente]
   static final contaCorrente =
       obx.QueryStringProperty<SetupObj>(_entities[7].properties[13]);
+
+  /// see [SetupObj.imprimir]
+  static final imprimir =
+      obx.QueryBooleanProperty<SetupObj>(_entities[7].properties[14]);
+
+  /// see [SetupObj.email]
+  static final email =
+      obx.QueryBooleanProperty<SetupObj>(_entities[7].properties[15]);
 }
 
 /// [ClienteObj] entity fields to define ObjectBox queries.

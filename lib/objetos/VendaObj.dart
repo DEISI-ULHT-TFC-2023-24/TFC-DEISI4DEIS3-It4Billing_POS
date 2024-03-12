@@ -1,5 +1,4 @@
 import '../main.dart';
-import 'artigoObj.dart';
 import 'package:objectbox/objectbox.dart';
 import '../database/objectbox.g.dart';
 

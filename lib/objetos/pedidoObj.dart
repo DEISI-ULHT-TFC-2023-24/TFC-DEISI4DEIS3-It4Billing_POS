@@ -1,5 +1,4 @@
 import '../main.dart';
-import 'artigoObj.dart';
 import 'package:objectbox/objectbox.dart';
 import '../database/objectbox.g.dart';
 
@@ -11,12 +10,12 @@ class PedidoObj {
   @Property(type: PropertyType.date)
   DateTime hora;
 
-
   // late ToMany<Artigo> artigosPedido = ToMany<Artigo>();
   late List<int> artigosPedidoIds = [];
 
   int funcionarioID;
-  int localId ;
+  int clienteID;
+  int localId;
 
   double total = 0;
   int nrArtigos = 0;
@@ -25,13 +24,13 @@ class PedidoObj {
     required this.nome,
     required this.hora,
     required this.funcionarioID,
+    required this.clienteID,
     required this.localId,
     required this.total,
   });
 
-
   double calcularValorTotal() {
-    total=0;
+    total = 0;
     for (var artigoId in artigosPedidoIds) {
       total += database.getArtigo(artigoId)!.price;
     }

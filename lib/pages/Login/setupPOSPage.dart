@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:it4billing_pos/objetos/setupObj.dart';
 import 'package:it4billing_pos/pages/Login/loginPage.dart';
 
-import '../../main.dart';
 
 class SetupPOSPage extends StatefulWidget {
   SetupObj setup;
@@ -84,6 +83,37 @@ class __FormContentState extends State<_FormContent> {
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+
+                Row(
+                  children: [
+                    Checkbox(
+                      value: widget.setup.email,
+                      onChanged: (value) {
+                        setState(() {
+                          widget.setup.email = value!;
+                        });
+                      },
+                    ),
+                    const Text('Enviar por Email'),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Checkbox(
+                      value: widget.setup.imprimir,
+                      onChanged: (value) {
+                        setState(() {
+                          widget.setup.imprimir = value!;
+                        });
+                      },
+                    ),
+                    const Text('Imprimir Documento'),
+                  ],
+                ),
+
+
+
+            _gap(),
             const Text('Selecione o documento para a faturação:'),
             _gap(),
             DropdownButtonFormField<String>(

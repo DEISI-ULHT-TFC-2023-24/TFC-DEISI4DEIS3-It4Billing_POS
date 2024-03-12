@@ -402,8 +402,7 @@ class _PedidosPage extends State<PedidosPage> {
                                       ],
                                     ),
                                     Text(
-                                      'Funcionario: ${database.getUtilizador(widget.pedidos[index].funcionarioID)?.nome} \n'
-                                      'Artigos na lista: ${widget.pedidos[index].artigosPedidoIds.length}',
+                                      'Funcionario: ${database.getUtilizador(widget.pedidos[index].funcionarioID)?.nome}',
                                       style: const TextStyle(
                                         color: Colors.black,
                                         fontSize: 18,

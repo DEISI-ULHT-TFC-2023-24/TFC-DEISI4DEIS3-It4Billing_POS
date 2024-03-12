@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:it4billing_pos/pages/Pedidos/dividirConta.dart';
-import 'package:it4billing_pos/pages/Pedidos/pedidos.dart';
 
 import '../../objetos/artigoObj.dart';
 import '../../objetos/categoriaObj.dart';

@@ -1,18 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:it4billing_pos/main.dart';
 import 'package:it4billing_pos/objetos/clienteObj.dart';
+import 'package:it4billing_pos/pages/Pedidos/carrinho.dart';
 
+import '../../objetos/artigoObj.dart';
+import '../../objetos/categoriaObj.dart';
+import '../../objetos/pedidoObj.dart';
 import 'editClientePage.dart';
+import 'newClientePage.dart';
 
 class AdicionarClientePage extends StatefulWidget {
   List<ClienteObj> clientes = database.getAllClientes();
   ClienteObj clienteSelecionado = database.getAllClientes()[0];
+  late List<PedidoObj> pedidos = [];
+  late List<Categoria> categorias = [];
+  late List<Artigo> artigos = [];
+  late PedidoObj pedido;
+
+  AdicionarClientePage({
+    Key? key,
+    required this.pedido,
+    required this.pedidos,
+    required this.categorias,
+    required this.artigos,
+  }) : super(key: key);
 
   @override
   _AdicionarClientePageState createState() => _AdicionarClientePageState();
 }
 
 class _AdicionarClientePageState extends State<AdicionarClientePage> {
+
+
+
   // Método para alterar o cliente selecionado
   void selecionarCliente(ClienteObj cliente) {
     setState(() {
@@ -22,6 +42,10 @@ class _AdicionarClientePageState extends State<AdicionarClientePage> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.pedido.clienteID != 0){
+      widget.clienteSelecionado = database.getCliente(widget.pedido.clienteID)!;
+      print('estive aqui pre carreguei o cliente');
+    }
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -44,14 +68,22 @@ class _AdicionarClientePageState extends State<AdicionarClientePage> {
                 children: [
                   const Text(
                     'Cliente selecionado',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black),
                   ),
                   const SizedBox(height: 10.0),
                   ElevatedButton(
                     onPressed: () {
-                      // Implementar ação para editar o cliente
-                      Navigator.of(context).push(
-                          MaterialPageRoute(builder: (context) => EditarClientePage(cliente: widget.clienteSelecionado,)));
+                      // Ação para editar o cliente
+                      if (widget.clienteSelecionado.nome !=
+                          'Consumidor Final') {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => EditarClientePage(
+                                  cliente: widget.clienteSelecionado,
+                                )));
+                      }
                     },
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(Colors.white),
@@ -73,12 +105,19 @@ class _AdicionarClientePageState extends State<AdicionarClientePage> {
                                 widget.clienteSelecionado.nome,
                                 style: const TextStyle(
                                     fontSize: 16.0,
-                                    fontWeight: FontWeight.bold, color: Colors.black),
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black),
                               ),
-                              Text('${widget.clienteSelecionado.NIF}', style: const TextStyle(color: Colors.black),),
+                              Text(
+                                '${widget.clienteSelecionado.NIF}',
+                                style: const TextStyle(color: Colors.black),
+                              ),
                             ],
                           ),
-                          const Text('Editar', style: TextStyle(color: Colors.black),),
+                          const Text(
+                            'Editar',
+                            style: TextStyle(color: Colors.black),
+                          ),
                         ],
                       ),
                     ),
@@ -90,8 +129,13 @@ class _AdicionarClientePageState extends State<AdicionarClientePage> {
             TextButton(
               onPressed: () {
                 // Implementar ação para adicionar novo cliente
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => NovoClientePage()));
               },
-              child: const Text('Adicionar novo cliente', style: TextStyle(color: Colors.black),),
+              child: const Text(
+                'Adicionar novo cliente',
+                style: TextStyle(color: Colors.black),
+              ),
             ),
             const Divider(),
             Expanded(
@@ -106,11 +150,43 @@ class _AdicionarClientePageState extends State<AdicionarClientePage> {
                     title: Text(
                       cliente.nome,
                       style: const TextStyle(
-                          fontSize: 16.0, fontWeight: FontWeight.bold, color: Colors.black ),
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black),
                     ),
                     subtitle: Text('NIF: ${cliente.NIF}'),
                   );
                 },
+              ),
+            ),
+            SizedBox(
+              height: 50.0,
+              width: 150,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xff00afe9),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    side: const BorderSide(color: Colors.black),
+                  ),
+                ),
+                onPressed: () {
+                  widget.pedido.clienteID = widget.clienteSelecionado.id;
+                  if (database.getPedido(widget.pedido.id) != null){
+                    database.addPedido(widget.pedido);
+                  }
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => CarrinhoPage(
+                          pedidos: widget.pedidos,
+                          categorias: widget.categorias,
+                          artigos: widget.artigos,
+                          pedido: widget.pedido)));
+                },
+                child: const Text('SALVAR',
+                    style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold)),
               ),
             ),
           ],

@@ -67,8 +67,12 @@ class _CarrinhoPage extends State<CarrinhoPage> {
               icon: const Icon(Icons.person_add_outlined),
               tooltip: 'Open shopping cart',
               onPressed: () {
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => AdicionarClientePage()));
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => AdicionarClientePage(
+                        pedido: widget.pedido,
+                        pedidos: widget.pedidos,
+                        categorias: widget.categorias,
+                        artigos: widget.artigos)));
               },
             ),
             PopupMenuButton<String>(
@@ -77,8 +81,8 @@ class _CarrinhoPage extends State<CarrinhoPage> {
                 print('Opção selecionada: ${widget.pedido.nome}');
                 if (value == 'Eliminar pedido') {
                   database.removePedido(widget.pedido.id);
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => PedidosPage()));
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => PedidosPage()));
                 }
               },
               itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
@@ -103,7 +107,6 @@ class _CarrinhoPage extends State<CarrinhoPage> {
                     title: Text('Sincronizar'),
                   ),
                 ),
-
               ],
             ),
           ],
@@ -118,7 +121,9 @@ class _CarrinhoPage extends State<CarrinhoPage> {
                   int artigoId = artigosAgrupados.keys.elementAt(index);
                   int quantidade = artigosAgrupados[artigoId]!;
                   double valor = database.getArtigo(artigoId)!.price;
-                  Artigo artigo = database.getArtigo(artigoId)!;                /// isto vai dar problemas no editar carrinho
+                  Artigo artigo = database.getArtigo(artigoId)!;
+
+                  /// isto vai dar problemas no editar carrinho
                   return Padding(
                     padding: const EdgeInsets.only(
                         left: 20, right: 20, bottom: 10.0),
@@ -129,13 +134,13 @@ class _CarrinhoPage extends State<CarrinhoPage> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => EditCarrinho(
-                                  artigo: artigo,
-                                  quantidade: quantidade,
-                                  pedido: widget.pedido,
-                                  artigos: widget.artigos,
-                                  categorias: widget.categorias,
-                                  pedidos: widget.pedidos,
-                                )));
+                                      artigo: artigo,
+                                      quantidade: quantidade,
+                                      pedido: widget.pedido,
+                                      artigos: widget.artigos,
+                                      categorias: widget.categorias,
+                                      pedidos: widget.pedidos,
+                                    )));
                       },
                       style: ButtonStyle(
                         side: MaterialStateProperty.all(
@@ -208,11 +213,10 @@ class _CarrinhoPage extends State<CarrinhoPage> {
                       height: 50,
                       child: ElevatedButton(
                         onPressed: () async {
-
                           if (widget.pedido.artigosPedidoIds.isNotEmpty) {
                             if (widget.pedido.localId == -1) {
-
-                              print('Lista de locais: ${database.getAllLocal().length}');
+                              print(
+                                  'Lista de locais: ${database.getAllLocal().length}');
                               database.getAllLocal().forEach((element) {
                                 print(element.nome);
                               });
@@ -221,17 +225,13 @@ class _CarrinhoPage extends State<CarrinhoPage> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => LocalPage(
-                                          pedidos: widget.pedidos,
-                                          pedido: widget.pedido,
-                                      )
-                                  )
-                              );
+                                            pedidos: widget.pedidos,
+                                            pedido: widget.pedido,
+                                          )));
                             } else {
-
                               await database.addPedido(widget.pedido);
                               Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) =>
-                                      PedidosPage()));
+                                  builder: (context) => PedidosPage()));
                             }
                           } else {
                             Fluttertoast.showToast(
@@ -278,12 +278,11 @@ class _CarrinhoPage extends State<CarrinhoPage> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => Cobrar(
-                                      pedidos: widget.pedidos,
-                                      pedido: widget.pedido,
-                                      categorias: widget.categorias,
-                                      artigos: widget.artigos,
-                                    )));
-
+                                          pedidos: widget.pedidos,
+                                          pedido: widget.pedido,
+                                          categorias: widget.categorias,
+                                          artigos: widget.artigos,
+                                        )));
                           } else {
                             Fluttertoast.showToast(
                               msg: "Adicionar artigos primeiro",
@@ -295,7 +294,6 @@ class _CarrinhoPage extends State<CarrinhoPage> {
                               fontSize: 16.0,
                             );
                           }
-
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xff00afe9),

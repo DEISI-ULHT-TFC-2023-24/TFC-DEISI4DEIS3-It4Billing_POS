@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:it4billing_pos/objetos/clienteObj.dart';
 import 'package:it4billing_pos/objetos/setupObj.dart';
-import 'package:it4billing_pos/pages/Cliente/addClientePage.dart';
 import 'package:it4billing_pos/pages/Configuracoes/configuracoes.dart';
 import 'package:it4billing_pos/pages/Login/loginPage.dart';
 import 'package:it4billing_pos/pages/Turnos/turnoFechado.dart';
 import 'package:it4billing_pos/pages/artigos.dart';
 import 'package:it4billing_pos/pages/categorias.dart';
-import 'package:it4billing_pos/pages/Login/setupPOSPage.dart';
 import 'package:it4billing_pos/pages/Login/setupPage.dart';
 import 'package:it4billing_pos/pages/vendas.dart';
 import 'package:it4billing_pos/pages/Turnos/turno.dart';
@@ -63,7 +60,9 @@ class MyApp extends StatelessWidget {
         '/vendas': (context) => VendasPage(),
         '/artigos': (context) => ArtigosPage(),
         '/categorias': (context) => CategoriasPage(),
-        '/cliente': (context) => AdicionarClientePage()
+        //'/cliente': (context) => AdicionarClientePage(),
+        '/config': (context) => ConfiguracoesPage()
+
 
       },
       debugShowCheckedModeBanner: false,

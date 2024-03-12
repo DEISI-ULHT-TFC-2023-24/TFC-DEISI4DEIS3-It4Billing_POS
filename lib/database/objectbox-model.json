@@ -157,7 +157,7 @@
     },
     {
       "id": "4:7104298556461174362",
-      "lastPropertyId": "9:1484090413830281754",
+      "lastPropertyId": "10:1235578495373841915",
       "name": "PedidoObj",
       "properties": [
         {
@@ -199,6 +199,11 @@
         {
           "id": "9:1484090413830281754",
           "name": "funcionarioID",
+          "type": 6
+        },
+        {
+          "id": "10:1235578495373841915",
+          "name": "clienteID",
           "type": 6
         }
       ],
@@ -373,7 +378,7 @@
     },
     {
       "id": "11:5421798492171887830",
-      "lastPropertyId": "14:6749323647515317920",
+      "lastPropertyId": "16:1911982912368214324",
       "name": "SetupObj",
       "properties": [
         {
@@ -446,6 +451,16 @@
           "id": "14:6749323647515317920",
           "name": "contaCorrente",
           "type": 9
+        },
+        {
+          "id": "15:3611576054806822963",
+          "name": "imprimir",
+          "type": 1
+        },
+        {
+          "id": "16:1911982912368214324",
+          "name": "email",
+          "type": 1
         }
       ],
       "relations": []

@@ -10,6 +10,9 @@ class SetupObj {
   late int lojaID = 0;  //escolher um dos dois
   late String nomeLoja = '';
 
+  late bool imprimir = false;
+  late bool email = false;
+
   late int posID = 0;
   late String pos = '';
 

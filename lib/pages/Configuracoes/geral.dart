@@ -19,6 +19,10 @@ class _GeralPageState extends State<GeralPage> {
 
   String? _selectedStore;
   String? _selectedPos;
+  String? _selectedDocInvoice;
+  String? _selectedDocRefund;
+  String? _selectedDocCurrentAccount;
+
   final List<String> _stores = [
     'Selecione a loja',
     'Loja 1',
@@ -26,6 +30,21 @@ class _GeralPageState extends State<GeralPage> {
     'Loja 3'
   ];
   final List<String> _poss = ['Selecione o POS', 'POS 1', 'POS 2', 'POS 3'];
+
+  final List<String> _invoices = [
+    'Documento da faturação',
+    'F 1',
+    'F 2',
+    'F 3'
+  ];
+  final List<String> _refunds = ['Documento do reembolso', 'R 1', 'R 2', 'R 3'];
+
+  final List<String> _cunrrentAccount = [
+    'Documento da conta corrente',
+    'Cc 1',
+    'Cc 2',
+    'Cc 3'
+  ];
 
   @override
   void initState() {
@@ -39,6 +58,10 @@ class _GeralPageState extends State<GeralPage> {
 
     _selectedStore = setup.nomeLoja;
     _selectedPos = setup.pos;
+
+    _selectedDocInvoice = setup.faturacao;
+    _selectedDocRefund = setup.reembolso;
+    _selectedDocCurrentAccount = setup.contaCorrente;
   }
 
   // Função para iniciar o temporizador
@@ -59,9 +82,12 @@ class _GeralPageState extends State<GeralPage> {
               passwordController.text != setup.password);
 
       // Verifica se houve alteração em algum dos dropdowns
-      _isDropdownChanged = (_selectedStore != 'Selecione a loja' &&
-          _selectedStore != setup.nomeLoja) ||
-          (_selectedPos != 'Selecione o POS' && _selectedPos != setup.pos);
+      _isDropdownChanged = (_selectedStore != 'Selecione a loja' && _selectedStore != setup.nomeLoja) ||
+                           (_selectedPos != 'Selecione o POS' && _selectedPos != setup.pos) ||
+                           (_selectedDocInvoice != 'Documento da faturação' && _selectedDocInvoice != setup.faturacao) ||
+                           (_selectedDocRefund != 'Documento do reembolso' && _selectedDocRefund != setup.reembolso) ||
+                           (_selectedDocCurrentAccount != 'Documento da conta corrente' && _selectedDocCurrentAccount != setup.contaCorrente)
+      ;
 
       if (ischanged == false && _isDropdownChanged == false) {
         _showConfirmation = ischanged;
@@ -89,11 +115,12 @@ class _GeralPageState extends State<GeralPage> {
               SizedBox(height: 16),
               TextField(
                 controller: passwordController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Password',
                 ),
+                obscureText: true,
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -149,11 +176,21 @@ class _GeralPageState extends State<GeralPage> {
                     )
                 ],
               ),
-              const SizedBox(height: 20),
+
+              const SizedBox(height: 10),
+              const Divider(),
+              const SizedBox(height: 10),
               DropdownButtonFormField<String>(
                 isExpanded: true,
                 value: _selectedStore,
                 decoration: InputDecoration(
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(
+                      // Definir a cor da borda quando em foco
+                      color: Color(0xff00afe9), // Substitua pela cor desejada
+                    ),
+                  ),
                   label: const Text('Loja', style: TextStyle(fontSize: 20)),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
@@ -166,6 +203,7 @@ class _GeralPageState extends State<GeralPage> {
                     updateButtonState(); // Chama a função para verificar alterações
                   });
                 },
+                icon: Icon(Icons.arrow_drop_down),
                 items: _stores.map<DropdownMenuItem<String>>((String? value) {
                   return DropdownMenuItem<String>(
                     value: value,
@@ -179,6 +217,13 @@ class _GeralPageState extends State<GeralPage> {
                 value: _selectedPos,
                 hint: const Text('Selecione o POS'),
                 decoration: InputDecoration(
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(
+                      // Definir a cor da borda quando em foco
+                      color: Color(0xff00afe9), // Substitua pela cor desejada
+                    ),
+                  ),
                   label: const Text('POS', style: TextStyle(fontSize: 20)),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
@@ -197,11 +242,104 @@ class _GeralPageState extends State<GeralPage> {
                   );
                 }).toList(),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 10),
+              const Divider(),
+              const SizedBox(height: 10),
+              DropdownButtonFormField<String>(
+                isExpanded: true,
+                value: _selectedDocInvoice,
+                hint: const Text('Documento da faturação'),
+                decoration: InputDecoration(
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: const BorderSide(
+                        // Definir a cor da borda quando em foco
+                        color: Color(0xff00afe9), // Substitua pela cor desejada
+                      ),
+                    ),
+                    label: const Text('Documento para faturação', style: TextStyle(fontSize: 20)),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    )),
+                onChanged: (newValue) {
+                  setState(() {
+                    _selectedDocInvoice = newValue!;
+                    updateButtonState();
+                  });
+                },
+                items: _invoices.map<DropdownMenuItem<String>>((String? value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value!),
+                  );
+                }).toList(),
+              ),
+              const SizedBox(height: 20,),
+              DropdownButtonFormField<String>(
+                isExpanded: true,
+                value: _selectedDocRefund,
+                hint: const Text('Documento do reembolso'),
+                decoration: InputDecoration(
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: const BorderSide(
+                        // Definir a cor da borda quando em foco
+                        color: Color(0xff00afe9), // Substitua pela cor desejada
+                      ),
+                    ),
+                    label: const Text('Documento para reembolso', style: TextStyle(fontSize: 20)),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    )),
+                onChanged: (newValue) {
+                  setState(() {
+                    _selectedDocRefund = newValue!;
+                    updateButtonState();
+                  });
+                },
+                items: _refunds.map<DropdownMenuItem<String>>((String? value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value!),
+                  );
+                }).toList(),
+              ),
+              const SizedBox(height: 20,),
+              DropdownButtonFormField<String>(
+                isExpanded: true,
+                value: _selectedDocCurrentAccount,
+                hint: const Text('Documento da conta corrente'),
+                decoration: InputDecoration(
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: const BorderSide(
+                        // Definir a cor da borda quando em foco
+                        color: Color(0xff00afe9), // Substitua pela cor desejada
+                      ),
+                    ),
+                    label: const Text('Documento para conta corrente', style: TextStyle(fontSize: 20)),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    )),
+                onChanged: (newValue) {
+                  setState(() {
+                    _selectedDocCurrentAccount = newValue!;
+                    updateButtonState();
+                  });
+                },
+                items: _cunrrentAccount
+                    .map<DropdownMenuItem<String>>((String? value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value!),
+                  );
+                }).toList(),
+              ),
+              const SizedBox(height: 20,),
               if (_isDropdownChanged)
                 SizedBox(
                   height: 50,
-                  width: 160,
+                  width: 250,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: _isButtonDisabled
@@ -215,31 +353,35 @@ class _GeralPageState extends State<GeralPage> {
                     onPressed: _isButtonDisabled
                         ? null
                         : () {
-                            if (_selectedStore != null &&
-                                _selectedStore != 'Selecione a loja' &&
-                                _selectedPos != null &&
-                                _selectedPos != 'Selecione o POS') {
-                              setState(() {
-                                _isButtonDisabled = true;
-                              });
+                      if (_selectedStore != null && _selectedStore != 'Selecione a loja' &&
+                          _selectedPos != null && _selectedPos != 'Selecione o POS' &&
+                          _selectedDocInvoice != null && _selectedDocInvoice != 'Documento da faturação' &&
+                          _selectedDocRefund != null && _selectedDocRefund != 'Documento do reembolso' &&
+                          _selectedDocCurrentAccount != null && _selectedDocCurrentAccount != 'Documento da conta corrente') {
+                        setState(() {
+                          _isButtonDisabled = true;
+                        });
 
-                              // Lógica para confirmar seleção da loja e do POS
-                              setup.nomeLoja = _selectedStore!;
-                              setup.pos = _selectedPos!;
-                              print(database.getAllSetup().length);
-                              //database.removeAllSetup();
-                              database.addSetup(setup);
-                              // Temporizador para reativar o botão após 5 segundos
-                              Timer(const Duration(seconds: 5), () {
-                                setState(() {
-                                  _isDropdownChanged =
-                                      _isButtonDisabled = false;
-                                });
-                              });
-                            }
-                          },
+                        // Lógica para confirmar seleção da loja e do POS
+                        setup.nomeLoja = _selectedStore!;
+                        setup.pos = _selectedPos!;
+                        setup.faturacao = _selectedDocInvoice!;
+                        setup.reembolso = _selectedDocRefund!;
+                        setup.contaCorrente = _selectedDocCurrentAccount!;
+                        print(database.getAllSetup().length);
+                        //database.removeAllSetup();
+                        database.addSetup(setup);
+                        // Temporizador para reativar o botão após 5 segundos
+                        Timer(const Duration(seconds: 5), () {
+                          setState(() {
+                            _isDropdownChanged =
+                                _isButtonDisabled = false;
+                          });
+                        });
+                      }
+                    },
                     child: Text(
-                      _isButtonDisabled ? 'SELECIONADO' : 'SELECIONAR',
+                      _isButtonDisabled ? 'SELECIONADO' : 'CONFIRMAR SELEÇÕES',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -248,6 +390,38 @@ class _GeralPageState extends State<GeralPage> {
                     ),
                   ),
                 ),
+              const SizedBox(height: 10),
+              const Divider(),
+              const SizedBox(height: 10),
+              // Espaçamento entre a lista e os botões
+              ListTile(
+                title: const Text('Imprimir Documento'),
+                trailing: Switch(
+                  value: setup.imprimir,
+                  onChanged: (value) {
+                    setState(() {
+                      setup.imprimir = value;
+                      database.addSetup(setup);
+                    });
+                  },
+                ),
+              ),
+              ListTile(
+                title: const Text('Enviar por Email'),
+                trailing: Switch(
+                  value: setup.email,
+                  onChanged: (value) {
+                    setState(() {
+                      setup.email = value;
+                      print(setup.email);
+                      database.addSetup(setup);
+                      print(database.getAllSetup().length);
+                      print(database.getAllSetup()[0].email);
+
+                    });
+                  },
+                ),
+              ),
             ],
           ),
         ),
