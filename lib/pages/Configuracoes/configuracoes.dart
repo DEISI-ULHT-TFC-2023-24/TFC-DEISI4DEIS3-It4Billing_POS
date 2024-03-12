@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:it4billing_pos/pages/artigos.dart';
 import 'package:it4billing_pos/pages/Turnos/turno.dart';
-import 'package:it4billing_pos/pages/vendas.dart';
+import 'package:it4billing_pos/pages/Vendas/vendas.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../main.dart';
 import '../../objetos/VendaObj.dart';

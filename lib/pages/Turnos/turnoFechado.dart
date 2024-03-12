@@ -10,7 +10,7 @@ import '../Pedidos/pedidos.dart';
 import '../artigos.dart';
 import '../categorias.dart';
 import '../Configuracoes/configuracoes.dart';
-import '../vendas.dart';
+import '../Vendas/vendas.dart';
 
 class TurnoFechado extends StatelessWidget {
   TurnoObj turno = database.getAllTurnos()[0];

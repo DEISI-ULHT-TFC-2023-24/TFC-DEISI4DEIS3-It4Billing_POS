@@ -37,7 +37,9 @@ class _ConcluirPedido extends State<ConcluirPedido> {
     venda.nrArtigos = widget.pedido.nrArtigos;
 
     database.addVenda(venda);
-    database.removePedido(widget.pedido.id);
+    if (database.getPedido(widget.pedido.id) != null){
+      database.removePedido(widget.pedido.id);
+    }
 
     Navigator.push(
       context,

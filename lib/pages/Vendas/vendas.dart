@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:it4billing_pos/pages/artigos.dart';
 import 'package:it4billing_pos/pages/Turnos/turno.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../main.dart';
-import '../objetos/pedidoObj.dart';
-import '../objetos/setupObj.dart';
-import '../objetos/turnoObj.dart';
-import 'Pedidos/pedidos.dart';
-import 'Turnos/turnoFechado.dart';
-import 'categorias.dart';
-import 'Configuracoes/configuracoes.dart';
+import '../../main.dart';
+import '../../objetos/VendaObj.dart';
+import '../../objetos/setupObj.dart';
+import '../../objetos/turnoObj.dart';
+import '../Pedidos/pedidos.dart';
+import '../Turnos/turnoFechado.dart';
+import '../categorias.dart';
+import '../Configuracoes/configuracoes.dart';
 
 class VendasPage extends StatelessWidget {
-  List<PedidoObj> pedidos = database.getAllPedidos();
+  List<VendaObj> vendas = database.getAllVendas();
   TurnoObj turno = database.getAllTurnos()[0];
   SetupObj setup = database.getAllSetup()[0];
+
 
   VendasPage({Key? key}) : super(key: key);
 
@@ -137,6 +139,9 @@ class VendasPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    print(vendas.length);
+
     return Scaffold(
       drawer: Drawer(
         child: SingleChildScrollView(
@@ -153,8 +158,80 @@ class VendasPage extends StatelessWidget {
         title: const Text('Vendas concluídas'),
         backgroundColor: const Color(0xff00afe9),
       ),
-      body: const Column(
-        children: [],
+      body: Column(
+        children: [
+          Expanded(
+            child: ListView.builder(
+              itemCount: vendas.length,
+              itemBuilder: (context, index) {
+                return Container(
+                    margin: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 50),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        // entrar dentro da venda
+
+                      },
+                      style: ButtonStyle(
+                        side: MaterialStateProperty.all(
+                            const BorderSide(color: Colors.black)),
+                        // Linha de borda preta
+                        backgroundColor:
+                        MaterialStateProperty.all(Colors.white),
+                        // Fundo white
+                        fixedSize: MaterialStateProperty.all(
+                            const Size(300, 80)),
+                        // Tamanho fixo de 270x80
+                        shape: MaterialStateProperty.all<
+                            RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                      ),
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          // Centraliza verticalmente
+                          //crossAxisAlignment: CrossAxisAlignment.center, // Centraliza horizontalmente
+                          children: [
+                            Row(
+                              mainAxisAlignment:
+                              MainAxisAlignment.spaceBetween,
+                              // Alinha a Row horizontalmente ao centro
+                              children: [
+                                Text(
+                                  DateFormat('dd/MM/yyyy HH:mm').format(vendas[index].hora), // Convertendo DateTime para string formatada
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 18,
+                                  ),
+                                ),
+
+                                Text(
+                                  'Total: ${vendas[index].total.toStringAsFixed(2)} €',
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 18,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Text(
+                              'Funcionario: ${database.getUtilizador(vendas[index].funcionarioID)?.nome}',
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 18,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ));
+              },
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -6,7 +6,7 @@ import 'package:it4billing_pos/pages/Turnos/turnoFechado.dart';
 import 'package:it4billing_pos/pages/artigos.dart';
 import 'package:it4billing_pos/pages/categorias.dart';
 import 'package:it4billing_pos/pages/Login/setupPage.dart';
-import 'package:it4billing_pos/pages/vendas.dart';
+import 'package:it4billing_pos/pages/Vendas/vendas.dart';
 import 'package:it4billing_pos/pages/Turnos/turno.dart';
 import 'package:it4billing_pos/pages/Pedidos/pedidos.dart';
 import 'dart:async';

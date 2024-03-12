@@ -17,7 +17,7 @@ import '../artigos.dart';
 import '../categorias.dart';
 import '../Turnos/turno.dart';
 import '../Configuracoes/configuracoes.dart';
-import '../vendas.dart';
+import '../Vendas/vendas.dart';
 
 class PedidosPage extends StatefulWidget {
   List<PedidoObj> pedidos = database.getAllPedidos();
