@@ -16,6 +16,7 @@ class _PreferenciasPageState extends State<PreferenciasPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Preferencias'),
+        backgroundColor: const Color(0xff00afe9),
       ),
       body: SingleChildScrollView(
         child: Padding(

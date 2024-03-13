@@ -6,6 +6,7 @@ import '../database/objectbox.g.dart';
 class VendaObj {
   int id = 0;
   String nome;
+  bool anulada = false;
 
   @Property(type: PropertyType.date)
   DateTime hora;

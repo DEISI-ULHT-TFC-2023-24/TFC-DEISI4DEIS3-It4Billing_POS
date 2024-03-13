@@ -13,14 +13,12 @@ import 'cobrar.dart';
 
 class CarrinhoPage extends StatefulWidget {
   late List<PedidoObj> pedidos = [];
-  late List<Categoria> categorias = [];
   late List<Artigo> artigos = [];
   late PedidoObj pedido;
 
   CarrinhoPage({
     Key? key,
     required this.pedidos,
-    required this.categorias,
     required this.artigos,
     required this.pedido,
   }) : super(key: key);
@@ -66,7 +64,6 @@ class _CarrinhoPageState extends State<CarrinhoPage> {
                     builder: (context) => AdicionarClientePage(
                         pedido: widget.pedido,
                         pedidos: widget.pedidos,
-                        categorias: widget.categorias,
                         artigos: widget.artigos)));
               },
             ),
@@ -133,7 +130,6 @@ class _CarrinhoPageState extends State<CarrinhoPage> {
                                       quantidade: quantidade,
                                       pedido: widget.pedido,
                                       artigos: widget.artigos,
-                                      categorias: widget.categorias,
                                       pedidos: widget.pedidos,
                                     )));
                       },
@@ -275,7 +271,6 @@ class _CarrinhoPageState extends State<CarrinhoPage> {
                                     builder: (context) => Cobrar(
                                           pedidos: widget.pedidos,
                                           pedido: widget.pedido,
-                                          categorias: widget.categorias,
                                           artigos: widget.artigos,
                                         )));
                           } else {

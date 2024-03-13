@@ -3,28 +3,28 @@ import 'package:flutter/material.dart';
 import '../../objetos/artigoObj.dart';
 import '../../objetos/categoriaObj.dart';
 import '../../objetos/pedidoObj.dart';
+import 'cobrarDividido.dart';
+import 'dividirConta.dart';
 
-class ConcluircobrancaDivididaPage extends StatefulWidget {
+class ConcluirCobrancaDivididaPage extends StatefulWidget {
   late List<PedidoObj> pedidos = [];
-  late List<Categoria> categorias = [];
   late List<Artigo> artigos = [];
   late PedidoObj pedido;
   late String troco;
 
-  ConcluircobrancaDivididaPage({
+  ConcluirCobrancaDivididaPage({
     Key? key,
     required this.pedidos,
-    required this.categorias,
     required this.artigos,
     required this.pedido,
     required this.troco,
   }) : super(key: key);
 
   @override
-  _ConcluircobrancaDivididaPage createState() => _ConcluircobrancaDivididaPage();
+  _ConcluirCobrancaDivididaPage createState() => _ConcluirCobrancaDivididaPage();
 }
 
-class _ConcluircobrancaDivididaPage extends State<ConcluircobrancaDivididaPage> {
+class _ConcluirCobrancaDivididaPage extends State<ConcluirCobrancaDivididaPage> {
 
 
   @override
@@ -103,7 +103,9 @@ class _ConcluircobrancaDivididaPage extends State<ConcluircobrancaDivididaPage> 
             onPressed: () {
               // acrescentar a lógica de pagamento, impressora, enviar e-mail, etc.
               Navigator.pop(context);
-              Navigator.pop(context);
+              Navigator.pop(context, true);
+
+
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xff00afe9),

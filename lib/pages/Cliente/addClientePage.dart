@@ -13,7 +13,6 @@ class AdicionarClientePage extends StatefulWidget {
   List<ClienteObj> clientes = database.getAllClientes();
   ClienteObj clienteSelecionado = database.getAllClientes()[0];
   late List<PedidoObj> pedidos = [];
-  late List<Categoria> categorias = [];
   late List<Artigo> artigos = [];
   late PedidoObj pedido;
 
@@ -21,7 +20,6 @@ class AdicionarClientePage extends StatefulWidget {
     Key? key,
     required this.pedido,
     required this.pedidos,
-    required this.categorias,
     required this.artigos,
   }) : super(key: key);
 
@@ -178,7 +176,6 @@ class _AdicionarClientePageState extends State<AdicionarClientePage> {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => CarrinhoPage(
                           pedidos: widget.pedidos,
-                          categorias: widget.categorias,
                           artigos: widget.artigos,
                           pedido: widget.pedido)));
                 },

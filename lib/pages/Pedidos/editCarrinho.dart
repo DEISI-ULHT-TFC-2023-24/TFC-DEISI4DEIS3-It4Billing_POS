@@ -10,7 +10,6 @@ class EditCarrinho extends StatefulWidget {
   int quantidade;
   late int qunatidadeInicial;
   List<PedidoObj> pedidos = [];
-  List<Categoria> categorias = [];
   List<Artigo> artigos = [];
   PedidoObj pedido;
 
@@ -19,7 +18,6 @@ class EditCarrinho extends StatefulWidget {
     required this.artigo,
     required this.quantidade,
     required this.pedidos,
-    required this.categorias,
     required this.artigos,
     required this.pedido,
   }) : super(key: key);
@@ -276,7 +274,6 @@ class _EditCarrinhoState extends State<EditCarrinho> {
                               .pushReplacement(MaterialPageRoute(
                             builder: (BuildContext context) => CarrinhoPage(
                                 pedidos: widget.pedidos,
-                                categorias: widget.categorias,
                                 artigos: widget.artigos,
                                 pedido: widget.pedido,),
                           ));
@@ -317,7 +314,6 @@ class _EditCarrinhoState extends State<EditCarrinho> {
                               .pushReplacement(MaterialPageRoute(
                             builder: (BuildContext context) => CarrinhoPage(
                                 pedidos: widget.pedidos,
-                                categorias: widget.categorias,
                                 artigos: widget.artigos,
                                 pedido: widget.pedido,),
                           ));

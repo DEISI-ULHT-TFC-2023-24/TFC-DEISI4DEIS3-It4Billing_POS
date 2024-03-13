@@ -142,7 +142,6 @@ class _PedidoPage extends State<PedidoPage> with TickerProviderStateMixin {
                       MaterialPageRoute(
                           builder: (context) => CarrinhoPage(
                                 artigos: widget.artigos,
-                                categorias: widget.categorias,
                                 pedidos: widget.pedidos,
                                 pedido: pedido,
                               )));
@@ -158,7 +157,6 @@ class _PedidoPage extends State<PedidoPage> with TickerProviderStateMixin {
                         MaterialPageRoute(
                             builder: (context) => CarrinhoPage(
                                   artigos: widget.artigos,
-                                  categorias: widget.categorias,
                                   pedidos: widget.pedidos,
                                   pedido: pedido,
                                 )));

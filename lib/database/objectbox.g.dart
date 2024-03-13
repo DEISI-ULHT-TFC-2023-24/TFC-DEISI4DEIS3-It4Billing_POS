@@ -355,7 +355,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
       id: const obx_int.IdUid(10, 969872590487839664),
       name: 'VendaObj',
-      lastPropertyId: const obx_int.IdUid(8, 4453366980173806972),
+      lastPropertyId: const obx_int.IdUid(9, 5990566734231644172),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
@@ -397,6 +397,11 @@ final _entities = <obx_int.ModelEntity>[
             id: const obx_int.IdUid(8, 4453366980173806972),
             name: 'nrArtigos',
             type: 6,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(9, 5990566734231644172),
+            name: 'anulada',
+            type: 1,
             flags: 0)
       ],
       relations: <obx_int.ModelRelation>[],
@@ -968,7 +973,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           final nomeOffset = fbb.writeString(object.nome);
           final artigosPedidoIdsOffset =
               fbb.writeListInt64(object.artigosPedidoIds);
-          fbb.startTable(9);
+          fbb.startTable(10);
           fbb.addInt64(0, object.id);
           fbb.addOffset(1, nomeOffset);
           fbb.addInt64(2, object.hora.millisecondsSinceEpoch);
@@ -977,6 +982,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           fbb.addInt64(5, object.localId);
           fbb.addFloat64(6, object.total);
           fbb.addInt64(7, object.nrArtigos);
+          fbb.addBool(8, object.anulada);
           fbb.finish(fbb.endTable());
           return object.id;
         },
@@ -1004,7 +1010,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
                 const fb.ListReader<int>(fb.Int64Reader(), lazy: false)
                     .vTableGet(buffer, rootOffset, 10, [])
             ..nrArtigos =
-                const fb.Int64Reader().vTableGet(buffer, rootOffset, 18, 0);
+                const fb.Int64Reader().vTableGet(buffer, rootOffset, 18, 0)
+            ..anulada =
+                const fb.BoolReader().vTableGet(buffer, rootOffset, 20, false);
 
           return object;
         }),
@@ -1424,6 +1432,10 @@ class VendaObj_ {
   /// see [VendaObj.nrArtigos]
   static final nrArtigos =
       obx.QueryIntegerProperty<VendaObj>(_entities[6].properties[7]);
+
+  /// see [VendaObj.anulada]
+  static final anulada =
+      obx.QueryBooleanProperty<VendaObj>(_entities[6].properties[8]);
 }
 
 /// [SetupObj] entity fields to define ObjectBox queries.

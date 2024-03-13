@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:it4billing_pos/pages/Pedidos/concluirPedido.dart';
-import 'package:it4billing_pos/pages/Pedidos/dividirConta.dart';
 import 'package:it4billing_pos/pages/Pedidos/pedidos.dart';
 
 import '../../objetos/artigoObj.dart';
 import '../../objetos/categoriaObj.dart';
 import '../../objetos/pedidoObj.dart';
-import 'concluircobrancaDividida.dart';
+import 'concluirCobrancaDividida.dart';
 
 class CobrarDivididoPage extends StatefulWidget {
   late List<PedidoObj> pedidos = [];
-  late List<Categoria> categorias = [];
   late List<Artigo> artigos = [];
   late PedidoObj pedido;
+
 
   CobrarDivididoPage({
     Key? key,
@@ -78,6 +76,13 @@ class _CobrarDivididoPage extends State<CobrarDivididoPage> {
         appBar: AppBar(
           title: Text(widget.pedido.nome),
           backgroundColor: const Color(0xff00afe9),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back), // Ícone padrão de voltar
+            onPressed: () {
+              // Navegar para a página anterior
+              Navigator.pop(context, false);
+            },
+          ),
           actions: [
             IconButton(
               icon: const Icon(Icons.person_add_outlined),
@@ -171,13 +176,13 @@ class _CobrarDivididoPage extends State<CobrarDivididoPage> {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => ConcluircobrancaDivididaPage(
+                                          builder: (context) => ConcluirCobrancaDivididaPage(
                                             pedidos: widget.pedidos,
                                             pedido: widget.pedido,
-                                            categorias: widget.categorias,
                                             artigos: widget.artigos,
                                             troco: _trocoController.text,
-                                          )));
+                                          )
+                                      ));
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.white,

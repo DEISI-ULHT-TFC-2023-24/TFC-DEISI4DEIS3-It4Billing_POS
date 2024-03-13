@@ -9,14 +9,12 @@ import '../../objetos/pedidoObj.dart';
 
 class Cobrar extends StatefulWidget {
   late List<PedidoObj> pedidos = [];
-  late List<Categoria> categorias = [];
   late List<Artigo> artigos = [];
   late PedidoObj pedido;
 
   Cobrar({
     Key? key,
     required this.pedidos,
-    required this.categorias,
     required this.artigos,
     required this.pedido,
   }) : super(key: key);
@@ -161,7 +159,7 @@ class _Cobrar extends State<Cobrar> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => DividirConta(pedido: widget.pedido)));
+                                    builder: (context) => DividirConta(pedido: widget.pedido, pedidos: widget.pedidos,)));
 
                           },
                           style: ElevatedButton.styleFrom(

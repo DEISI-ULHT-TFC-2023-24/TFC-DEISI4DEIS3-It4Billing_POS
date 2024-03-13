@@ -18,7 +18,6 @@ class VendasPage extends StatelessWidget {
   TurnoObj turno = database.getAllTurnos()[0];
   SetupObj setup = database.getAllSetup()[0];
 
-
   VendasPage({Key? key}) : super(key: key);
 
   Widget buildHeader(BuildContext context) => Container(
@@ -140,9 +139,6 @@ class VendasPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    print(vendas.length);
-
     return Scaffold(
       drawer: Drawer(
         child: SingleChildScrollView(
@@ -161,31 +157,39 @@ class VendasPage extends StatelessWidget {
       ),
       body: Column(
         children: [
-          const SizedBox(height: 20,),
+          const SizedBox(
+            height: 20,
+          ),
           Expanded(
             child: ListView.builder(
               itemCount: vendas.length,
               itemBuilder: (context, index) {
                 return Container(
-                    margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                    margin: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 20),
                     child: ElevatedButton(
                       onPressed: () {
                         // entrar dentro da venda
                         Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => VendaPage(vendas: vendas, categorias: [], artigos: [], venda: vendas[index],)));
+                            builder: (context) => VendaPage(
+                                  vendas: vendas,
+                                  categorias: [],
+                                  artigos: [],
+                                  venda: vendas[index],
+                                )));
                       },
                       style: ButtonStyle(
                         side: MaterialStateProperty.all(
                             const BorderSide(color: Colors.black)),
                         // Linha de borda preta
                         backgroundColor:
-                        MaterialStateProperty.all(Colors.white),
+                            MaterialStateProperty.all(Colors.white),
                         // Fundo white
-                        fixedSize: MaterialStateProperty.all(
-                            const Size(300, 80)),
+                        fixedSize:
+                            MaterialStateProperty.all(const Size(300, 80)),
                         // Tamanho fixo de 270x80
-                        shape: MaterialStateProperty.all<
-                            RoundedRectangleBorder>(
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
@@ -201,13 +205,17 @@ class VendasPage extends StatelessWidget {
                               // Alinha a Row horizontalmente ao centro
                               children: [
                                 Text(
-                                  DateFormat('dd/MM/yyyy HH:mm').format(vendas[index].hora), // Convertendo DateTime para string formatada
+                                  DateFormat('dd/MM/yyyy HH:mm')
+                                      .format(vendas[index].hora),
+                                  // Convertendo DateTime para string formatada
                                   style: const TextStyle(
                                     color: Colors.black,
                                     fontSize: 18,
                                   ),
                                 ),
-                                const SizedBox(width: 4,),
+                                const SizedBox(
+                                  width: 4,
+                                ),
                                 Text(
                                   'Total: ${vendas[index].total.toStringAsFixed(2)} €',
                                   style: const TextStyle(
@@ -217,12 +225,22 @@ class VendasPage extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            Text(
-                              'FT XPTO/158',
-                              style: const TextStyle(
-                                color: Colors.black,
-                                fontSize: 18,
-                              ),
+                            const SizedBox(height: 5),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              // Alinha a Row horizontalmente ao centro
+                              children: [
+                                Text(
+                                  'FT XPTO/158',
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 18,
+                                  ),
+                                ),
+                                if (vendas[index].anulada)
+                                const Text('ANULADO', style: TextStyle(color: Colors.red, fontSize: 18,),),
+
+                              ],
                             ),
                           ],
                         ),

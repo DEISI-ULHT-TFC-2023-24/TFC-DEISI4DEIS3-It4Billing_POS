@@ -7,10 +7,14 @@ import '../../objetos/pedidoObj.dart';
 import 'cobrarDividido.dart';
 
 class DividirConta extends StatefulWidget {
+
+  List<PedidoObj> pedidos = [];
   late PedidoObj pedido;
+
 
   DividirConta({
     Key? key,
+    required this.pedidos,
     required this.pedido,
   }) : super(key: key);
 
@@ -20,10 +24,9 @@ class DividirConta extends StatefulWidget {
 
 class _DividirConta extends State<DividirConta> {
   int numPessoas = 2; // Começa com dois
-  // Valor total do pedido
   List<double> valoresIndividuais = []; // Valores individuais de cada pessoa
-  List<bool> botaoPressionado = [];
   bool mostrarBotaoConcluir = false;
+  List<bool> botaoPressionado = [];
 
   @override
   void initState() {
@@ -85,35 +88,28 @@ class _DividirConta extends State<DividirConta> {
     }
   }
 
-  //void cobrarValor(int index) {
-  //  setState(() {
-  //    botaoPressionado[index] = true; // Marca o botão como pressionado
-  //    // Implemente outras lógicas aqui, se necessário
-  //  });
-//
-  //  /// ir para a pagina de combrança diferente não pode ser a mesma acho
-//
-  //  // Implemente a lógica para cobrar o valor da pessoa com o índice 'index'
-  //  // Aqui você pode realizar a ação necessária, como registrar o pagamento, etc.
-  //  print("Cobrar valor da pessoa ${index + 1}: ${valoresIndividuais[index]}");
-  //}
   // Adicione um método para contar quantos botões foram pressionados
   int countPressedButtons() {
     return botaoPressionado.where((pressed) => pressed).length;
   }
+
+
 
   void cobrarValor(int index) {
     Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) =>
-                CobrarDivididoPage(pedido: widget.pedido))).then((_) {
-      setState(() {
-        botaoPressionado[index] = true;
-        if (countPressedButtons() == numPessoas) {
-          mostrarBotaoConcluir = true;
-        }
-      });
+                CobrarDivididoPage(pedido: widget.pedido,))).then((troca) {
+                  if (troca){
+                    setState(() {
+                      botaoPressionado[index] = troca;
+                      if (countPressedButtons() == numPessoas) {
+                        mostrarBotaoConcluir = true;
+                      }
+                    });
+                  }
+
     });
   }
 
@@ -146,6 +142,7 @@ class _DividirConta extends State<DividirConta> {
       appBar: AppBar(
         title: const Text('Dividir Conta'),
         backgroundColor: const Color(0xff00afe9),
+
       ),
       body: Column(
         children: [
@@ -185,8 +182,7 @@ class _DividirConta extends State<DividirConta> {
                         ? null
                         : () => cobrarValor(index),
                     style: ElevatedButton.styleFrom(
-                      foregroundColor:
-                          botaoPressionado[index] ? Colors.black : Colors.white,
+                      foregroundColor: botaoPressionado[index] ? Colors.black : Colors.white,
                       backgroundColor: botaoPressionado[index]
                           ? Colors.grey
                           : const Color(0xff00afe9),

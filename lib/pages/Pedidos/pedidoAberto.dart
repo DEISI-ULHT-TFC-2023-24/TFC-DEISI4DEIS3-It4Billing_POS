@@ -164,7 +164,6 @@ class _PedidoAbertoPage extends State<PedidoAbertoPage> with TickerProviderState
                           MaterialPageRoute(
                               builder: (context) => CarrinhoPage(
                                     artigos: widget.artigos,
-                                    categorias: widget.categorias,
                                     pedidos: widget.pedidos,
                                     pedido: widget.pedido,
                                   )));
@@ -180,7 +179,6 @@ class _PedidoAbertoPage extends State<PedidoAbertoPage> with TickerProviderState
                             MaterialPageRoute(
                                 builder: (context) => CarrinhoPage(
                                       artigos: widget.artigos,
-                                      categorias: widget.categorias,
                                       pedidos: widget.pedidos,
                                       pedido: widget.pedido,
                                     )));

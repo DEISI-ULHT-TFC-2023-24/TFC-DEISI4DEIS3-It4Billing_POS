@@ -329,7 +329,7 @@
     },
     {
       "id": "10:969872590487839664",
-      "lastPropertyId": "8:4453366980173806972",
+      "lastPropertyId": "9:5990566734231644172",
       "name": "VendaObj",
       "properties": [
         {
@@ -372,6 +372,11 @@
           "id": "8:4453366980173806972",
           "name": "nrArtigos",
           "type": 6
+        },
+        {
+          "id": "9:5990566734231644172",
+          "name": "anulada",
+          "type": 1
         }
       ],
       "relations": []
