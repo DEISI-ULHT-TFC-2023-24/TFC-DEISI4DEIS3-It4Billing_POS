@@ -37,17 +37,21 @@ class _ConcluirPedido extends State<ConcluirPedido> {
     venda.nrArtigos = widget.pedido.nrArtigos;
 
     database.addVenda(venda);
-    if (database.getPedido(widget.pedido.id) != null){
-      database.removePedido(widget.pedido.id);
+    if(widget.pedido.id != 0) {
+      if (database.getPedido(widget.pedido.id) != null){
+        database.removePedido(widget.pedido.id);
+      }
+    }
+    if (widget.pedido.funcionarioID != 0) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => PedidosPage(),
+        ),
+      );
+      print('Venda concluída!');
     }
 
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => PedidosPage(),
-      ),
-    );
-    print('Venda concluída!');
   }
 
   @override

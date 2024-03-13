@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:it4billing_pos/objetos/setupObj.dart';
 import 'package:it4billing_pos/pages/Login/loginPage.dart';
 
-
 class SetupPOSPage extends StatefulWidget {
   SetupObj setup;
 
@@ -23,18 +22,22 @@ class _SetupPOSPageState extends State<SetupPOSPage> {
                 ? Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      _FormContent(setup: widget.setup,),
+                      _FormContent(
+                        setup: widget.setup,
+                      ),
                     ],
                   )
                 : Container(
                     padding: const EdgeInsets.all(32.0),
                     constraints: const BoxConstraints(maxWidth: 800),
-                    child:  Row(
+                    child: Row(
                       children: [
                         Expanded(
                           child: Scrollbar(
                             child: SingleChildScrollView(
-                              child: _FormContent(setup: widget.setup,),
+                              child: _FormContent(
+                                setup: widget.setup,
+                              ),
                             ),
                           ),
                         ),
@@ -46,6 +49,7 @@ class _SetupPOSPageState extends State<SetupPOSPage> {
 
 class _FormContent extends StatefulWidget {
   SetupObj setup;
+
   _FormContent({Key? key, required this.setup}) : super(key: key);
 
   @override
@@ -83,36 +87,45 @@ class __FormContentState extends State<_FormContent> {
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-
-                Row(
-                  children: [
-                    Checkbox(
-                      value: widget.setup.email,
-                      onChanged: (value) {
-                        setState(() {
-                          widget.setup.email = value!;
-                        });
-                      },
-                    ),
-                    const Text('Enviar por Email'),
-                  ],
+            Row(
+              children: [
+                Checkbox(
+                  value: widget.setup.email,
+                  onChanged: (value) {
+                    setState(() {
+                      widget.setup.email = value!;
+                    });
+                  },
                 ),
-                Row(
-                  children: [
-                    Checkbox(
-                      value: widget.setup.imprimir,
-                      onChanged: (value) {
-                        setState(() {
-                          widget.setup.imprimir = value!;
-                        });
-                      },
-                    ),
-                    const Text('Imprimir Documento'),
-                  ],
+                const Text('Enviar por email'),
+              ],
+            ),
+            Row(
+              children: [
+                Checkbox(
+                  value: widget.setup.imprimir,
+                  onChanged: (value) {
+                    setState(() {
+                      widget.setup.imprimir = value!;
+                    });
+                  },
                 ),
-
-
-
+                const Text('Imprimir documento'),
+              ],
+            ),
+            Row(
+              children: [
+                Checkbox(
+                  value: widget.setup.notaCredito,
+                  onChanged: (value) {
+                    setState(() {
+                      widget.setup.notaCredito = value!;
+                    });
+                  },
+                ),
+                const Text('Emitir nota de credito'),
+              ],
+            ),
             _gap(),
             const Text('Selecione o documento para a faturação:'),
             _gap(),
@@ -210,8 +223,9 @@ class __FormContentState extends State<_FormContent> {
                     widget.setup.contaCorrente = _selectedDocCurrentAccount!;
                     Navigator.of(context).pushAndRemoveUntil(
                         MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                LoginPage(setup: widget.setup,)),
+                            builder: (BuildContext context) => LoginPage(
+                                  setup: widget.setup,
+                                )),
                         (route) => false);
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
@@ -224,8 +238,10 @@ class __FormContentState extends State<_FormContent> {
                   }
                 },
                 child: const Text('Confirmar Seleções',
-                    style:
-                        TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.bold)),
+                    style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold)),
               ),
             ),
           ],

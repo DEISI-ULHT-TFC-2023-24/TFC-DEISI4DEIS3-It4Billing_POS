@@ -26,18 +26,13 @@ class CarrinhoPage extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _CarrinhoPage createState() => _CarrinhoPage();
+  _CarrinhoPageState createState() => _CarrinhoPageState();
 }
 
-class _CarrinhoPage extends State<CarrinhoPage> {
+class _CarrinhoPageState extends State<CarrinhoPage> {
   late Map<int, int> artigosAgrupados;
 
   Map<int, int> groupItems(List<int> listaIds) {
-    //Map<int, int> artigosAgrupados = {};
-    //for (var item in items) {
-    //  artigosAgrupados[item] = (artigosAgrupados[item] ?? 0) + 1;
-    //}
-    //return artigosAgrupados;
     Map<int, int> frequenciaIds = {};
 
     for (int id in listaIds) {

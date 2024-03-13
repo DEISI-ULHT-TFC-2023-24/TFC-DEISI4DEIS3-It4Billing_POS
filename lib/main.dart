@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
       }
     }
 
-    //pagina = '/cliente'; /// TESTES
+    pagina = '/vendas'; /// TESTES
 
     return MaterialApp(
       title: 'it4billing_pos',

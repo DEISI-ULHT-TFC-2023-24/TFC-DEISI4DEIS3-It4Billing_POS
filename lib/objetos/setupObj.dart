@@ -12,6 +12,7 @@ class SetupObj {
 
   late bool imprimir = false;
   late bool email = false;
+  late bool notaCredito = false;
 
   late int posID = 0;
   late String pos = '';
@@ -26,6 +27,7 @@ class SetupObj {
 
   late int contaCorrenteID = 0;//escolher um dos dois
   late String contaCorrente = '';
+
 
   SetupObj();
 

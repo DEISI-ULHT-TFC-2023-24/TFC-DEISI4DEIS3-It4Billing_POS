@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:it4billing_pos/pages/artigos.dart';
 import 'package:it4billing_pos/pages/Turnos/turno.dart';
@@ -14,6 +13,7 @@ import '../categorias.dart';
 import 'exposocaoCliente.dart';
 import 'geral.dart';
 import 'impressoras.dart';
+import 'preferencias.dart';
 
 class ConfiguracoesPage extends StatefulWidget {
   @override
@@ -52,7 +52,7 @@ class _ConfiguracoesPageState extends State<ConfiguracoesPage> {
               shrinkWrap: true,
               children: <Widget>[
                 ListTile(
-                  leading: const Icon(Icons.settings),
+                  leading: const Icon(Icons.app_settings_alt_outlined),
                   title: const Text('Geral'),
                   onTap: () {
                     Navigator.of(context).push(
@@ -61,7 +61,7 @@ class _ConfiguracoesPageState extends State<ConfiguracoesPage> {
                 ),
                 Divider(), // Linha divisória
                 ListTile(
-                  leading: const Icon(Icons.print),
+                  leading: const Icon(Icons.local_print_shop_outlined),
                   title: const Text('Impressoras'),
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
@@ -70,11 +70,21 @@ class _ConfiguracoesPageState extends State<ConfiguracoesPage> {
                 ),
                 Divider(), // Linha divisória
                 ListTile(
-                  leading: const Icon(Icons.person),
+                  leading: const Icon(Icons.display_settings_outlined),
+                  //
                   title: const Text('Exposição do Cliente'),
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => ExposicaoPage()));
+                  },
+                ),
+                Divider(),
+                ListTile(
+                  leading: const Icon(Icons.settings_input_component_outlined),//),
+                  title: const Text('Preferencias'),
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => PreferenciasPage()));
                   },
                 ),
                 Divider(), // Linha divisória

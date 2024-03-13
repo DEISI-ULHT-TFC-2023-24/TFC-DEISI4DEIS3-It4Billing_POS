@@ -283,6 +283,7 @@ class _PedidosPage extends State<PedidosPage> {
                         setState(() {
                           database.removeAllPedidos();
                           carregarPedidos();
+                          database.removeAllVendas();
                           //database.removeAllArtigos();
                           //database.removeAllCategorias();
                         });
@@ -401,8 +402,7 @@ class _PedidosPage extends State<PedidosPage> {
                                         ),
                                       ],
                                     ),
-                                    Text(
-                                      'Funcionario: ${database.getUtilizador(widget.pedidos[index].funcionarioID)?.nome}',
+                                    Text('Funcionario: ${database.getUtilizador(widget.pedidos[index].funcionarioID)?.nome}',
                                       style: const TextStyle(
                                         color: Colors.black,
                                         fontSize: 18,

@@ -404,7 +404,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
       id: const obx_int.IdUid(11, 5421798492171887830),
       name: 'SetupObj',
-      lastPropertyId: const obx_int.IdUid(16, 1911982912368214324),
+      lastPropertyId: const obx_int.IdUid(17, 6196846570544367772),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
@@ -485,6 +485,11 @@ final _entities = <obx_int.ModelEntity>[
         obx_int.ModelProperty(
             id: const obx_int.IdUid(16, 1911982912368214324),
             name: 'email',
+            type: 1,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(17, 6196846570544367772),
+            name: 'notaCredito',
             type: 1,
             flags: 0)
       ],
@@ -1019,7 +1024,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           final faturacaoOffset = fbb.writeString(object.faturacao);
           final reembolsoOffset = fbb.writeString(object.reembolso);
           final contaCorrenteOffset = fbb.writeString(object.contaCorrente);
-          fbb.startTable(17);
+          fbb.startTable(18);
           fbb.addInt64(0, object.id);
           fbb.addOffset(1, urlOffset);
           fbb.addOffset(2, passwordOffset);
@@ -1036,6 +1041,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           fbb.addOffset(13, contaCorrenteOffset);
           fbb.addBool(14, object.imprimir);
           fbb.addBool(15, object.email);
+          fbb.addBool(16, object.notaCredito);
           fbb.finish(fbb.endTable());
           return object.id;
         },
@@ -1074,7 +1080,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
             ..imprimir =
                 const fb.BoolReader().vTableGet(buffer, rootOffset, 32, false)
             ..email =
-                const fb.BoolReader().vTableGet(buffer, rootOffset, 34, false);
+                const fb.BoolReader().vTableGet(buffer, rootOffset, 34, false)
+            ..notaCredito =
+                const fb.BoolReader().vTableGet(buffer, rootOffset, 36, false);
 
           return object;
         }),
@@ -1483,6 +1491,10 @@ class SetupObj_ {
   /// see [SetupObj.email]
   static final email =
       obx.QueryBooleanProperty<SetupObj>(_entities[7].properties[15]);
+
+  /// see [SetupObj.notaCredito]
+  static final notaCredito =
+      obx.QueryBooleanProperty<SetupObj>(_entities[7].properties[16]);
 }
 
 /// [ClienteObj] entity fields to define ObjectBox queries.

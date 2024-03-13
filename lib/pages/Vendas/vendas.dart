@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:it4billing_pos/pages/Vendas/venda.dart';
 import 'package:it4billing_pos/pages/artigos.dart';
 import 'package:it4billing_pos/pages/Turnos/turno.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -160,17 +161,18 @@ class VendasPage extends StatelessWidget {
       ),
       body: Column(
         children: [
+          const SizedBox(height: 20,),
           Expanded(
             child: ListView.builder(
               itemCount: vendas.length,
               itemBuilder: (context, index) {
                 return Container(
-                    margin: const EdgeInsets.symmetric(
-                        vertical: 10, horizontal: 50),
+                    margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                     child: ElevatedButton(
                       onPressed: () {
                         // entrar dentro da venda
-
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => VendaPage(vendas: vendas, categorias: [], artigos: [], venda: vendas[index],)));
                       },
                       style: ButtonStyle(
                         side: MaterialStateProperty.all(
@@ -192,12 +194,10 @@ class VendasPage extends StatelessWidget {
                       child: Center(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          // Centraliza verticalmente
-                          //crossAxisAlignment: CrossAxisAlignment.center, // Centraliza horizontalmente
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Row(
-                              mainAxisAlignment:
-                              MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               // Alinha a Row horizontalmente ao centro
                               children: [
                                 Text(
@@ -207,7 +207,7 @@ class VendasPage extends StatelessWidget {
                                     fontSize: 18,
                                   ),
                                 ),
-
+                                const SizedBox(width: 4,),
                                 Text(
                                   'Total: ${vendas[index].total.toStringAsFixed(2)} €',
                                   style: const TextStyle(
@@ -218,7 +218,7 @@ class VendasPage extends StatelessWidget {
                               ],
                             ),
                             Text(
-                              'Funcionario: ${database.getUtilizador(vendas[index].funcionarioID)?.nome}',
+                              'FT XPTO/158',
                               style: const TextStyle(
                                 color: Colors.black,
                                 fontSize: 18,
