@@ -20,6 +20,7 @@ import '../objetos/artigoObj.dart';
 import '../objetos/categoriaObj.dart';
 import '../objetos/clienteObj.dart';
 import '../objetos/localObj.dart';
+import '../objetos/metodoPagamentoObj.dart';
 import '../objetos/pedidoObj.dart';
 import '../objetos/setupObj.dart';
 import '../objetos/turnoObj.dart';
@@ -232,7 +233,12 @@ final _entities = <obx_int.ModelEntity>[
             type: 6,
             flags: 0)
       ],
-      relations: <obx_int.ModelRelation>[],
+      relations: <obx_int.ModelRelation>[
+        obx_int.ModelRelation(
+            id: const obx_int.IdUid(2, 764650263908402594),
+            name: 'artigosPedido',
+            targetId: const obx_int.IdUid(1, 3191427397601551436))
+      ],
       backlinks: <obx_int.ModelBacklink>[]),
   obx_int.ModelEntity(
       id: const obx_int.IdUid(5, 6422666133805705485),
@@ -302,21 +308,6 @@ final _entities = <obx_int.ModelEntity>[
         obx_int.ModelProperty(
             id: const obx_int.IdUid(8, 3443008092730262250),
             name: 'vendasliquidas',
-            type: 8,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(9, 5732034200910664457),
-            name: 'dinheiro',
-            type: 8,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(10, 1685756764194169679),
-            name: 'multibanco',
-            type: 8,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(11, 9072606405762854221),
-            name: 'mbWay',
             type: 8,
             flags: 0),
         obx_int.ModelProperty(
@@ -563,6 +554,30 @@ final _entities = <obx_int.ModelEntity>[
             flags: 0)
       ],
       relations: <obx_int.ModelRelation>[],
+      backlinks: <obx_int.ModelBacklink>[]),
+  obx_int.ModelEntity(
+      id: const obx_int.IdUid(13, 9134296771102256354),
+      name: 'MetodoPagamentoObj',
+      lastPropertyId: const obx_int.IdUid(3, 4352070940926087825),
+      flags: 0,
+      properties: <obx_int.ModelProperty>[
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(1, 2335736288636376692),
+            name: 'id',
+            type: 6,
+            flags: 1),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(2, 3798163338722494379),
+            name: 'nome',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(3, 4352070940926087825),
+            name: 'valor',
+            type: 8,
+            flags: 0)
+      ],
+      relations: <obx_int.ModelRelation>[],
       backlinks: <obx_int.ModelBacklink>[])
 ];
 
@@ -601,9 +616,9 @@ Future<obx.Store> openStore(
 obx_int.ModelDefinition getObjectBoxModel() {
   final model = obx_int.ModelInfo(
       entities: _entities,
-      lastEntityId: const obx_int.IdUid(12, 8591189250015938569),
+      lastEntityId: const obx_int.IdUid(13, 9134296771102256354),
       lastIndexId: const obx_int.IdUid(1, 2709143836952813707),
-      lastRelationId: const obx_int.IdUid(1, 7466652304049170735),
+      lastRelationId: const obx_int.IdUid(2, 764650263908402594),
       lastSequenceId: const obx_int.IdUid(0, 0),
       retiredEntityUids: const [
         4772283387577696936,
@@ -640,7 +655,10 @@ obx_int.ModelDefinition getObjectBoxModel() {
         3169776483276987781,
         8488742810161187612,
         7909175669971041779,
-        7760452733796280113
+        7760452733796280113,
+        5732034200910664457,
+        1685756764194169679,
+        9072606405762854221
       ],
       retiredRelationUids: const [7466652304049170735],
       modelVersion: 5,
@@ -819,7 +837,10 @@ obx_int.ModelDefinition getObjectBoxModel() {
     PedidoObj: obx_int.EntityDefinition<PedidoObj>(
         model: _entities[3],
         toOneRelations: (PedidoObj object) => [],
-        toManyRelations: (PedidoObj object) => {},
+        toManyRelations: (PedidoObj object) => {
+              obx_int.RelInfo<PedidoObj>.toMany(2, object.id):
+                  object.artigosPedido
+            },
         getId: (PedidoObj object) => object.id,
         setId: (PedidoObj object, int id) {
           object.id = id;
@@ -869,7 +890,10 @@ obx_int.ModelDefinition getObjectBoxModel() {
             ..artigosPedidoIds =
                 const fb.ListReader<int>(fb.Int64Reader(), lazy: false)
                     .vTableGet(buffer, rootOffset, 18, []);
-
+          obx_int.InternalToManyAccess.setRelInfo<PedidoObj>(
+              object.artigosPedido,
+              store,
+              obx_int.RelInfo<PedidoObj>.toMany(2, object.id));
           return object;
         }),
     Utilizador: obx_int.EntityDefinition<Utilizador>(
@@ -919,9 +943,6 @@ obx_int.ModelDefinition getObjectBoxModel() {
           fbb.addFloat64(5, object.reembolsos);
           fbb.addFloat64(6, object.descontos);
           fbb.addFloat64(7, object.vendasliquidas);
-          fbb.addFloat64(8, object.dinheiro);
-          fbb.addFloat64(9, object.multibanco);
-          fbb.addFloat64(10, object.mbWay);
           fbb.addFloat64(11, object.dinheiroInicial);
           fbb.addFloat64(12, object.pagamentosDinheiro);
           fbb.addFloat64(13, object.suprimento);
@@ -952,12 +973,6 @@ obx_int.ModelDefinition getObjectBoxModel() {
                 const fb.Float64Reader().vTableGet(buffer, rootOffset, 16, 0)
             ..vendasliquidas =
                 const fb.Float64Reader().vTableGet(buffer, rootOffset, 18, 0)
-            ..dinheiro =
-                const fb.Float64Reader().vTableGet(buffer, rootOffset, 20, 0)
-            ..multibanco =
-                const fb.Float64Reader().vTableGet(buffer, rootOffset, 22, 0)
-            ..mbWay =
-                const fb.Float64Reader().vTableGet(buffer, rootOffset, 24, 0)
             ..dinheiroInicial =
                 const fb.Float64Reader().vTableGet(buffer, rootOffset, 26, 0)
             ..pagamentosDinheiro =
@@ -1173,6 +1188,35 @@ obx_int.ModelDefinition getObjectBoxModel() {
             ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
 
           return object;
+        }),
+    MetodoPagamentoObj: obx_int.EntityDefinition<MetodoPagamentoObj>(
+        model: _entities[9],
+        toOneRelations: (MetodoPagamentoObj object) => [],
+        toManyRelations: (MetodoPagamentoObj object) => {},
+        getId: (MetodoPagamentoObj object) => object.id,
+        setId: (MetodoPagamentoObj object, int id) {
+          object.id = id;
+        },
+        objectToFB: (MetodoPagamentoObj object, fb.Builder fbb) {
+          final nomeOffset = fbb.writeString(object.nome);
+          fbb.startTable(4);
+          fbb.addInt64(0, object.id);
+          fbb.addOffset(1, nomeOffset);
+          fbb.addFloat64(2, object.valor);
+          fbb.finish(fbb.endTable());
+          return object.id;
+        },
+        objectFromFB: (obx.Store store, ByteData fbData) {
+          final buffer = fb.BufferContext(fbData);
+          final rootOffset = buffer.derefObject(0);
+          final nomeParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGet(buffer, rootOffset, 6, '');
+          final valorParam =
+              const fb.Float64Reader().vTableGet(buffer, rootOffset, 8, 0);
+          final object = MetodoPagamentoObj(nomeParam, valorParam)
+            ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
+
+          return object;
         })
   };
 
@@ -1325,6 +1369,10 @@ class PedidoObj_ {
   /// see [PedidoObj.clienteID]
   static final clienteID =
       obx.QueryIntegerProperty<PedidoObj>(_entities[3].properties[8]);
+
+  /// see [PedidoObj.artigosPedido]
+  static final artigosPedido =
+      obx.QueryRelationToMany<PedidoObj, Artigo>(_entities[3].relations[0]);
 }
 
 /// [Utilizador] entity fields to define ObjectBox queries.
@@ -1376,45 +1424,33 @@ class TurnoObj_ {
   static final vendasliquidas =
       obx.QueryDoubleProperty<TurnoObj>(_entities[5].properties[7]);
 
-  /// see [TurnoObj.dinheiro]
-  static final dinheiro =
-      obx.QueryDoubleProperty<TurnoObj>(_entities[5].properties[8]);
-
-  /// see [TurnoObj.multibanco]
-  static final multibanco =
-      obx.QueryDoubleProperty<TurnoObj>(_entities[5].properties[9]);
-
-  /// see [TurnoObj.mbWay]
-  static final mbWay =
-      obx.QueryDoubleProperty<TurnoObj>(_entities[5].properties[10]);
-
   /// see [TurnoObj.dinheiroInicial]
   static final dinheiroInicial =
-      obx.QueryDoubleProperty<TurnoObj>(_entities[5].properties[11]);
+      obx.QueryDoubleProperty<TurnoObj>(_entities[5].properties[8]);
 
   /// see [TurnoObj.pagamentosDinheiro]
   static final pagamentosDinheiro =
-      obx.QueryDoubleProperty<TurnoObj>(_entities[5].properties[12]);
+      obx.QueryDoubleProperty<TurnoObj>(_entities[5].properties[9]);
 
   /// see [TurnoObj.suprimento]
   static final suprimento =
-      obx.QueryDoubleProperty<TurnoObj>(_entities[5].properties[13]);
+      obx.QueryDoubleProperty<TurnoObj>(_entities[5].properties[10]);
 
   /// see [TurnoObj.sangria]
   static final sangria =
-      obx.QueryDoubleProperty<TurnoObj>(_entities[5].properties[14]);
+      obx.QueryDoubleProperty<TurnoObj>(_entities[5].properties[11]);
 
   /// see [TurnoObj.dinheiroEsperado]
   static final dinheiroEsperado =
-      obx.QueryDoubleProperty<TurnoObj>(_entities[5].properties[15]);
+      obx.QueryDoubleProperty<TurnoObj>(_entities[5].properties[12]);
 
   /// see [TurnoObj.funcionarioID]
   static final funcionarioID =
-      obx.QueryIntegerProperty<TurnoObj>(_entities[5].properties[16]);
+      obx.QueryIntegerProperty<TurnoObj>(_entities[5].properties[13]);
 
   /// see [TurnoObj.reembolsosDinheiro]
   static final reembolsosDinheiro =
-      obx.QueryDoubleProperty<TurnoObj>(_entities[5].properties[17]);
+      obx.QueryDoubleProperty<TurnoObj>(_entities[5].properties[14]);
 }
 
 /// [VendaObj] entity fields to define ObjectBox queries.
@@ -1568,4 +1604,19 @@ class ClienteObj_ {
   /// see [ClienteObj.obeservations]
   static final obeservations =
       obx.QueryStringProperty<ClienteObj>(_entities[8].properties[9]);
+}
+
+/// [MetodoPagamentoObj] entity fields to define ObjectBox queries.
+class MetodoPagamentoObj_ {
+  /// see [MetodoPagamentoObj.id]
+  static final id =
+      obx.QueryIntegerProperty<MetodoPagamentoObj>(_entities[9].properties[0]);
+
+  /// see [MetodoPagamentoObj.nome]
+  static final nome =
+      obx.QueryStringProperty<MetodoPagamentoObj>(_entities[9].properties[1]);
+
+  /// see [MetodoPagamentoObj.valor]
+  static final valor =
+      obx.QueryDoubleProperty<MetodoPagamentoObj>(_entities[9].properties[2]);
 }

@@ -3,14 +3,19 @@ import 'package:it4billing_pos/pages/Pedidos/concluirPedido.dart';
 import 'package:it4billing_pos/pages/Pedidos/dividirConta.dart';
 import 'package:it4billing_pos/pages/Pedidos/pedidos.dart';
 
+import '../../main.dart';
 import '../../objetos/artigoObj.dart';
 import '../../objetos/categoriaObj.dart';
+import '../../objetos/metodoPagamentoObj.dart';
 import '../../objetos/pedidoObj.dart';
+import '../../objetos/turnoObj.dart';
+import '../Cliente/addClientePage.dart';
 
 class Cobrar extends StatefulWidget {
   late List<PedidoObj> pedidos = [];
   late List<Artigo> artigos = [];
   late PedidoObj pedido;
+  late TurnoObj turno  =database.getAllTurno()[0];
 
   Cobrar({
     Key? key,
@@ -24,7 +29,7 @@ class Cobrar extends StatefulWidget {
 }
 
 class _Cobrar extends State<Cobrar> {
-  List<String> metodos = PedidosPage().getMetodosPagamento();
+  List<MetodoPagamentoObj> metodos = database.getAllMetodosPagamento();
   final FocusNode _focusNode = FocusNode();
 
   // Controladores dos campos de texto
@@ -83,7 +88,11 @@ class _Cobrar extends State<Cobrar> {
               icon: const Icon(Icons.person_add_outlined),
               tooltip: 'Open client',
               onPressed: () {
-                // handle the press
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => AdicionarClientePage(
+                        pedido: widget.pedido,
+                        pedidos: widget.pedidos,
+                        artigos: widget.artigos)));
               },
             ),
           ],
@@ -199,6 +208,15 @@ class _Cobrar extends State<Cobrar> {
                                 onPressed: () {
                                   // Entrar no final da compra
 
+                                  double dinheiroRecebido = double.parse(_dinheiroRecebidoController.text);
+                                  double troco = double.parse(_trocoController.text);
+                                  metodos[index].valor += dinheiroRecebido - troco;
+                                  if (metodos[index].nome.toLowerCase() == 'dinheiro' ){
+                                    widget.turno.pagamentosDinheiro = metodos[index].valor;
+                                    database.addTurno(widget.turno);
+                                  }
+                                  database.addMetodoPagamento(metodos[index]);
+
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
@@ -216,7 +234,7 @@ class _Cobrar extends State<Cobrar> {
                                 ),
                                 child: Center(
                                   child: Text(
-                                    metodos[index],
+                                    metodos[index].nome,
                                     style: const TextStyle(
                                         color: Colors.black, fontSize: 16),
                                   ),

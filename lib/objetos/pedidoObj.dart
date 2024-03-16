@@ -1,6 +1,7 @@
 import '../main.dart';
 import 'package:objectbox/objectbox.dart';
 import '../database/objectbox.g.dart';
+import 'artigoObj.dart';
 
 @Entity()
 class PedidoObj {
@@ -10,7 +11,7 @@ class PedidoObj {
   @Property(type: PropertyType.date)
   DateTime hora;
 
-  // late ToMany<Artigo> artigosPedido = ToMany<Artigo>();
+  late ToMany<Artigo> artigosPedido = ToMany<Artigo>();
   late List<int> artigosPedidoIds = [];
 
   int funcionarioID;

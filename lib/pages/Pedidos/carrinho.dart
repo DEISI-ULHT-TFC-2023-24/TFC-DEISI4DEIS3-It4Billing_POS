@@ -7,7 +7,6 @@ import 'package:it4billing_pos/pages/Pedidos/escolhaLocal.dart';
 import 'package:it4billing_pos/pages/Pedidos/pedidos.dart';
 
 import '../../objetos/artigoObj.dart';
-import '../../objetos/categoriaObj.dart';
 import '../../objetos/pedidoObj.dart';
 import 'cobrar.dart';
 
@@ -58,7 +57,7 @@ class _CarrinhoPageState extends State<CarrinhoPage> {
           actions: [
             IconButton(
               icon: const Icon(Icons.person_add_outlined),
-              tooltip: 'Open shopping cart',
+              tooltip: 'Open client',
               onPressed: () {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => AdicionarClientePage(
@@ -112,8 +111,18 @@ class _CarrinhoPageState extends State<CarrinhoPage> {
                 itemBuilder: (context, index) {
                   int artigoId = artigosAgrupados.keys.elementAt(index);
                   int quantidade = artigosAgrupados[artigoId]!;
-                  double valor = database.getArtigo(artigoId)!.price;
-                  Artigo artigo = database.getArtigo(artigoId)!;
+                  double? valor;
+                  Artigo? artigo;
+
+                  // Verifica se o artigo está presente na lista
+                  for (Artigo artigoLista in widget.pedido.artigosPedido) {
+                    if (artigoLista.nome == database.getArtigo(artigoId)!.nome) {
+                      print('preço do artigo na lista do pedido ${artigoLista.price}');
+                      artigo = artigoLista;
+                      break;
+                    }
+                  }
+                  valor = artigo?.price;
 
                   /// isto vai dar problemas no editar carrinho
                   return Padding(
@@ -126,7 +135,7 @@ class _CarrinhoPageState extends State<CarrinhoPage> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => EditCarrinho(
-                                      artigo: artigo,
+                                      artigo: artigo!,
                                       quantidade: quantidade,
                                       pedido: widget.pedido,
                                       artigos: widget.artigos,
@@ -150,7 +159,7 @@ class _CarrinhoPageState extends State<CarrinhoPage> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Text(
-                                  artigo.nome.length > 10
+                                  artigo!.nome.length > 10
                                       ? artigo.nome.substring(0, 20)
                                       : artigo.nome,
                                   style: const TextStyle(
@@ -161,7 +170,7 @@ class _CarrinhoPageState extends State<CarrinhoPage> {
                                       color: Colors.black, fontSize: 16)),
                             ],
                           ),
-                          Text('${(valor * quantidade).toStringAsFixed(2)} €',
+                          Text('${(valor! * quantidade).toStringAsFixed(2)} €',
                               style: const TextStyle(
                                   color: Colors.black, fontSize: 16)),
                         ],

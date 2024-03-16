@@ -5,6 +5,7 @@ import 'package:it4billing_pos/pages/Pedidos/pedidos.dart';
 
 import '../../objetos/pedidoObj.dart';
 import '../../objetos/setupObj.dart';
+import '../Cliente/addClientePage.dart';
 
 class ConcluirPedido extends StatefulWidget {
   late PedidoObj pedido;
@@ -28,8 +29,9 @@ class _ConcluirPedidoState extends State<ConcluirPedido> {
   @override
   void initState() {
     if (widget.pedido.clienteID != database.getAllClientes()[0].id) {
-      if (database.getCliente(widget.pedido.clienteID)?.email != 'N/D'){
-        _emailController = TextEditingController(text: database.getCliente(widget.pedido.clienteID)?.email);
+      if (database.getCliente(widget.pedido.clienteID)?.email != 'N/D') {
+        _emailController = TextEditingController(
+            text: database.getCliente(widget.pedido.clienteID)?.email);
       } else {
         _emailController = TextEditingController();
       }
@@ -39,7 +41,9 @@ class _ConcluirPedidoState extends State<ConcluirPedido> {
 
   @override
   void dispose() {
-    _emailController.dispose();
+    if (widget.pedido.clienteID != 0 && widget.pedido.clienteID != database.getAllClientes()[0].id) {
+      _emailController.dispose();
+    }
     super.dispose();
   }
 
@@ -60,7 +64,7 @@ class _ConcluirPedidoState extends State<ConcluirPedido> {
         database.removePedido(widget.pedido.id);
       }
     }
-    if (widget.pedido.funcionarioID != 0) {
+    //if (widget.pedido.funcionarioID != 0) {   porque que isto esta aqui??
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -68,7 +72,7 @@ class _ConcluirPedidoState extends State<ConcluirPedido> {
         ),
       );
       print('Venda concluída!');
-    }
+    //}
   }
 
   @override
@@ -82,7 +86,12 @@ class _ConcluirPedidoState extends State<ConcluirPedido> {
             icon: const Icon(Icons.person_add_outlined),
             tooltip: 'Open client',
             onPressed: () {
-              // handle the press
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => AdicionarClientePage(
+                      pedido: widget.pedido,
+                      pedidos: database.getAllPedidos(),
+                      artigos: database.getAllArtigos())
+              ));
             },
           ),
         ],
@@ -133,7 +142,8 @@ class _ConcluirPedidoState extends State<ConcluirPedido> {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    if (widget.pedido.clienteID != 0)
+                    //verifica se tem algum clente ou se é o cliente predefenido
+                    if (widget.pedido.clienteID != 0 && widget.pedido.clienteID != database.getAllClientes()[0].id)
                       Row(
                         children: [
                           Checkbox(
@@ -185,6 +195,7 @@ class _ConcluirPedidoState extends State<ConcluirPedido> {
           width: double.infinity,
           child: ElevatedButton(
             onPressed: concluirVenda,
+
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xff00afe9),
               shape: RoundedRectangleBorder(
@@ -192,6 +203,7 @@ class _ConcluirPedidoState extends State<ConcluirPedido> {
                 side: const BorderSide(color: Colors.black),
               ),
             ),
+
             child: const Padding(
               padding: EdgeInsets.symmetric(vertical: 15.0),
               child: Text(

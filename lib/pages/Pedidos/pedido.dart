@@ -292,6 +292,7 @@ class _PedidoPage extends State<PedidoPage> with TickerProviderStateMixin {
                             onPressed: () {
                               pedido.artigosPedidoIds
                                   .add(artigosFiltrados()[index].id);
+                              pedido.artigosPedido.add(artigosFiltrados()[index]);
                               print('foi adicionado o artigo');
                               addItemToCart();
                             },

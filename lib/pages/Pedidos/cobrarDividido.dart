@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:it4billing_pos/pages/Pedidos/pedidos.dart';
 
+import '../../main.dart';
 import '../../objetos/artigoObj.dart';
 import '../../objetos/categoriaObj.dart';
+import '../../objetos/metodoPagamentoObj.dart';
 import '../../objetos/pedidoObj.dart';
+import '../Cliente/addClientePage.dart';
 import 'concluirCobrancaDividida.dart';
 
 class CobrarDivididoPage extends StatefulWidget {
@@ -22,7 +25,7 @@ class CobrarDivididoPage extends StatefulWidget {
 }
 
 class _CobrarDivididoPage extends State<CobrarDivididoPage> {
-  List<String> metodos = PedidosPage().getMetodosPagamento();
+  List<MetodoPagamentoObj> metodos = database.getAllMetodosPagamento();
   final FocusNode _focusNode = FocusNode();
 
   // Controladores dos campos de texto
@@ -88,7 +91,12 @@ class _CobrarDivididoPage extends State<CobrarDivididoPage> {
               icon: const Icon(Icons.person_add_outlined),
               tooltip: 'Open client',
               onPressed: () {
-                // handle the press
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => AdicionarClientePage(
+                        pedido: widget.pedido,
+                        pedidos: database.getAllPedidos(),
+                        artigos: database.getAllArtigos())
+                ));
               },
             ),
           ],
@@ -173,6 +181,11 @@ class _CobrarDivididoPage extends State<CobrarDivididoPage> {
                                 onPressed: () {
                                   // Entrar no final da compra
 
+                                  double dinheiroRecebido = double.parse(_dinheiroRecebidoController.text);
+                                  double troco = double.parse(_trocoController.text);
+                                  metodos[index].valor += dinheiroRecebido - troco;
+                                  database.addMetodoPagamento(metodos[index]);
+
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
@@ -191,7 +204,7 @@ class _CobrarDivididoPage extends State<CobrarDivididoPage> {
                                 ),
                                 child: Center(
                                   child: Text(
-                                    metodos[index],
+                                    metodos[index].nome,
                                     style: const TextStyle(
                                         color: Colors.black, fontSize: 16),
                                   ),

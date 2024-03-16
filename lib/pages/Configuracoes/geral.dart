@@ -390,38 +390,6 @@ class _GeralPageState extends State<GeralPage> {
                     ),
                   ),
                 ),
-              const SizedBox(height: 10),
-              const Divider(),
-              const SizedBox(height: 10),
-              // Espaçamento entre a lista e os botões
-              ListTile(
-                title: const Text('Imprimir Documento'),
-                trailing: Switch(
-                  value: setup.imprimir,
-                  onChanged: (value) {
-                    setState(() {
-                      setup.imprimir = value;
-                      database.addSetup(setup);
-                    });
-                  },
-                ),
-              ),
-              ListTile(
-                title: const Text('Enviar por Email'),
-                trailing: Switch(
-                  value: setup.email,
-                  onChanged: (value) {
-                    setState(() {
-                      setup.email = value;
-                      print(setup.email);
-                      database.addSetup(setup);
-                      print(database.getAllSetup().length);
-                      print(database.getAllSetup()[0].email);
-
-                    });
-                  },
-                ),
-              ),
             ],
           ),
         ),

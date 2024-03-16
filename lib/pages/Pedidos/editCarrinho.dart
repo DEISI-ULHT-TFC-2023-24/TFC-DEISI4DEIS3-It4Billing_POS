@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:it4billing_pos/main.dart';
 import 'package:it4billing_pos/pages/Pedidos/carrinho.dart';
 
 import '../../objetos/artigoObj.dart';
@@ -29,6 +30,8 @@ class EditCarrinho extends StatefulWidget {
 class _EditCarrinhoState extends State<EditCarrinho> {
   TextEditingController _controllerP = TextEditingController();
   TextEditingController _controllerD = TextEditingController();
+  late TextEditingController _observacoesController;
+
   bool _updatedP = false;
   bool _updatedD = false;
 
@@ -36,6 +39,14 @@ class _EditCarrinhoState extends State<EditCarrinho> {
   void initState() {
     super.initState();
     widget.qunatidadeInicial = widget.quantidade;
+    _observacoesController = TextEditingController(text: widget.artigo.observacoes);
+  }
+
+  @override
+  void dispose() {
+    // Lembre-se de descartar o TextEditingController quando não for mais necessário para evitar vazamentos de memória.
+    _observacoesController.dispose();
+    super.dispose();
   }
 
   void _increment() {
@@ -58,6 +69,7 @@ class _EditCarrinhoState extends State<EditCarrinho> {
     double novoPreco = double.parse(_controllerP.text);
     setState(() {
       widget.artigo.price = novoPreco;
+      widget.pedido.artigosPedido.add(widget.artigo);
     });
   }
 
@@ -65,6 +77,7 @@ class _EditCarrinhoState extends State<EditCarrinho> {
     double novoPreco = widget.artigo.price - double.parse(_controllerD.text);
     setState(() {
       widget.artigo.price = novoPreco;
+      widget.pedido.artigosPedido.add(widget.artigo);
     });
   }
 
@@ -219,6 +232,7 @@ class _EditCarrinhoState extends State<EditCarrinho> {
                   ),
                   const SizedBox(height: 8),
                   TextField(
+                    controller: _observacoesController,
                     decoration: const InputDecoration(
                       hintText: 'Digite as suas observações...\n\n\n\n\n\n',
                       border: OutlineInputBorder(),
@@ -227,6 +241,7 @@ class _EditCarrinhoState extends State<EditCarrinho> {
                     onChanged: (value) {
                       setState(() {
                         widget.artigo.observacoes = value;
+                        widget.pedido.artigosPedido.add(widget.artigo);
                       });
                     },
                   ),

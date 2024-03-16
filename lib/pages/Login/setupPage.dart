@@ -121,10 +121,16 @@ class __FormContentState extends State<_FormContent> {
       await database.putDemoUsers();
     }
   }
+  Future<void> carregarMetodoPagamento() async {
+    if (database.getAllMetodosPagamento().isEmpty) {
+      await database.putDemoMetodosPagamento();
+    }
+  }
 
   @override
   void setState(VoidCallback fn) {
     carregarUsers();
+    carregarMetodoPagamento();
     super.setState(fn);
   }
 

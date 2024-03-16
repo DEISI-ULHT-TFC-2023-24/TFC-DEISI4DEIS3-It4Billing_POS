@@ -9,6 +9,7 @@ import '../objetos/VendaObj.dart';
 import '../objetos/artigoObj.dart';
 import '../objetos/categoriaObj.dart';
 import '../objetos/localObj.dart';
+import '../objetos/metodoPagamentoObj.dart';
 import '../objetos/pedidoObj.dart';
 import '../objetos/utilizadorObj.dart';
 import 'objectbox.g.dart'; // created by `flutter pub run build_runner build`
@@ -31,6 +32,7 @@ class ObjectBoxDatabase {
 
   late final Box<SetupObj> _setupBox;
   late final Box<TurnoObj> _turnosBox;
+  late final Box<MetodoPagamentoObj> _metodoPagamentoBox;
 
   ObjectBoxDatabase._create(this._store) {
     _pedidosBox = Box<PedidoObj>(_store);
@@ -44,6 +46,8 @@ class ObjectBoxDatabase {
 
     _setupBox = Box<SetupObj>(_store);
     _turnosBox = Box<TurnoObj>(_store);
+    _metodoPagamentoBox = Box<MetodoPagamentoObj>(_store);
+
   }
 
   /// Create an instance of ObjectBox to use throughout the app.
@@ -61,6 +65,17 @@ class ObjectBoxDatabase {
       Utilizador('User 064', 4321),
     ];
     await _utilizadoresBox.putManyAsync(demoUsers);
+  }
+
+  /// perceber quandou houver BDws se criar uma "tabela" ou colocar dentro objeto turno
+  /// por agora tabela apenas
+  Future<void> putDemoMetodosPagamento() async {
+    final List<MetodoPagamentoObj> metodoPagamento = [
+      MetodoPagamentoObj('Dinheiro', 0),
+      MetodoPagamentoObj('Multibanco', 0),
+      MetodoPagamentoObj('MB Way', 0),
+    ];
+    await _metodoPagamentoBox.putMany(metodoPagamento);
   }
 
   Future<void> putDemoClientes() async {
@@ -345,4 +360,23 @@ class ObjectBoxDatabase {
   Future<void> removeAllClientes() async {
     await _clientesBox.removeAll();
   }
+
+  ///---------------------------------------------------------
+  // Funções para manipular o MetodoPagamento
+  Future<void> addMetodoPagamento(MetodoPagamentoObj metodo) async {
+    await _metodoPagamentoBox.put(metodo);
+  }
+
+  MetodoPagamentoObj? getMetodoPagamento(int id) {
+    return _metodoPagamentoBox.get(id);
+  }
+
+  List<MetodoPagamentoObj> getAllMetodosPagamento() {
+    return _metodoPagamentoBox.getAll();
+  }
+
+  Future<void> removeAllMetodosPagamento() async {
+    await _metodoPagamentoBox.removeAll();
+  }
+
 }

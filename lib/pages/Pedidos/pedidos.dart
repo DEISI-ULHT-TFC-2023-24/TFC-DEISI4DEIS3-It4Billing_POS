@@ -24,15 +24,10 @@ class PedidosPage extends StatefulWidget {
   TurnoObj turno = database.getAllTurno()[0];
   SetupObj setup = database.getAllSetup()[0];
 
-  List<String> metodosPagamento = ['DINHEIRO', 'MULTIBANCO', 'MB WAY'];
-
   PedidosPage({
     Key? key,
   }) : super(key: key);
 
-  List<String> getMetodosPagamento() {
-    return metodosPagamento;
-  }
 
   @override
   State<PedidosPage> createState() => _PedidosPage();

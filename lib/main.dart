@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:it4billing_pos/objetos/setupObj.dart';
 import 'package:it4billing_pos/pages/Configuracoes/configuracoes.dart';
 import 'package:it4billing_pos/pages/Login/loginPage.dart';
 import 'package:it4billing_pos/pages/Turnos/turnoFechado.dart';
@@ -41,7 +40,7 @@ class MyApp extends StatelessWidget {
       }
     }
 
-    pagina = '/pedidos'; /// TESTES
+    pagina = '/turno'; /// TESTES
 
     return MaterialApp(
       title: 'it4billing_pos',

@@ -8,6 +8,7 @@ import 'package:it4billing_pos/pages/categorias.dart';
 import 'package:it4billing_pos/pages/Vendas/vendas.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../main.dart';
+import '../../objetos/metodoPagamentoObj.dart';
 import '../../objetos/pedidoObj.dart';
 import '../../objetos/setupObj.dart';
 import '../../objetos/turnoObj.dart';
@@ -22,6 +23,7 @@ class TurnosPage extends StatefulWidget {
 
 class _TurnosPageState extends State<TurnosPage> {
   List<PedidoObj> pedidos = database.getAllPedidos();
+  List<MetodoPagamentoObj> metodos = database.getAllMetodosPagamento();
   SetupObj setup = database.getAllSetup()[0];
   late TurnoObj turno;
 
@@ -328,37 +330,23 @@ class _TurnosPageState extends State<TurnosPage> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 8),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text('Dinheiro'),
-                      Text('${turno.dinheiro.toStringAsFixed(2)} €'),
-                    ],
-                  ),
-                  _gap(),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text('Multibanco'),
-                      Text('${turno.multibanco.toStringAsFixed(2)} €'),
-                    ],
-                  ),
-                  _gap(),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text('MB Way'),
-                      Text('${turno.mbWay.toStringAsFixed(2)} €'),
-                    ],
-                  ),
-                  _gap(),
-                  const Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('Fazer a lista consuante o tipo de metudos ?'),
-                      Text('999999.99 €'),
-                    ],
+                  const SizedBox(height: 4),
+
+                  ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: metodos.length,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(metodos[index].nome),
+                            Text('${metodos[index].valor.toStringAsFixed(2)} €'),
+                          ],
+                        ),
+                      );
+                    },
                   ),
                 ],
               ),

@@ -1,10 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:it4billing_pos/main.dart';
 import 'package:it4billing_pos/objetos/clienteObj.dart';
 import 'package:it4billing_pos/pages/Pedidos/carrinho.dart';
 
 import '../../objetos/artigoObj.dart';
-import '../../objetos/categoriaObj.dart';
 import '../../objetos/pedidoObj.dart';
 import 'editClientePage.dart';
 import 'newClientePage.dart';
@@ -179,8 +179,10 @@ class _AdicionarClientePageState extends State<AdicionarClientePage> {
                   if (widget.pedido.id != 0){
                     database.addPedido(widget.pedido);
                   }
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => CarrinhoPage(
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => CarrinhoPage(
                           pedidos: widget.pedidos,
                           artigos: widget.artigos,
                           pedido: widget.pedido)));

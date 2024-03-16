@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:it4billing_pos/objetos/metodoPagamentoObj.dart';
 import 'package:it4billing_pos/pages/Turnos/turnoFechado.dart';
 
 import '../../main.dart';
@@ -15,14 +16,13 @@ class _FecharTurnoState extends State<FecharTurno> {
   TextEditingController _textEditingController = TextEditingController();
   FocusNode _focusNode = FocusNode();
 
-  double dinheiroEsperado = 100.00;
   double dinheiroReal = 0.00;
 
 
   @override
   void initState() {
     super.initState();
-    _textEditingController.text = dinheiroEsperado.toStringAsFixed(2);
+    _textEditingController.text = turno.dinheiroEsperado.toStringAsFixed(2);
     calcularDiferenca(); // Calcular a diferença logo após o carregamento da página
     _focusNode.addListener(_onFocusChange);
   }
@@ -30,7 +30,7 @@ class _FecharTurnoState extends State<FecharTurno> {
   void _onFocusChange() {
     if (!_focusNode.hasFocus && _textEditingController.text.isEmpty) {
       setState(() {
-        _textEditingController.text = dinheiroEsperado.toStringAsFixed(2);
+        _textEditingController.text = turno.dinheiroEsperado.toStringAsFixed(2);
       });
       calcularDiferenca();
     }
@@ -75,7 +75,7 @@ class _FecharTurnoState extends State<FecharTurno> {
                     style: TextStyle(fontSize: 16),
                   ),
                   Text(
-                    dinheiroEsperado.toStringAsFixed(2),
+                    turno.dinheiroEsperado.toStringAsFixed(2),
                     style: const TextStyle(fontSize: 16),
                   ),
                 ],
@@ -104,7 +104,7 @@ class _FecharTurnoState extends State<FecharTurno> {
                       },
                       onTap: () {
                         setState(() {
-                          if (_textEditingController.text == dinheiroEsperado.toStringAsFixed(2)) {
+                          if (_textEditingController.text == turno.dinheiroEsperado.toStringAsFixed(2)) {
                             _textEditingController.text = '';
                           }
                         });
@@ -127,7 +127,7 @@ class _FecharTurnoState extends State<FecharTurno> {
                     style: TextStyle(fontSize: 16),
                   ),
                   Text(
-                    (dinheiroReal - dinheiroEsperado).toStringAsFixed(2), // Exibir a diferença calculada
+                    (dinheiroReal - turno.dinheiroEsperado).toStringAsFixed(2), // Exibir a diferença calculada
                     style: const TextStyle(fontSize: 16),
                   ),
                 ],
@@ -152,8 +152,16 @@ class _FecharTurnoState extends State<FecharTurno> {
                 ///  talvez nao faça sentido porque preciso de um turno sem funcionario
                 ///
 
+                //limpar os valores dos movimentos
+                List<MetodoPagamentoObj> metudos = database.getAllMetodosPagamento();
+                for (int i = 0 ; i < metudos.length ; i++ ){
+                  metudos[i].valor = 0;
+                  database.addMetodoPagamento(metudos[i]);
+                }
+
                 database.addTurno(novoturno);
                 print('Esta aberto? DEVIA!! -> ${database.getAllTurno()[0].turnoAberto}');
+
 
                 Navigator.push(
                     context,

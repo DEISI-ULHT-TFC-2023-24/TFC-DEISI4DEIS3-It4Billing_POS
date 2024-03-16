@@ -16,9 +16,11 @@ class TurnoObj {
   double reembolsos = 0;
   double descontos = 0;
   double vendasliquidas = 0;
-  double dinheiro = 0;    // ?? não sei como fazer isto porque pode ter ou não ter estas :/ ou ter mais ainda 🤯
-  double multibanco = 0;  // ?? não sei como fazer isto porque pode ter ou não ter estas :/ ou ter mais ainda 🤯
-  double mbWay = 0;       // ?? não sei como fazer isto porque pode ter ou não ter estas :/ ou ter mais ainda 🤯
+
+  // double dinheiro = 0;    // ?? não sei como fazer isto porque pode ter ou não ter estas :/ ou ter mais ainda 🤯
+  // double multibanco = 0;  // ?? não sei como fazer isto porque pode ter ou não ter estas :/ ou ter mais ainda 🤯
+  // double mbWay = 0;       // ?? não sei como fazer isto porque pode ter ou não ter estas :/ ou ter mais ainda 🤯
+
   double dinheiroInicial = 0;
   double pagamentosDinheiro = 0;
   double reembolsosDinheiro = 0;
