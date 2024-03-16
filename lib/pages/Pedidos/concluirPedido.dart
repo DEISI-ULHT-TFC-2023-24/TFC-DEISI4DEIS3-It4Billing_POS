@@ -4,10 +4,12 @@ import 'package:it4billing_pos/objetos/VendaObj.dart';
 import 'package:it4billing_pos/pages/Pedidos/pedidos.dart';
 
 import '../../objetos/pedidoObj.dart';
+import '../../objetos/setupObj.dart';
 
 class ConcluirPedido extends StatefulWidget {
   late PedidoObj pedido;
   late String troco;
+  SetupObj setup = database.getAllSetup()[0];
 
   ConcluirPedido({
     Key? key,
@@ -16,29 +18,45 @@ class ConcluirPedido extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _ConcluirPedido createState() => _ConcluirPedido();
+  _ConcluirPedidoState createState() => _ConcluirPedidoState();
 }
 
-class _ConcluirPedido extends State<ConcluirPedido> {
+class _ConcluirPedidoState extends State<ConcluirPedido> {
+  late TextEditingController _emailController;
+  bool _showEmailField = false;
+
   @override
   void initState() {
+    if (widget.pedido.clienteID != database.getAllClientes()[0].id) {
+      if (database.getCliente(widget.pedido.clienteID)?.email != 'N/D'){
+        _emailController = TextEditingController(text: database.getCliente(widget.pedido.clienteID)?.email);
+      } else {
+        _emailController = TextEditingController();
+      }
+    }
     super.initState();
   }
 
+  @override
+  void dispose() {
+    _emailController.dispose();
+    super.dispose();
+  }
+
   void concluirVenda() {
-    // Lógica para concluir a venda
     VendaObj venda = VendaObj(
-        nome: widget.pedido.nome,
-        hora: widget.pedido.hora,
-        funcionarioID: widget.pedido.funcionarioID,
-        localId: widget.pedido.localId,
-        total: widget.pedido.total);
+      nome: widget.pedido.nome,
+      hora: widget.pedido.hora,
+      funcionarioID: widget.pedido.funcionarioID,
+      localId: widget.pedido.localId,
+      total: widget.pedido.total,
+    );
     venda.artigosPedidoIds = widget.pedido.artigosPedidoIds;
     venda.nrArtigos = widget.pedido.nrArtigos;
 
     database.addVenda(venda);
-    if(widget.pedido.id != 0) {
-      if (database.getPedido(widget.pedido.id) != null){
+    if (widget.pedido.id != 0) {
+      if (database.getPedido(widget.pedido.id) != null) {
         database.removePedido(widget.pedido.id);
       }
     }
@@ -51,7 +69,6 @@ class _ConcluirPedido extends State<ConcluirPedido> {
       );
       print('Venda concluída!');
     }
-
   }
 
   @override
@@ -80,34 +97,80 @@ class _ConcluirPedido extends State<ConcluirPedido> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text('Total pago',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                        )),
+                    const Text(
+                      'Total pago',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                     const SizedBox(height: 10),
                     Text(
-                        '${widget.pedido.calcularValorTotal().toStringAsFixed(2)} €',
-                        style: const TextStyle(
-                          color: Colors.black,
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                        )),
+                      '${widget.pedido.calcularValorTotal().toStringAsFixed(2)} €',
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                     const SizedBox(height: 30),
-                    const Text('Troco',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                        )),
+                    const Text(
+                      'Troco',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                     const SizedBox(height: 10),
-                    Text('${widget.troco} €',
-                        style: const TextStyle(
-                          color: Colors.black,
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                        )),
+                    Text(
+                      '${widget.troco} €',
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    if (widget.pedido.clienteID != 0)
+                      Row(
+                        children: [
+                          Checkbox(
+                            value: widget.setup.email,
+                            onChanged: (value) {
+                              setState(() {
+                                widget.setup.email = value!;
+                                _showEmailField = value;
+                              });
+                            },
+                          ),
+                          const Text('Enviar por email'),
+                        ],
+                      ),
+                    if (_showEmailField)
+                      TextField(
+                        controller: _emailController,
+                        keyboardType: TextInputType.emailAddress,
+                        decoration: const InputDecoration(
+                          labelText: 'Email',
+                          hintText: 'Digite seu email',
+                        ),
+                      ),
+                    const SizedBox(height: 5),
+                    Row(
+                      children: [
+                        Checkbox(
+                          value: widget.setup.imprimir,
+                          onChanged: (value) {
+                            setState(() {
+                              widget.setup.imprimir = value!;
+                            });
+                          },
+                        ),
+                        const Text('Imprimir documento'),
+                      ],
+                    ),
                   ],
                 ),
               ),
@@ -119,11 +182,9 @@ class _ConcluirPedido extends State<ConcluirPedido> {
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.only(bottom: 30, left: 80, right: 80),
         child: SizedBox(
-          width: double.infinity, // Largura total da tela
+          width: double.infinity,
           child: ElevatedButton(
             onPressed: concluirVenda,
-            // acrescentar a lógica de pagamento, impressora, enviar e-mail, etc.
-
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xff00afe9),
               shape: RoundedRectangleBorder(

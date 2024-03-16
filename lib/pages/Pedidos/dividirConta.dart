@@ -7,10 +7,8 @@ import '../../objetos/pedidoObj.dart';
 import 'cobrarDividido.dart';
 
 class DividirConta extends StatefulWidget {
-
   List<PedidoObj> pedidos = [];
   late PedidoObj pedido;
-
 
   DividirConta({
     Key? key,
@@ -93,23 +91,23 @@ class _DividirConta extends State<DividirConta> {
     return botaoPressionado.where((pressed) => pressed).length;
   }
 
-
-
   void cobrarValor(int index) {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) =>
-                CobrarDivididoPage(pedido: widget.pedido,))).then((troca) {
-                  if (troca){
-                    setState(() {
-                      botaoPressionado[index] = troca;
-                      if (countPressedButtons() == numPessoas) {
-                        mostrarBotaoConcluir = true;
-                      }
-                    });
-                  }
-
+            builder: (context) => CobrarDivididoPage(
+                  pedido: widget.pedido,
+                  valorCobrar: valoresIndividuais[index],
+                )
+        )).then((troca) {
+      if (troca) {
+        setState(() {
+          botaoPressionado[index] = troca;
+          if (countPressedButtons() == numPessoas) {
+            mostrarBotaoConcluir = true;
+          }
+        });
+      }
     });
   }
 
@@ -125,7 +123,11 @@ class _DividirConta extends State<DividirConta> {
     venda.nrArtigos = widget.pedido.nrArtigos;
 
     database.addVenda(venda);
-    database.removePedido(widget.pedido.id);
+    if (widget.pedido.id != 0) {
+      if (database.getPedido(widget.pedido.id) != null) {
+        database.removePedido(widget.pedido.id);
+      }
+    }
 
     Navigator.push(
       context,
@@ -142,7 +144,16 @@ class _DividirConta extends State<DividirConta> {
       appBar: AppBar(
         title: const Text('Dividir Conta'),
         backgroundColor: const Color(0xff00afe9),
-
+        leading: Visibility(
+          visible: botaoPressionado.every((element) => element == false),
+          child: IconButton(
+            icon: const Icon(Icons.arrow_back), // Ícone padrão de voltar
+            onPressed: () {
+              // Navegar para a página anterior
+              Navigator.pop(context, false);
+            },
+          ),
+        ),
       ),
       body: Column(
         children: [
@@ -182,7 +193,8 @@ class _DividirConta extends State<DividirConta> {
                         ? null
                         : () => cobrarValor(index),
                     style: ElevatedButton.styleFrom(
-                      foregroundColor: botaoPressionado[index] ? Colors.black : Colors.white,
+                      foregroundColor:
+                          botaoPressionado[index] ? Colors.black : Colors.white,
                       backgroundColor: botaoPressionado[index]
                           ? Colors.grey
                           : const Color(0xff00afe9),
@@ -209,7 +221,10 @@ class _DividirConta extends State<DividirConta> {
                       side: const BorderSide(color: Colors.black),
                     ),
                   ),
-                  child: const Text('CONCLUIR VENDA'),
+                  child: const Text(
+                    'CONCLUIR VENDA',
+                    style: TextStyle(color: Colors.white),
+                  ),
                 )),
           const SizedBox(height: 20),
         ],

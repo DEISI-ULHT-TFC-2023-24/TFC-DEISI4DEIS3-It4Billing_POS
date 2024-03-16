@@ -261,7 +261,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
       id: const obx_int.IdUid(9, 6051910675640835218),
       name: 'TurnoObj',
-      lastPropertyId: const obx_int.IdUid(17, 2922750027210177741),
+      lastPropertyId: const obx_int.IdUid(23, 7909175669971041779),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
@@ -348,6 +348,11 @@ final _entities = <obx_int.ModelEntity>[
             id: const obx_int.IdUid(17, 2922750027210177741),
             name: 'funcionarioID',
             type: 6,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(18, 2585488299434047412),
+            name: 'reembolsosDinheiro',
+            type: 8,
             flags: 0)
       ],
       relations: <obx_int.ModelRelation>[],
@@ -409,7 +414,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
       id: const obx_int.IdUid(11, 5421798492171887830),
       name: 'SetupObj',
-      lastPropertyId: const obx_int.IdUid(17, 6196846570544367772),
+      lastPropertyId: const obx_int.IdUid(18, 9140654380790352588),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
@@ -446,11 +451,6 @@ final _entities = <obx_int.ModelEntity>[
             id: const obx_int.IdUid(7, 2840280473894480183),
             name: 'pos',
             type: 9,
-            flags: 0),
-        obx_int.ModelProperty(
-            id: const obx_int.IdUid(8, 7760452733796280113),
-            name: 'utilizadorID',
-            type: 6,
             flags: 0),
         obx_int.ModelProperty(
             id: const obx_int.IdUid(9, 7502764982237474806),
@@ -496,6 +496,11 @@ final _entities = <obx_int.ModelEntity>[
             id: const obx_int.IdUid(17, 6196846570544367772),
             name: 'notaCredito',
             type: 1,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(18, 9140654380790352588),
+            name: 'funcionarioId',
+            type: 6,
             flags: 0)
       ],
       relations: <obx_int.ModelRelation>[],
@@ -629,7 +634,13 @@ obx_int.ModelDefinition getObjectBoxModel() {
         1330753141360703355,
         2708372927138612788,
         3672436035991890288,
-        6556494904146860720
+        6556494904146860720,
+        6931124628946287980,
+        3284798698106748045,
+        3169776483276987781,
+        8488742810161187612,
+        7909175669971041779,
+        7760452733796280113
       ],
       retiredRelationUids: const [7466652304049170735],
       modelVersion: 5,
@@ -899,7 +910,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           object.id = id;
         },
         objectToFB: (TurnoObj object, fb.Builder fbb) {
-          fbb.startTable(18);
+          fbb.startTable(24);
           fbb.addInt64(0, object.id);
           fbb.addBool(1, object.turnoAberto);
           fbb.addInt64(2, object.horaAbertura.millisecondsSinceEpoch);
@@ -917,6 +928,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           fbb.addFloat64(14, object.sangria);
           fbb.addFloat64(15, object.dinheiroEsperado);
           fbb.addInt64(16, object.funcionarioID);
+          fbb.addFloat64(17, object.reembolsosDinheiro);
           fbb.finish(fbb.endTable());
           return object.id;
         },
@@ -957,7 +969,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
             ..dinheiroEsperado =
                 const fb.Float64Reader().vTableGet(buffer, rootOffset, 34, 0)
             ..funcionarioID =
-                const fb.Int64Reader().vTableGet(buffer, rootOffset, 36, 0);
+                const fb.Int64Reader().vTableGet(buffer, rootOffset, 36, 0)
+            ..reembolsosDinheiro =
+                const fb.Float64Reader().vTableGet(buffer, rootOffset, 38, 0);
 
           return object;
         }),
@@ -1032,7 +1046,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           final faturacaoOffset = fbb.writeString(object.faturacao);
           final reembolsoOffset = fbb.writeString(object.reembolso);
           final contaCorrenteOffset = fbb.writeString(object.contaCorrente);
-          fbb.startTable(18);
+          fbb.startTable(19);
           fbb.addInt64(0, object.id);
           fbb.addOffset(1, urlOffset);
           fbb.addOffset(2, passwordOffset);
@@ -1040,7 +1054,6 @@ obx_int.ModelDefinition getObjectBoxModel() {
           fbb.addOffset(4, nomeLojaOffset);
           fbb.addInt64(5, object.posID);
           fbb.addOffset(6, posOffset);
-          fbb.addInt64(7, object.utilizadorID);
           fbb.addInt64(8, object.faturacaoID);
           fbb.addOffset(9, faturacaoOffset);
           fbb.addInt64(10, object.reembolsoID);
@@ -1050,6 +1063,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           fbb.addBool(14, object.imprimir);
           fbb.addBool(15, object.email);
           fbb.addBool(16, object.notaCredito);
+          fbb.addInt64(17, object.funcionarioId);
           fbb.finish(fbb.endTable());
           return object.id;
         },
@@ -1071,8 +1085,6 @@ obx_int.ModelDefinition getObjectBoxModel() {
                 const fb.Int64Reader().vTableGet(buffer, rootOffset, 14, 0)
             ..pos = const fb.StringReader(asciiOptimization: true)
                 .vTableGet(buffer, rootOffset, 16, '')
-            ..utilizadorID =
-                const fb.Int64Reader().vTableGet(buffer, rootOffset, 18, 0)
             ..faturacaoID =
                 const fb.Int64Reader().vTableGet(buffer, rootOffset, 20, 0)
             ..faturacao = const fb.StringReader(asciiOptimization: true)
@@ -1090,7 +1102,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
             ..email =
                 const fb.BoolReader().vTableGet(buffer, rootOffset, 34, false)
             ..notaCredito =
-                const fb.BoolReader().vTableGet(buffer, rootOffset, 36, false);
+                const fb.BoolReader().vTableGet(buffer, rootOffset, 36, false)
+            ..funcionarioId =
+                const fb.Int64Reader().vTableGet(buffer, rootOffset, 38, 0);
 
           return object;
         }),
@@ -1397,6 +1411,10 @@ class TurnoObj_ {
   /// see [TurnoObj.funcionarioID]
   static final funcionarioID =
       obx.QueryIntegerProperty<TurnoObj>(_entities[5].properties[16]);
+
+  /// see [TurnoObj.reembolsosDinheiro]
+  static final reembolsosDinheiro =
+      obx.QueryDoubleProperty<TurnoObj>(_entities[5].properties[17]);
 }
 
 /// [VendaObj] entity fields to define ObjectBox queries.
@@ -1468,45 +1486,45 @@ class SetupObj_ {
   static final pos =
       obx.QueryStringProperty<SetupObj>(_entities[7].properties[6]);
 
-  /// see [SetupObj.utilizadorID]
-  static final utilizadorID =
-      obx.QueryIntegerProperty<SetupObj>(_entities[7].properties[7]);
-
   /// see [SetupObj.faturacaoID]
   static final faturacaoID =
-      obx.QueryIntegerProperty<SetupObj>(_entities[7].properties[8]);
+      obx.QueryIntegerProperty<SetupObj>(_entities[7].properties[7]);
 
   /// see [SetupObj.faturacao]
   static final faturacao =
-      obx.QueryStringProperty<SetupObj>(_entities[7].properties[9]);
+      obx.QueryStringProperty<SetupObj>(_entities[7].properties[8]);
 
   /// see [SetupObj.reembolsoID]
   static final reembolsoID =
-      obx.QueryIntegerProperty<SetupObj>(_entities[7].properties[10]);
+      obx.QueryIntegerProperty<SetupObj>(_entities[7].properties[9]);
 
   /// see [SetupObj.reembolso]
   static final reembolso =
-      obx.QueryStringProperty<SetupObj>(_entities[7].properties[11]);
+      obx.QueryStringProperty<SetupObj>(_entities[7].properties[10]);
 
   /// see [SetupObj.contaCorrenteID]
   static final contaCorrenteID =
-      obx.QueryIntegerProperty<SetupObj>(_entities[7].properties[12]);
+      obx.QueryIntegerProperty<SetupObj>(_entities[7].properties[11]);
 
   /// see [SetupObj.contaCorrente]
   static final contaCorrente =
-      obx.QueryStringProperty<SetupObj>(_entities[7].properties[13]);
+      obx.QueryStringProperty<SetupObj>(_entities[7].properties[12]);
 
   /// see [SetupObj.imprimir]
   static final imprimir =
-      obx.QueryBooleanProperty<SetupObj>(_entities[7].properties[14]);
+      obx.QueryBooleanProperty<SetupObj>(_entities[7].properties[13]);
 
   /// see [SetupObj.email]
   static final email =
-      obx.QueryBooleanProperty<SetupObj>(_entities[7].properties[15]);
+      obx.QueryBooleanProperty<SetupObj>(_entities[7].properties[14]);
 
   /// see [SetupObj.notaCredito]
   static final notaCredito =
-      obx.QueryBooleanProperty<SetupObj>(_entities[7].properties[16]);
+      obx.QueryBooleanProperty<SetupObj>(_entities[7].properties[15]);
+
+  /// see [SetupObj.funcionarioId]
+  static final funcionarioId =
+      obx.QueryIntegerProperty<SetupObj>(_entities[7].properties[16]);
 }
 
 /// [ClienteObj] entity fields to define ObjectBox queries.

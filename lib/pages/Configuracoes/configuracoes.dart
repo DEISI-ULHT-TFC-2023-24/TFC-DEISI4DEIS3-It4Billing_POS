@@ -22,7 +22,7 @@ class ConfiguracoesPage extends StatefulWidget {
 
 class _ConfiguracoesPageState extends State<ConfiguracoesPage> {
   List<VendaObj> vendas = database.getAllVendas();
-  TurnoObj turno = database.getAllTurnos()[0];
+  TurnoObj turno = database.getAllTurno()[0];
   SetupObj setup = database.getAllSetup()[0];
 
   @override
@@ -108,7 +108,7 @@ class _ConfiguracoesPageState extends State<ConfiguracoesPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          database.getUtilizador(setup.utilizadorID)!.nome,
+          database.getUtilizador(setup.funcionarioId)!.nome,
           style: const TextStyle(fontSize: 24, color: Colors.white),
         ),
         Text(

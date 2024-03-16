@@ -13,7 +13,7 @@ import 'Configuracoes/configuracoes.dart';
 
 class CategoriasPage extends StatelessWidget {
   List<Categoria> categorias = database.getAllCategorias();
-  TurnoObj turno = database.getAllTurnos()[0];
+  TurnoObj turno = database.getAllTurno()[0];
   SetupObj setup = database.getAllSetup()[0];
 
   CategoriasPage({Key? key}) : super(key: key);
@@ -29,7 +29,7 @@ class CategoriasPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              database.getUtilizador(setup.utilizadorID)!.nome,
+              database.getUtilizador(turno.funcionarioID)!.nome,
               style: const TextStyle(fontSize: 24, color: Colors.white),
             ),
             Text(

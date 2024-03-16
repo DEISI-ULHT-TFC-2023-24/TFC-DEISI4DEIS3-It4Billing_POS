@@ -90,7 +90,7 @@ class _PedidoPage extends State<PedidoPage> with TickerProviderStateMixin {
       funcionarioID: 0,
       total: 0,
       localId: -1,
-      clienteID: 0);
+      clienteID: database.getAllClientes()[0].id);
 
   // estudar a parte de voltar a entrar dentro do pedido
   // como vou carregar toda a info ??devo adicionar mais variaveis ao pedido por exemplo
@@ -115,7 +115,7 @@ class _PedidoPage extends State<PedidoPage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    pedido.nome = "Pedido ${widget.pedidos.length + 1}";
+    pedido.nome = "Pedido ${database.getAllVendas().length + widget.pedidos.length + 1}";
 
     return Scaffold(
       appBar: AppBar(

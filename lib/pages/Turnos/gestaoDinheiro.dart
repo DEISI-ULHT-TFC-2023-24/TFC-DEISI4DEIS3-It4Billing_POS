@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/services.dart';
+import 'package:it4billing_pos/main.dart';
+
+import '../../objetos/turnoObj.dart';
 
 class CustomNumberTextInputFormatter extends TextInputFormatter {
   static const _defaultDoubleFormat = '0.00';
@@ -16,8 +19,7 @@ class CustomNumberTextInputFormatter extends TextInputFormatter {
     if (!regEx.hasMatch(newText)) {
       return oldValue;
     }
-    return newValue.copyWith(
-        text: double.parse(newText).toStringAsFixed(2));
+    return newValue.copyWith(text: double.parse(newText).toStringAsFixed(2));
   }
 }
 
@@ -26,7 +28,8 @@ class Transaction {
   final String description;
   final String amount;
 
-  Transaction({required this.time, required this.description, required this.amount});
+  Transaction(
+      {required this.time, required this.description, required this.amount});
 }
 
 class GestaoDinheiro extends StatefulWidget {
@@ -35,6 +38,7 @@ class GestaoDinheiro extends StatefulWidget {
 }
 
 class _GestaoDinheiroState extends State<GestaoDinheiro> {
+  late TurnoObj turno;
   TextEditingController _moneyController = TextEditingController();
   TextEditingController _descriptionController = TextEditingController();
   List<Transaction> transactions = [];
@@ -43,6 +47,7 @@ class _GestaoDinheiroState extends State<GestaoDinheiro> {
   @override
   void initState() {
     super.initState();
+    turno = database.getAllTurno()[0]; // Inicializando turno aqui
     _moneyController.addListener(_updateFormattedAmount);
   }
 
@@ -76,7 +81,8 @@ class _GestaoDinheiroState extends State<GestaoDinheiro> {
               ),
               onChanged: (_) {
                 setState(() {
-                  _canAddTransaction = _moneyController.text.isNotEmpty && _moneyController.text != '0.00';
+                  _canAddTransaction = _moneyController.text.isNotEmpty &&
+                      _moneyController.text != '0.00';
                 });
               },
             ),
@@ -94,6 +100,8 @@ class _GestaoDinheiroState extends State<GestaoDinheiro> {
                 ElevatedButton(
                   onPressed: _canAddTransaction
                       ? () {
+                    turno.setSangria = turno.sangria + double.parse(_moneyController.text);
+                    database.addTurno(turno);
                     _addTransaction();
                   }
                       : null,
@@ -109,6 +117,8 @@ class _GestaoDinheiroState extends State<GestaoDinheiro> {
                 ElevatedButton(
                   onPressed: _canAddTransaction
                       ? () {
+                    turno.setSuprimento = turno.suprimento + double.parse(_moneyController.text);
+                    database.addTurno(turno);
                     _addTransaction();
                   }
                       : null,
@@ -142,7 +152,8 @@ class _GestaoDinheiroState extends State<GestaoDinheiro> {
                     Divider(),
                 itemBuilder: (BuildContext context, int index) {
                   return ListTile(
-                    title: Text('${transactions[index].time} - Utilizador 01 - ${transactions[index].description} - ${transactions[index].amount} €'),
+                    title: Text(
+                        '${transactions[index].time} - Utilizador 01 - ${transactions[index].description} - ${transactions[index].amount} €'),
                   );
                 },
               ),
@@ -155,7 +166,8 @@ class _GestaoDinheiroState extends State<GestaoDinheiro> {
 
   void _updateFormattedAmount() {
     setState(() {
-      _canAddTransaction = _moneyController.text.isNotEmpty && _moneyController.text != '0.00';
+      _canAddTransaction =
+          _moneyController.text.isNotEmpty && _moneyController.text != '0.00';
     });
   }
 
@@ -175,3 +187,4 @@ class _GestaoDinheiroState extends State<GestaoDinheiro> {
     });
   }
 }
+

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:it4billing_pos/pages/Turnos/fecharTurno.dart';
 
 import 'package:it4billing_pos/pages/artigos.dart';
@@ -9,17 +10,26 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../main.dart';
 import '../../objetos/pedidoObj.dart';
 import '../../objetos/setupObj.dart';
+import '../../objetos/turnoObj.dart';
 import '../Pedidos/pedidos.dart';
 import '../Configuracoes/configuracoes.dart';
 import 'gestaoDinheiro.dart';
 
-class TurnosPage extends StatelessWidget {
+class TurnosPage extends StatefulWidget {
+  @override
+  _TurnosPageState createState() => _TurnosPageState();
+}
+
+class _TurnosPageState extends State<TurnosPage> {
   List<PedidoObj> pedidos = database.getAllPedidos();
   SetupObj setup = database.getAllSetup()[0];
+  late TurnoObj turno;
 
-  TurnosPage({
-    Key? key,
-  }) : super(key: key);
+  @override
+  void initState() {
+    super.initState();
+    turno = database.getAllTurno()[0];
+  }
 
   Widget buildHeader(BuildContext context) => Container(
     color: const Color(0xff00afe9),
@@ -32,7 +42,7 @@ class TurnosPage extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          database.getUtilizador(setup.utilizadorID)!.nome,
+          database.getUtilizador(setup.funcionarioId)!.nome,
           style: const TextStyle(fontSize: 24, color: Colors.white),
         ),
         Text(
@@ -137,7 +147,7 @@ class TurnosPage extends StatelessWidget {
   Widget build(BuildContext context) {
     bool isHorizontal =
         MediaQuery.of(context).orientation == Orientation.landscape;
-
+    turno = database.getAllTurno()[0];
     return Scaffold(
       drawer: Drawer(
         child: SingleChildScrollView(
@@ -164,16 +174,24 @@ class TurnosPage extends StatelessWidget {
                   horizontal: isHorizontal ? 40.0 : 20.0), // Alteração aqui
               child: SizedBox(
                 height: isHorizontal ? 45 : 40, // Altura fixa do botão
-                child: ElevatedButton(
+                child:
+
+                ElevatedButton(
                   onPressed: () {
                     // Ação do botão "GESTÃO DO DINHEIRO NA GAVETA"
                     Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => GestaoDinheiro()));
+                      context,
+                      MaterialPageRoute(builder: (context) => GestaoDinheiro()),
+                    ).then((_) {
+                      // Atualizar a instância de turno após retornar da página de gestão de dinheiro
+                      setState(() {
+                        turno = database.getAllTurno()[0];
+                      });
+                    });
                   },
                   style: ElevatedButton.styleFrom(
-                    foregroundColor: const Color(0xff00afe9), backgroundColor: Colors.white,
+                    foregroundColor: const Color(0xff00afe9),
+                    backgroundColor: Colors.white,
                     side: const BorderSide(color: Color(0xff00afe9)),
                     elevation: 0,
                     shape: RoundedRectangleBorder(
@@ -181,10 +199,10 @@ class TurnosPage extends StatelessWidget {
                     ),
                   ),
                   child: const FittedBox(
-                    child: Text('GESTÃO DO DINHEIRO NA GAVETA',
-                        style: TextStyle(fontSize: 16)),
+                    child: Text('GESTÃO DO DINHEIRO NA GAVETA', style: TextStyle(fontSize: 16)),
                   ),
                 ),
+
               ),
             ),
             const SizedBox(height: 20),
@@ -221,8 +239,7 @@ class TurnosPage extends StatelessWidget {
                 children: [
                   Expanded(
                     flex: 1,
-                    child: Text(
-                      'Funcionário: João',
+                    child: Text( database.getUtilizador(turno.funcionarioID)!.nome,
                       textAlign: TextAlign.left,
                     ),
                   ),
@@ -230,8 +247,8 @@ class TurnosPage extends StatelessWidget {
                   // Espaço vazio proporcional ao tamanho da tela
                   Expanded(
                     flex: 1,
-                    child: Text(
-                      '03/03/2024 10:00',
+                    child: Text( DateFormat('dd/MM/yyyy HH:mm')
+                        .format(turno.horaAbertura),
                       textAlign: TextAlign.right,
                     ),
                   ),
@@ -245,26 +262,25 @@ class TurnosPage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Text(
+                  const Text(
                     'Resumo de vendas',
                     textAlign: TextAlign.left,
                     style: TextStyle(
                       color: Color(0xff00afe9),
                     ),
                   ),
-                  SizedBox(height: 8),
-                  Row(
+                  const SizedBox(height: 8),
+                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
+                      const Text(
                         'Vendas brutas',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      Text(
-                        '0.00 €',
-                        style: TextStyle(
+                      Text( '${turno.vendasBrutas.toStringAsFixed(2)} €',
+                        style: const TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -274,16 +290,16 @@ class TurnosPage extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Reembolsos'),
-                      Text('0.00 €'),
+                      const Text('Reembolsos'),
+                      Text('${turno.reembolsos.toStringAsFixed(2)} €'),
                     ],
                   ),
                   _gap(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Descontos'),
-                      Text('0.00 €'),
+                      const Text('Descontos'),
+                      Text('${turno.descontos.toStringAsFixed(2)} €'),
                     ],
                   ),
                 ],
@@ -299,48 +315,48 @@ class TurnosPage extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
+                      const Text(
                         'Vendas líquidas',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      Text('0.00 €',
-                        style: TextStyle(
+                      Text('${turno.vendasliquidas.toStringAsFixed(2)} €',
+                        style: const TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                     ],
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Dinheiro'),
-                      Text('0.00 €'),
+                      const Text('Dinheiro'),
+                      Text('${turno.dinheiro.toStringAsFixed(2)} €'),
                     ],
                   ),
                   _gap(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Multibanco'),
-                      Text('0.00 €'),
+                      const Text('Multibanco'),
+                      Text('${turno.multibanco.toStringAsFixed(2)} €'),
                     ],
                   ),
                   _gap(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('MB Way'),
-                      Text('0.00 €'),
+                      const Text('MB Way'),
+                      Text('${turno.mbWay.toStringAsFixed(2)} €'),
                     ],
                   ),
                   _gap(),
-                  Row(
+                  const Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Fazer a lista consuante o tipo de metudos'),
+                      Text('Fazer a lista consuante o tipo de metudos ?'),
                       Text('999999.99 €'),
                     ],
                   ),
@@ -354,65 +370,65 @@ class TurnosPage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Text(
+                  const Text(
                     'Gaveta do dinheiro',
                     textAlign: TextAlign.left,
                     style: TextStyle(
                       color: Color(0xff00afe9),
                     ),
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Dinheiro inicial'),
-                      Text('0.00 €'),
+                      const Text('Dinheiro inicial'),
+                      Text('${turno.dinheiroInicial.toStringAsFixed(2)} €'),
                     ],
                   ),
                   _gap(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Pagamentos em dinheiro'),
-                      Text('0.00 €'),
+                      const Text('Pagamentos em dinheiro'),
+                      Text('${turno.pagamentosDinheiro.toStringAsFixed(2)} €'),
                     ],
                   ),
                   _gap(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Reembolsos em dinheiro'),
-                      Text('0.00 €'),
+                      const Text('Reembolsos em dinheiro'),
+                      Text('${turno.reembolsosDinheiro.toStringAsFixed(2)} €'),
                     ],
                   ),
                   _gap(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Suprimento'),
-                      Text('0.00 €'),
+                      const Text('Suprimento'),
+                      Text('${turno.suprimento.toStringAsFixed(2)} €'),
                     ],
                   ),
                   _gap(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Sangria'),
-                      Text('0.00 €'),
+                      const Text('Sangria'),
+                      Text('${turno.sangria.toStringAsFixed(2)} €'),
                     ],
                   ),
                   _gap(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
+                      const Text(
                         'Quantidade de dinheiro esperado',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      Text('0.00 €',
-                        style: TextStyle(
+                      Text('${turno.dinheiroEsperado.toStringAsFixed(2)} €',
+                        style: const TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
                       ),

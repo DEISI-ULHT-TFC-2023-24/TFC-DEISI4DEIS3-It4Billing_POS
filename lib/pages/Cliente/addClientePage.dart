@@ -29,7 +29,11 @@ class AdicionarClientePage extends StatefulWidget {
 
 class _AdicionarClientePageState extends State<AdicionarClientePage> {
 
-
+  @override
+  void initState() {
+    super.initState();
+    widget.clienteSelecionado = database.getCliente(widget.pedido.clienteID)!;
+  }
 
   // Método para alterar o cliente selecionado
   void selecionarCliente(ClienteObj cliente) {
@@ -40,10 +44,8 @@ class _AdicionarClientePageState extends State<AdicionarClientePage> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.pedido.clienteID != 0){
-      widget.clienteSelecionado = database.getCliente(widget.pedido.clienteID)!;
-      print('estive aqui pre carreguei o cliente');
-    }
+
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -140,6 +142,9 @@ class _AdicionarClientePageState extends State<AdicionarClientePage> {
               child: ListView.builder(
                 itemCount: widget.clientes.length,
                 itemBuilder: (context, index) {
+                  // Ignorar o primeiro elemento
+                  if(index == 0) return SizedBox.shrink(); // ou qualquer outro widget vazio
+
                   ClienteObj cliente = widget.clientes[index];
                   return ListTile(
                     onTap: () {
@@ -157,6 +162,7 @@ class _AdicionarClientePageState extends State<AdicionarClientePage> {
                 },
               ),
             ),
+
             SizedBox(
               height: 50.0,
               width: 150,
@@ -170,7 +176,7 @@ class _AdicionarClientePageState extends State<AdicionarClientePage> {
                 ),
                 onPressed: () {
                   widget.pedido.clienteID = widget.clienteSelecionado.id;
-                  if (database.getPedido(widget.pedido.id) != null){
+                  if (widget.pedido.id != 0){
                     database.addPedido(widget.pedido);
                   }
                   Navigator.of(context).push(MaterialPageRoute(

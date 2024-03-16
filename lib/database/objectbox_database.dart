@@ -33,7 +33,6 @@ class ObjectBoxDatabase {
   late final Box<TurnoObj> _turnosBox;
 
   ObjectBoxDatabase._create(this._store) {
-
     _pedidosBox = Box<PedidoObj>(_store);
     _vendasBox = Box<VendaObj>(_store);
     _utilizadoresBox = Box<Utilizador>(_store);
@@ -58,20 +57,24 @@ class ObjectBoxDatabase {
 
   Future<void> putDemoUsers() async {
     final demoUsers = [
-      Utilizador('User 001', 9638),
-      Utilizador('User 064', 9849),
+      Utilizador('User 001', 1234),
+      Utilizador('User 064', 4321),
     ];
     await _utilizadoresBox.putManyAsync(demoUsers);
   }
 
   Future<void> putDemoClientes() async {
     final demoClients = [
-      ClienteObj('Consumidor Final', 999999990, 'N/D', 'N/D', '0000-000', 'N/D', 'N/D', 987654321, 'N/D'),
-      ClienteObj('Beatriz Silva', 240548921, 'Portugal', 'N/D', '0000-000', 'Lisboa', 'email001@gmail.com', 926545742, 'N/D'),
-      ClienteObj('Diogo Figueira', 270785524, 'Portugal', 'Av. de Berna 4 1D', '2478-654', 'Porto', 'email002@gmail.com', 926595552, 'N/D'),
-      ClienteObj('Filipa Silva', 230784532, 'Espanha', 'N/D', '4562-488', 'Madrid', 'N/D', 924826542, 'N/D'),
-      ClienteObj('João Neves', 191978465, 'Portugal', 'N/D', '0000-000', 'Lisboa', 'email004@gmail.com', 926952148, 'N/D'),
-
+      ClienteObj('Consumidor Final', 999999990, 'N/D', 'N/D', '0000-000', 'N/D',
+          'N/D', 987654321, 'N/D'),
+      ClienteObj('Beatriz Silva', 240548921, 'Portugal', 'N/D', '0000-000',
+          'Lisboa', 'email001@gmail.com', 926545742, 'N/D'),
+      ClienteObj('Diogo Figueira', 270785524, 'Portugal', 'Av. de Berna 4 1D',
+          '2478-654', 'Porto', 'email002@gmail.com', 926595552, 'N/D'),
+      ClienteObj('Filipa Silva', 230784532, 'Espanha', 'N/D', '4562-488',
+          'Madrid', 'N/D', 924826542, 'N/D'),
+      ClienteObj('João Neves', 191978465, 'Portugal', 'N/D', '0000-000',
+          'Lisboa', 'email004@gmail.com', 926952148, 'N/D'),
     ];
     await _clientesBox.putManyAsync(demoClients);
   }
@@ -100,7 +103,6 @@ class ObjectBoxDatabase {
     List<int> idCategorias = [];
 
     if (database.getAllCategorias().isNotEmpty) {
-
       for (var i = 0; i < database.getAllCategorias().length; i++) {
         idCategorias.add(database.getAllCategorias()[i].id);
       }
@@ -273,7 +275,7 @@ class ObjectBoxDatabase {
   }
 
   ///---------------------------------------------------------
-  // Funções para manipular os Turnos
+  // Funções para manipular os Turno
   Future<void> addTurno(TurnoObj turno) async {
     await _turnosBox.put(turno);
   }
@@ -282,11 +284,11 @@ class ObjectBoxDatabase {
     return _turnosBox.get(id);
   }
 
-  List<TurnoObj> getAllTurnos() {
+  List<TurnoObj> getAllTurno() {
     return _turnosBox.getAll();
   }
 
-  Future<void> removeAllTurnos() async {
+  Future<void> removeAllTurno() async {
     await _turnosBox.removeAll();
   }
 
@@ -307,7 +309,6 @@ class ObjectBoxDatabase {
   Future<void> removeAllVendas() async {
     await _vendasBox.removeAll();
   }
-
 
   ///---------------------------------------------------------
   // Funções para manipular o Setup
@@ -344,7 +345,4 @@ class ObjectBoxDatabase {
   Future<void> removeAllClientes() async {
     await _clientesBox.removeAll();
   }
-
-
-
 }

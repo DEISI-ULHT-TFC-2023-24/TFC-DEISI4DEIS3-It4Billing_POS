@@ -17,7 +17,7 @@ class SetupObj {
   late int posID = 0;
   late String pos = '';
 
-  late int utilizadorID = 0;
+  late int funcionarioId = 0;
 
   late int faturacaoID = 0;//escolher um dos dois
   late String faturacao = '';

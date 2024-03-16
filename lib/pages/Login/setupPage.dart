@@ -11,17 +11,37 @@ class SetupPage extends StatefulWidget {
 }
 
 class _SetupPageState extends State<SetupPage> {
-
   @override
   Widget build(BuildContext context) {
+    final bool isSmallScreen = MediaQuery.of(context).size.width < 600;
+
     return Scaffold(
       body: Center(
-        child: Column(
+        child: isSmallScreen
+            ? Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             _Logo(),
             _FormContent(),
           ],
+        )
+            : Container(
+          padding: const EdgeInsets.all(32.0),
+          constraints: const BoxConstraints(maxWidth: 800),
+          child: Row(
+            children: [
+              Expanded(
+                child: _Logo(),
+              ),
+              Expanded(
+                child: Scrollbar(
+                  child: SingleChildScrollView(
+                    child: _FormContent(),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -46,10 +66,7 @@ class _Logo extends StatelessWidget {
             textAlign: TextAlign.center,
             style: isSmallScreen
                 ? Theme.of(context).textTheme.headline5
-                : Theme.of(context)
-                .textTheme
-                .headline4
-                ?.copyWith(color: Colors.black),
+                : Theme.of(context).textTheme.headline4?.copyWith(color: Colors.black),
           ),
         )
       ],
@@ -68,6 +85,27 @@ class __FormContentState extends State<_FormContent> {
   final TextEditingController urlController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
+  @override
+  void initState() {
+    super.initState();
+    urlController.addListener(_updateConfirmation);
+    passwordController.addListener(_updateConfirmation);
+  }
+
+  @override
+  void dispose() {
+    urlController.removeListener(_updateConfirmation);
+    passwordController.removeListener(_updateConfirmation);
+    super.dispose();
+  }
+
+  void _updateConfirmation() {
+    setState(() {
+      _showConfirmation = false;
+    });
+  }
+
+
   bool _isPasswordVisible = false;
   bool _showConfirmation = false;
   String? _selectedStore;
@@ -82,9 +120,9 @@ class __FormContentState extends State<_FormContent> {
     if (database.getAllUtilizadores().isEmpty) {
       await database.putDemoUsers();
     }
-    ;
   }
-   @override
+
+  @override
   void setState(VoidCallback fn) {
     carregarUsers();
     super.setState(fn);
@@ -100,6 +138,7 @@ class __FormContentState extends State<_FormContent> {
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            _gap(),
             TextFormField(
               controller: urlController,
               validator: (value) {
@@ -148,9 +187,7 @@ class __FormContentState extends State<_FormContent> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                   suffixIcon: IconButton(
-                    icon: Icon(_isPasswordVisible
-                        ? Icons.visibility_off
-                        : Icons.visibility),
+                    icon: Icon(_isPasswordVisible ? Icons.visibility_off : Icons.visibility),
                     onPressed: () {
                       setState(() {
                         _isPasswordVisible = !_isPasswordVisible;
@@ -164,22 +201,22 @@ class __FormContentState extends State<_FormContent> {
               children: [
                 SizedBox(
                   height: 50,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xff00afe9),
+                  child:
+
+                  ElevatedButton(
+                    style: _showConfirmation
+                        ? ElevatedButton.styleFrom(
+                      backgroundColor: Colors.grey,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                         side: const BorderSide(color: Colors.black),
                       ),
-                    ),
-                    child: const Padding(
-                      padding: EdgeInsets.all(10.0),
-                      child: Text(
-                        'Conectar',
-                        style: TextStyle(
-                          color: Colors.white,fontWeight: FontWeight.bold,
-                          fontSize: 16.0,
-                        ),
+                    )
+                        : ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xff00afe9),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        side: const BorderSide(color: Colors.black),
                       ),
                     ),
                     onPressed: () {
@@ -192,7 +229,20 @@ class __FormContentState extends State<_FormContent> {
                         }
                       });
                     },
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Text(
+                        _showConfirmation ? 'Conectado' : 'Conectar',
+                        style: TextStyle(
+                          color: _showConfirmation ? Colors.black : Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16.0,
+                        ),
+                      ),
+                    ),
                   ),
+
+
                 ),
                 if (_showConfirmation)
                   const Row(
@@ -211,10 +261,11 @@ class __FormContentState extends State<_FormContent> {
                     isExpanded: true,
                     value: _selectedStore,
                     decoration: InputDecoration(
-                        label: const Text('Loja', style: TextStyle(fontSize: 20)),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        )),
+                      label: const Text('Loja', style: TextStyle(fontSize: 20)),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
                     hint: const Text('Selecione a loja'),
                     onChanged: (newValue) {
                       setState(() {
@@ -228,7 +279,6 @@ class __FormContentState extends State<_FormContent> {
                       );
                     }).toList(),
                   ),
-                  //if (_selectedStore != null && _selectedStore != 'Selecione a loja')
                   Column(
                     children: [
                       _gap(),
@@ -237,10 +287,11 @@ class __FormContentState extends State<_FormContent> {
                         value: _selectedPos,
                         hint: const Text('Selecione o POS'),
                         decoration: InputDecoration(
-                            label: const Text('POS', style: TextStyle(fontSize: 20)),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            )),
+                          label: const Text('POS', style: TextStyle(fontSize: 20)),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
                         onChanged: (newValue) {
                           setState(() {
                             _selectedPos = newValue!;
@@ -271,17 +322,16 @@ class __FormContentState extends State<_FormContent> {
                             _selectedStore != 'Selecione a loja' &&
                             _selectedPos != null &&
                             _selectedPos != 'Selecione o POS') {
-                          // Lógica para confirmar seleção da loja e do POS
                           setup.nomeLoja = _selectedStore!;
                           setup.pos = _selectedPos!;
 
                           Navigator.of(context).pushAndRemoveUntil(
-                              MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                  SetupPOSPage(setup: setup,)),
-                                  (route) => false);
+                            MaterialPageRoute(
+                              builder: (BuildContext context) => SetupPOSPage(setup: setup,),
+                            ),
+                                (route) => false,
+                          );
                         } else {
-                          // Exibir mensagem de erro.
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                               content: Text('Por favor, selecione a loja e o POS.'),
@@ -290,11 +340,13 @@ class __FormContentState extends State<_FormContent> {
                           );
                         }
                       },
-                      child: const Text('Entrar',
-                          style:
-                          TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.bold)),
+                      child: const Text(
+                        'Entrar',
+                        style: TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.bold),
+                      ),
                     ),
                   ),
+                  _gap(),
                 ],
               ),
           ],

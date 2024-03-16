@@ -26,6 +26,8 @@ class _PreferenciasPageState extends State<PreferenciasPage> {
               ListTile(
                 title: const Text('Imprimir documento'),
                 trailing: Switch(
+                  activeTrackColor: const Color(0xff00afe9),
+                  activeColor: Colors.white,
                   value: setup.imprimir,
                   onChanged: (value) {
                     setState(() {
@@ -38,14 +40,13 @@ class _PreferenciasPageState extends State<PreferenciasPage> {
               ListTile(
                 title: const Text('Enviar por email'),
                 trailing: Switch(
+                  activeTrackColor: const Color(0xff00afe9),
+                  activeColor: Colors.white,
                   value: setup.email,
                   onChanged: (value) {
                     setState(() {
                       setup.email = value;
-                      print(setup.email);
                       database.addSetup(setup);
-                      print(database.getAllSetup().length);
-                      print(database.getAllSetup()[0].email);
 
                     });
                   },
@@ -54,12 +55,13 @@ class _PreferenciasPageState extends State<PreferenciasPage> {
               ListTile(
                 title: const Text('Emitir nota de credito'),
                 trailing: Switch(
+                  activeTrackColor: const Color(0xff00afe9),
+                  activeColor: Colors.white,
                   value: setup.notaCredito,
                   onChanged: (value) {
                     setState(() {
                       setup.notaCredito = value;
                       database.addSetup(setup);
-
                     });
                   },
                 ),

@@ -7,13 +7,13 @@ import '../../objetos/pedidoObj.dart';
 import 'concluirCobrancaDividida.dart';
 
 class CobrarDivididoPage extends StatefulWidget {
-  late List<PedidoObj> pedidos = [];
-  late List<Artigo> artigos = [];
   late PedidoObj pedido;
+  double valorCobrar;
 
 
   CobrarDivididoPage({
     Key? key,
+    required this.valorCobrar,
     required this.pedido,
   }) : super(key: key);
 
@@ -33,9 +33,9 @@ class _CobrarDivididoPage extends State<CobrarDivididoPage> {
   void initState() {
     super.initState();
     _dinheiroRecebidoController.text =
-        widget.pedido.calcularValorTotal().toStringAsFixed(2);
+        widget.valorCobrar.toStringAsFixed(2);
     _trocoController.text =
-        (double.parse(_dinheiroRecebidoController.text) - double.parse(widget.pedido.calcularValorTotal().toStringAsFixed(2))).toStringAsFixed(2);
+        (double.parse(_dinheiroRecebidoController.text) - double.parse(widget.valorCobrar.toStringAsFixed(2))).toStringAsFixed(2);
     _focusNode.addListener(_onFocusChanged);
 
   }
@@ -52,7 +52,7 @@ class _CobrarDivididoPage extends State<CobrarDivididoPage> {
     if (!_focusNode.hasFocus) {
       setState(() {
         _trocoController.text =
-            (double.parse(_dinheiroRecebidoController.text) - widget.pedido.calcularValorTotal()).toStringAsFixed(2);
+            (double.parse(_dinheiroRecebidoController.text) - widget.valorCobrar).toStringAsFixed(2);
 
       });
     }
@@ -60,7 +60,7 @@ class _CobrarDivididoPage extends State<CobrarDivididoPage> {
 
   bool _toggleVisibility(){
     bool isVisible = false;
-    if ((double.parse(_dinheiroRecebidoController.text) - double.parse(widget.pedido.calcularValorTotal().toStringAsFixed(2))) >= 0){
+    if ((double.parse(_dinheiroRecebidoController.text) - double.parse(widget.valorCobrar.toStringAsFixed(2))) >= 0){
       isVisible = true;
     }
     return isVisible;
@@ -109,7 +109,7 @@ class _CobrarDivididoPage extends State<CobrarDivididoPage> {
                           fontWeight: FontWeight.bold,
                         )),
                     Text(
-                        '${widget.pedido.calcularValorTotal().toStringAsFixed(2)} €',
+                        '${widget.valorCobrar.toStringAsFixed(2)} €',
                         style: const TextStyle(
                           color: Colors.black,
                           fontSize: 22,
@@ -130,7 +130,7 @@ class _CobrarDivididoPage extends State<CobrarDivididoPage> {
                       decoration: InputDecoration(
                         labelText: 'Dinheiro Recebido',
                         labelStyle: const TextStyle(color: Color(0xff00afe9),fontSize: 14),
-                        hintText: widget.pedido.calcularValorTotal().toStringAsFixed(2),
+                        hintText: widget.valorCobrar.toStringAsFixed(2),
                       ),
                     ),
                   ),
@@ -177,9 +177,7 @@ class _CobrarDivididoPage extends State<CobrarDivididoPage> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) => ConcluirCobrancaDivididaPage(
-                                            pedidos: widget.pedidos,
                                             pedido: widget.pedido,
-                                            artigos: widget.artigos,
                                             troco: _trocoController.text,
                                           )
                                       ));

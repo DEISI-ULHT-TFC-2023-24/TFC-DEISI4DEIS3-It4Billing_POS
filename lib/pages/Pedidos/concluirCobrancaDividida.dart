@@ -1,21 +1,14 @@
 import 'package:flutter/material.dart';
 
 import '../../objetos/artigoObj.dart';
-import '../../objetos/categoriaObj.dart';
 import '../../objetos/pedidoObj.dart';
-import 'cobrarDividido.dart';
-import 'dividirConta.dart';
 
 class ConcluirCobrancaDivididaPage extends StatefulWidget {
-  late List<PedidoObj> pedidos = [];
-  late List<Artigo> artigos = [];
   late PedidoObj pedido;
   late String troco;
 
   ConcluirCobrancaDivididaPage({
     Key? key,
-    required this.pedidos,
-    required this.artigos,
     required this.pedido,
     required this.troco,
   }) : super(key: key);

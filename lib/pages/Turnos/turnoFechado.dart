@@ -13,7 +13,8 @@ import '../Configuracoes/configuracoes.dart';
 import '../Vendas/vendas.dart';
 
 class TurnoFechado extends StatelessWidget {
-  TurnoObj turno = database.getAllTurnos()[0];
+  final TextEditingController valorInicialController = TextEditingController();
+  TurnoObj turno = database.getAllTurno()[0];
   SetupObj setup = database.getAllSetup()[0];
 
   Widget buildHeader(BuildContext context) => Container(
@@ -27,7 +28,7 @@ class TurnoFechado extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          database.getUtilizador(setup.utilizadorID)!.nome,
+          database.getUtilizador(setup.funcionarioId)!.nome,
           style: const TextStyle(fontSize: 24, color: Colors.white),
         ),
         Text(
@@ -165,6 +166,7 @@ class TurnoFechado extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 60.0),
               child: TextFormField(
+                controller: valorInicialController, // Controlador adicionado aqui
                 keyboardType: TextInputType.numberWithOptions(decimal: true),
                 textAlign: TextAlign.center,
                 inputFormatters: [
@@ -190,11 +192,12 @@ class TurnoFechado extends StatelessWidget {
                         // Lógica para abrir o turno aqui
 
                         turno.turnoAberto = true;
-                        await database.removeAllTurnos();
+                        turno.dinheiroInicial = double.parse(valorInicialController.text); // Valor do controlador adicionado aqui
+                        await database.removeAllTurno();
                         database.addTurno(turno);
-                        print('Esta aberto? DEVIA!! -> ${database.getAllTurnos()[0].turnoAberto}');
+                        print('Esta aberto? DEVIA!! -> ${database.getAllTurno()[0].turnoAberto}');
 
-                        /// Logica oara a BD local Zé
+
 
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context) => TurnosPage()));

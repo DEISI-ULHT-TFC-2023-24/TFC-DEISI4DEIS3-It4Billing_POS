@@ -11,7 +11,7 @@ class FecharTurno extends StatefulWidget {
 }
 
 class _FecharTurnoState extends State<FecharTurno> {
-  TurnoObj turno = database.getAllTurnos()[0];
+  TurnoObj turno = database.getAllTurno()[0];
   TextEditingController _textEditingController = TextEditingController();
   FocusNode _focusNode = FocusNode();
 
@@ -145,15 +145,15 @@ class _FecharTurnoState extends State<FecharTurno> {
                 // Ação ao pressionar o botão de fechar turno
 
                 turno.turnoAberto = false;
-                await database.removeAllTurnos();
-                database.addTurno(turno);
-                print('Esta aberto? DEVIA!! -> ${database.getAllTurnos()[0].turnoAberto}');
-
-
+                await database.removeAllTurno();
+                TurnoObj novoturno = TurnoObj();
+                novoturno.funcionarioID = database.getAllSetup()[0].funcionarioId;
                 ///
-                ///  Falta
+                ///  talvez nao faça sentido porque preciso de um turno sem funcionario
                 ///
 
+                database.addTurno(novoturno);
+                print('Esta aberto? DEVIA!! -> ${database.getAllTurno()[0].turnoAberto}');
 
                 Navigator.push(
                     context,

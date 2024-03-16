@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:it4billing_pos/objetos/setupObj.dart';
 import 'package:it4billing_pos/pages/Login/loginPage.dart';
 
+import '../../main.dart';
+
 class SetupPOSPage extends StatefulWidget {
   SetupObj setup;
 
@@ -221,10 +223,19 @@ class __FormContentState extends State<_FormContent> {
                     widget.setup.faturacao = _selectedDocInvoice!;
                     widget.setup.reembolso = _selectedDocRefund!;
                     widget.setup.contaCorrente = _selectedDocCurrentAccount!;
+
+                    print(database.getAllSetup().length);
+                    if (database.getAllSetup().isEmpty) {
+                      await database.addSetup(widget.setup);
+                      print('Não tinha setup');
+                    } else {
+                      print('Tenho setup e não criei outro');
+                    }
+                    print(database.getAllSetup().length);
+
                     Navigator.of(context).pushAndRemoveUntil(
                         MaterialPageRoute(
                             builder: (BuildContext context) => LoginPage(
-                                  setup: widget.setup,
                                 )),
                         (route) => false);
                   } else {

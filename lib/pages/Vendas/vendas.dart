@@ -14,8 +14,9 @@ import '../categorias.dart';
 import '../Configuracoes/configuracoes.dart';
 
 class VendasPage extends StatelessWidget {
-  List<VendaObj> vendas = database.getAllVendas();
-  TurnoObj turno = database.getAllTurnos()[0];
+  List<VendaObj> vendas = database.getAllVendas()
+    ..sort((a, b) => b.hora.compareTo(a.hora));
+  TurnoObj turno = database.getAllTurno()[0];
   SetupObj setup = database.getAllSetup()[0];
 
   VendasPage({Key? key}) : super(key: key);
@@ -31,7 +32,7 @@ class VendasPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              database.getUtilizador(setup.utilizadorID)!.nome,
+              database.getUtilizador(turno.funcionarioID)!.nome,
               style: const TextStyle(fontSize: 24, color: Colors.white),
             ),
             Text(
@@ -160,95 +161,105 @@ class VendasPage extends StatelessWidget {
           const SizedBox(
             height: 20,
           ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: vendas.length,
-              itemBuilder: (context, index) {
-                return Container(
-                    margin: const EdgeInsets.symmetric(
-                        vertical: 10, horizontal: 20),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        // entrar dentro da venda
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => VendaPage(
-                                  vendas: vendas,
-                                  categorias: [],
-                                  artigos: [],
-                                  venda: vendas[index],
-                                )));
-                      },
-                      style: ButtonStyle(
-                        side: MaterialStateProperty.all(
-                            const BorderSide(color: Colors.black)),
-                        // Linha de borda preta
-                        backgroundColor:
-                            MaterialStateProperty.all(Colors.white),
-                        // Fundo white
-                        fixedSize:
-                            MaterialStateProperty.all(const Size(300, 80)),
-                        // Tamanho fixo de 270x80
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
-                      ),
-                      child: Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              // Alinha a Row horizontalmente ao centro
-                              children: [
-                                Text(
-                                  DateFormat('dd/MM/yyyy HH:mm')
-                                      .format(vendas[index].hora),
-                                  // Convertendo DateTime para string formatada
-                                  style: const TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 18,
-                                  ),
+          vendas.isEmpty
+              ? const Expanded(
+                  child: Center(child: Text('Não existem vendas concluídas')))
+              : Expanded(
+                  child: ListView.builder(
+                    itemCount: vendas.length,
+                    itemBuilder: (context, index) {
+                      return Container(
+                          margin: const EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 20),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              // entrar dentro da venda
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => VendaPage(
+                                        vendas: vendas,
+                                        categorias: [],
+                                        artigos: [],
+                                        venda: vendas[index],
+                                      )));
+                            },
+                            style: ButtonStyle(
+                              side: MaterialStateProperty.all(
+                                  const BorderSide(color: Colors.black)),
+                              // Linha de borda preta
+                              backgroundColor:
+                                  MaterialStateProperty.all(Colors.white),
+                              // Fundo white
+                              fixedSize: MaterialStateProperty.all(
+                                  const Size(300, 80)),
+                              // Tamanho fixo de 270x80
+                              shape: MaterialStateProperty.all<
+                                  RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
                                 ),
-                                const SizedBox(
-                                  width: 4,
-                                ),
-                                Text(
-                                  'Total: ${vendas[index].total.toStringAsFixed(2)} €',
-                                  style: const TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 18,
-                                  ),
-                                ),
-                              ],
+                              ),
                             ),
-                            const SizedBox(height: 5),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              // Alinha a Row horizontalmente ao centro
-                              children: [
-                                Text(
-                                  'FT XPTO/158',
-                                  style: const TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 18,
+                            child: Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    // Alinha a Row horizontalmente ao centro
+                                    children: [
+                                      Text(
+                                        DateFormat('dd/MM/yyyy HH:mm')
+                                            .format(vendas[index].hora),
+                                        // Convertendo DateTime para string formatada
+                                        style: const TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 18,
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        width: 4,
+                                      ),
+                                      Text(
+                                        'Total: ${vendas[index].total.toStringAsFixed(2)} €',
+                                        style: const TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 18,
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ),
-                                if (vendas[index].anulada)
-                                const Text('ANULADO', style: TextStyle(color: Colors.red, fontSize: 18,),),
-
-                              ],
+                                  const SizedBox(height: 5),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    // Alinha a Row horizontalmente ao centro
+                                    children: [
+                                      Text(
+                                        'FT XPTO/158',
+                                        style: const TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 18,
+                                        ),
+                                      ),
+                                      if (vendas[index].anulada)
+                                        const Text(
+                                          'ANULADO',
+                                          style: TextStyle(
+                                            color: Colors.red,
+                                            fontSize: 18,
+                                          ),
+                                        ),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
-                          ],
-                        ),
-                      ),
-                    ));
-              },
-            ),
-          ),
+                          ));
+                    },
+                  ),
+                ),
         ],
       ),
     );

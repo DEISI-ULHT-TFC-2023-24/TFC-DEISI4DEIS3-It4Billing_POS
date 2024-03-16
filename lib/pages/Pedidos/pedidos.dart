@@ -21,7 +21,7 @@ import '../Vendas/vendas.dart';
 
 class PedidosPage extends StatefulWidget {
   List<PedidoObj> pedidos = database.getAllPedidos();
-  TurnoObj turno = database.getAllTurnos()[0];
+  TurnoObj turno = database.getAllTurno()[0];
   SetupObj setup = database.getAllSetup()[0];
 
   List<String> metodosPagamento = ['DINHEIRO', 'MULTIBANCO', 'MB WAY'];
@@ -53,7 +53,7 @@ class _PedidosPage extends State<PedidosPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              database.getUtilizador(widget.setup.utilizadorID)!.nome,
+              database.getUtilizador(widget.setup.funcionarioId)!.nome,
               style: const TextStyle(fontSize: 24, color: Colors.white),
             ),
             Text(
@@ -159,10 +159,6 @@ class _PedidosPage extends State<PedidosPage> {
     }
   }
 
-
-
-
-
   Future<bool?> showMyDialog(BuildContext context) => showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
@@ -170,7 +166,7 @@ class _PedidosPage extends State<PedidosPage> {
             actions: [
               TextButton(
                   onPressed: () => Navigator.pop(context, false),
-                  child: const Text('CANCELAR')),
+                  child: const Text('NÃO')),
               TextButton(
                   onPressed: () {
                     exit(0);
@@ -188,6 +184,7 @@ class _PedidosPage extends State<PedidosPage> {
       database.putDemoLocais();
     }
   }
+
   void carregarClientes() {
     if (database.getAllClientes().isEmpty) {
       database.putDemoClientes();
@@ -223,15 +220,8 @@ class _PedidosPage extends State<PedidosPage> {
     }
   }
 
-  Future<void> carregarUsers() async {
-    if (database.getAllUtilizadores().isEmpty) {
-      await database.putDemoUsers();
-    }
-    ;
-  }
-
   void carregarTurno() {
-    widget.turno = database.getAllTurnos()[0];
+    widget.turno = database.getAllTurno()[0];
   }
 
   @override
@@ -332,89 +322,102 @@ class _PedidosPage extends State<PedidosPage> {
                           ),
                         )),
                   ),
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: widget.pedidos.length,
-                      itemBuilder: (context, index) {
-                        return Container(
-                            margin: const EdgeInsets.symmetric(
-                                vertical: 10, horizontal: 50),
-                            child: ElevatedButton(
-                              onPressed: () {
-                                // entrar dentro do pedido ainda aberto
-                                print(widget.pedidos[index].nrArtigos);
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => PedidoAbertoPage(
-                                              artigos: database.getAllArtigos(),
-                                              categorias:
-                                                  database.getAllCategorias(),
-                                              pedidos: widget.pedidos,
-                                              pedido: widget.pedidos[index],
-                                            )));
-                              },
-                              style: ButtonStyle(
-                                side: MaterialStateProperty.all(
-                                    const BorderSide(color: Colors.black)),
-                                // Linha de borda preta
-                                backgroundColor:
-                                    MaterialStateProperty.all(Colors.white),
-                                // Fundo white
-                                fixedSize: MaterialStateProperty.all(
-                                    const Size(300, 80)),
-                                // Tamanho fixo de 270x80
-                                shape: MaterialStateProperty.all<
-                                    RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                ),
-                              ),
-                              child: Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  // Centraliza verticalmente
-                                  //crossAxisAlignment: CrossAxisAlignment.center, // Centraliza horizontalmente
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      // Alinha a Row horizontalmente ao centro
-                                      children: [
-                                        Text(
-                                          database
-                                              .getLocal(widget
-                                                  .pedidos[index].localId)!
-                                              .nome,
-                                          style: const TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold,
-                                          ),
+                  widget.pedidos.isEmpty
+                      ? const Expanded(
+                          child: Center(
+                              child: Text('Não existem pedidos abertos')))
+                      : Expanded(
+                          child: ListView.builder(
+                            itemCount: widget.pedidos.length,
+                            itemBuilder: (context, index) {
+                              return Container(
+                                  margin: const EdgeInsets.symmetric(
+                                      vertical: 10, horizontal: 50),
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      // entrar dentro do pedido ainda aberto
+                                      print(widget.pedidos[index].nrArtigos);
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  PedidoAbertoPage(
+                                                    artigos: database
+                                                        .getAllArtigos(),
+                                                    categorias: database
+                                                        .getAllCategorias(),
+                                                    pedidos: widget.pedidos,
+                                                    pedido:
+                                                        widget.pedidos[index],
+                                                  )));
+                                    },
+                                    style: ButtonStyle(
+                                      side: MaterialStateProperty.all(
+                                          const BorderSide(
+                                              color: Colors.black)),
+                                      // Linha de borda preta
+                                      backgroundColor:
+                                          MaterialStateProperty.all(
+                                              Colors.white),
+                                      // Fundo white
+                                      fixedSize: MaterialStateProperty.all(
+                                          const Size(300, 80)),
+                                      // Tamanho fixo de 270x80
+                                      shape: MaterialStateProperty.all<
+                                          RoundedRectangleBorder>(
+                                        RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(12),
                                         ),
-                                        Text(
-                                          'Total: ${widget.pedidos[index].total.toStringAsFixed(2)} €',
-                                          style: const TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 18,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Text('Funcionario: ${database.getUtilizador(widget.pedidos[index].funcionarioID)?.nome}',
-                                      style: const TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 18,
                                       ),
                                     ),
-                                  ],
-                                ),
-                              ),
-                            ));
-                      },
-                    ),
-                  ),
+                                    child: Center(
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        // Centraliza verticalmente
+                                        //crossAxisAlignment: CrossAxisAlignment.center, // Centraliza horizontalmente
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            // Alinha a Row horizontalmente ao centro
+                                            children: [
+                                              Text(
+                                                database
+                                                    .getLocal(widget
+                                                        .pedidos[index]
+                                                        .localId)!
+                                                    .nome,
+                                                style: const TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                              Text(
+                                                'Total: ${widget.pedidos[index].total.toStringAsFixed(2)} €',
+                                                style: const TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 18,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          Text(
+                                            'Funcionario: ${database.getUtilizador(widget.pedidos[index].funcionarioID)?.nome}',
+                                            style: const TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 18,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ));
+                            },
+                          ),
+                        ),
                 ],
               )
             : Center(

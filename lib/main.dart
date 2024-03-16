@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
       }
     }
 
-    pagina = '/vendas'; /// TESTES
+    pagina = '/pedidos'; /// TESTES
 
     return MaterialApp(
       title: 'it4billing_pos',
@@ -50,9 +50,7 @@ class MyApp extends StatelessWidget {
       // Trocar depois quando funcionar bem
       routes: {
         '/setupPage': (context) => const SetupPage(),
-        '/loginPage': (context) => LoginPage(
-              setup: SetupObj(),
-            ),
+        '/loginPage': (context) => LoginPage(),
         '/cofig': (context) => ConfiguracoesPage(),
         '/pedidos': (context) => PedidosPage(),
         '/turno': (context) => TurnosPage(),
