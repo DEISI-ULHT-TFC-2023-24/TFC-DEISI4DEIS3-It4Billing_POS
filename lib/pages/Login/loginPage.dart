@@ -35,7 +35,6 @@ class _LoginPageState extends State<LoginPage> {
                   _Logo(
                     setup: widget.setup,
                   ),
-
                   _FormContent(
                     setup: widget.setup,
                   ),
@@ -130,7 +129,8 @@ class __FormContentState extends State<_FormContent> {
           children: [
             TextFormField(
               controller: _pinController,
-              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              keyboardType:
+                  const TextInputType.numberWithOptions(decimal: true),
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Introduzir o PIN';
@@ -190,35 +190,30 @@ class __FormContentState extends State<_FormContent> {
 
                     bool pinFound = false; // Variável para verificar se o PIN foi encontrado
 
-                    //for (int i = 0; i < database.getAllUtilizadores().length; i++) {
-                    //  if (database.getAllUtilizadores()[i].pin == int.parse(_pinController.text)) {
-//
-                    //    widget.setup.funcionarioId = database.getAllUtilizadores()[i].id;
-                    //    await database.addSetup(widget.setup);
-                    //    await criarTurno();
-                    //    Navigator.of(context).pushAndRemoveUntil(
-                    //      MaterialPageRoute(
-                    //        builder: (BuildContext context) => PedidosPage(),
-                    //      ),
-                    //      (route) => false,
-                    //    );
-                    //    pinFound = true; // Define como true se o PIN for encontrado
-                    //    break;
-//
-                    //  }
-                    //}
+                    for (int i = 0; i < database.getAllUtilizadores().length; i++) {
+                      if (database.getAllUtilizadores()[i].pin == int.parse(_pinController.text)) {
+                        widget.setup.funcionarioId = database.getAllUtilizadores()[i].id;
+                        await database.addSetup(widget.setup);
+                        await criarTurno();
+                        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => PedidosPage(),),(route) => false,);
+                        pinFound = true; // Define como true se o PIN for encontrado
+                        break;
+                      }
+                    }
+
                     ///PORQUÊ???
 
-                    widget.setup.funcionarioId = database.getAllUtilizadores()[0].id;
-                    await database.addSetup(widget.setup);
-                    await criarTurno();
-                    Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(
-                        builder: (BuildContext context) => PedidosPage(),
-                      ),
-                          (route) => false,
-                    );
-                    pinFound = true; // Define como true se o PIN for encontrado
+                    //widget.setup.funcionarioId =
+                    //    database.getAllUtilizadores()[0].id;
+                    //await database.addSetup(widget.setup);
+                    //await criarTurno();
+                    //Navigator.of(context).pushAndRemoveUntil(
+                    //  MaterialPageRoute(
+                    //    builder: (BuildContext context) => PedidosPage(),
+                    //  ),
+                    //  (route) => false,
+                    //);
+                    //pinFound = true; // Define como true se o PIN for encontrado
 
                     if (!pinFound) {
                       // Se o PIN não for encontrado, mostra o SnackBar

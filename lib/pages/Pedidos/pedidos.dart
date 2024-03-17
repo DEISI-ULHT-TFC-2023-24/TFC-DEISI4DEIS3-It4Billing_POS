@@ -263,17 +263,18 @@ class _PedidosPage extends State<PedidosPage> {
         body: widget.turno.turnoAberto
             ? Column(
                 children: [
-                  ElevatedButton(
-                      onPressed: () {
-                        setState(() {
-                          database.removeAllPedidos();
-                          carregarPedidos();
-                          database.removeAllVendas();
-                          //database.removeAllArtigos();
-                          //database.removeAllCategorias();
-                        });
-                      },
-                      child: const Text('Limpar a lista para testes-')),
+                  //ElevatedButton(
+                  //    onPressed: () {
+                  //      setState(() {
+                  //        database.removeAllPedidos();
+                  //        carregarPedidos();
+                  //        database.removeAllVendas();
+                  //        //database.removeAllArtigos();
+                  //        //database.removeAllCategorias();
+                  //      });
+                  //    },
+                  //    child: const Text('Limpar a lista para testes-')
+                  //),
                   Padding(
                     padding: EdgeInsets.only(
                       top: 20 + MediaQuery.of(context).padding.top,
