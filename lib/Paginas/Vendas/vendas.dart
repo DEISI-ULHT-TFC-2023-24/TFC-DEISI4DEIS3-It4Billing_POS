@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:it4billing_pos/pages/Vendas/venda.dart';
-import 'package:it4billing_pos/pages/artigos.dart';
-import 'package:it4billing_pos/pages/Turnos/turno.dart';
+import 'package:it4billing_pos/Paginas/Vendas/venda.dart';
+import 'package:it4billing_pos/Paginas/artigos.dart';
+import 'package:it4billing_pos/Paginas/Turnos/turno.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../main.dart';
 import '../../objetos/VendaObj.dart';
@@ -32,7 +32,7 @@ class VendasPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              database.getUtilizador(turno.funcionarioID)!.nome,
+              database.getFuncionario(turno.funcionarioID)!.nome,
               style: const TextStyle(fontSize: 24, color: Colors.white),
             ),
             Text(

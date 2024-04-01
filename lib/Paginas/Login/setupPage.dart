@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:it4billing_pos/main.dart';
 import 'package:it4billing_pos/objetos/setupObj.dart';
-import 'package:it4billing_pos/pages/Login/setupPOSPage.dart';
+import 'package:it4billing_pos/Paginas/Login/setupPOSPage.dart';
 
 class SetupPage extends StatefulWidget {
   const SetupPage({Key? key}) : super(key: key);
@@ -117,7 +117,7 @@ class __FormContentState extends State<_FormContent> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   Future<void> carregarUsers() async {
-    if (database.getAllUtilizadores().isEmpty) {
+    if (database.getAllFuncionarios().isEmpty) {
       await database.putDemoUsers();
     }
   }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:it4billing_pos/pages/artigos.dart';
-import 'package:it4billing_pos/pages/Turnos/turno.dart';
-import 'package:it4billing_pos/pages/Vendas/vendas.dart';
+import 'package:it4billing_pos/Paginas/artigos.dart';
+import 'package:it4billing_pos/Paginas/Turnos/turno.dart';
+import 'package:it4billing_pos/Paginas/Vendas/vendas.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../main.dart';
 import '../../objetos/VendaObj.dart';
@@ -108,7 +108,7 @@ class _ConfiguracoesPageState extends State<ConfiguracoesPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          database.getUtilizador(setup.funcionarioId)!.nome,
+          database.getFuncionario(setup.funcionarioId)!.nome,
           style: const TextStyle(fontSize: 24, color: Colors.white),
         ),
         Text(

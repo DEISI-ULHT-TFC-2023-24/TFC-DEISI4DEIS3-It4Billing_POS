@@ -1,34 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:it4billing_pos/pages/Pedidos/concluirPedido.dart';
-import 'package:it4billing_pos/pages/Pedidos/dividirConta.dart';
-import 'package:it4billing_pos/pages/Pedidos/pedidos.dart';
 
 import '../../main.dart';
-import '../../objetos/artigoObj.dart';
-import '../../objetos/categoriaObj.dart';
 import '../../objetos/metodoPagamentoObj.dart';
 import '../../objetos/pedidoObj.dart';
-import '../../objetos/turnoObj.dart';
 import '../Cliente/addClientePage.dart';
+import 'concluirCobrancaDividida.dart';
 
-class Cobrar extends StatefulWidget {
-  late List<PedidoObj> pedidos = [];
-  late List<Artigo> artigos = [];
+class CobrarDivididoPage extends StatefulWidget {
   late PedidoObj pedido;
-  late TurnoObj turno  =database.getAllTurno()[0];
+  double valorCobrar;
 
-  Cobrar({
+
+  CobrarDivididoPage({
     Key? key,
-    required this.pedidos,
-    required this.artigos,
+    required this.valorCobrar,
     required this.pedido,
   }) : super(key: key);
 
   @override
-  _Cobrar createState() => _Cobrar();
+  _CobrarDivididoPage createState() => _CobrarDivididoPage();
 }
 
-class _Cobrar extends State<Cobrar> {
+class _CobrarDivididoPage extends State<CobrarDivididoPage> {
   List<MetodoPagamentoObj> metodos = database.getAllMetodosPagamento();
   final FocusNode _focusNode = FocusNode();
 
@@ -40,9 +33,9 @@ class _Cobrar extends State<Cobrar> {
   void initState() {
     super.initState();
     _dinheiroRecebidoController.text =
-        widget.pedido.calcularValorTotal().toStringAsFixed(2);
+        widget.valorCobrar.toStringAsFixed(2);
     _trocoController.text =
-        (double.parse(_dinheiroRecebidoController.text) - double.parse(widget.pedido.calcularValorTotal().toStringAsFixed(2))).toStringAsFixed(2);
+        (double.parse(_dinheiroRecebidoController.text) - double.parse(widget.valorCobrar.toStringAsFixed(2))).toStringAsFixed(2);
     _focusNode.addListener(_onFocusChanged);
 
   }
@@ -59,7 +52,7 @@ class _Cobrar extends State<Cobrar> {
     if (!_focusNode.hasFocus) {
       setState(() {
         _trocoController.text =
-            (double.parse(_dinheiroRecebidoController.text) - widget.pedido.calcularValorTotal()).toStringAsFixed(2);
+            (double.parse(_dinheiroRecebidoController.text) - widget.valorCobrar).toStringAsFixed(2);
 
       });
     }
@@ -67,7 +60,7 @@ class _Cobrar extends State<Cobrar> {
 
   bool _toggleVisibility(){
     bool isVisible = false;
-    if ((double.parse(_dinheiroRecebidoController.text) - double.parse(widget.pedido.calcularValorTotal().toStringAsFixed(2))) >= 0){
+    if ((double.parse(_dinheiroRecebidoController.text) - double.parse(widget.valorCobrar.toStringAsFixed(2))) >= 0){
       isVisible = true;
     }
     return isVisible;
@@ -83,6 +76,13 @@ class _Cobrar extends State<Cobrar> {
         appBar: AppBar(
           title: Text(widget.pedido.nome),
           backgroundColor: const Color(0xff00afe9),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back), // Ícone padrão de voltar
+            onPressed: () {
+              // Navegar para a página anterior
+              Navigator.pop(context, false);
+            },
+          ),
           actions: [
             IconButton(
               icon: const Icon(Icons.person_add_outlined),
@@ -91,8 +91,9 @@ class _Cobrar extends State<Cobrar> {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => AdicionarClientePage(
                         pedido: widget.pedido,
-                        pedidos: widget.pedidos,
-                        artigos: widget.artigos)));
+                        pedidos: database.getAllPedidos(),
+                        artigos: database.getAllArtigos())
+                ));
               },
             ),
           ],
@@ -113,7 +114,7 @@ class _Cobrar extends State<Cobrar> {
                           fontWeight: FontWeight.bold,
                         )),
                     Text(
-                        '${widget.pedido.calcularValorTotal().toStringAsFixed(2)} €',
+                        '${widget.valorCobrar.toStringAsFixed(2)} €',
                         style: const TextStyle(
                           color: Colors.black,
                           fontSize: 22,
@@ -134,7 +135,7 @@ class _Cobrar extends State<Cobrar> {
                       decoration: InputDecoration(
                         labelText: 'Dinheiro Recebido',
                         labelStyle: const TextStyle(color: Color(0xff00afe9),fontSize: 14),
-                        hintText: widget.pedido.calcularValorTotal().toStringAsFixed(2),
+                        hintText: widget.valorCobrar.toStringAsFixed(2),
                       ),
                     ),
                   ),
@@ -157,37 +158,6 @@ class _Cobrar extends State<Cobrar> {
               _toggleVisibility() ? SizedBox(
                 child: Column(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.only(right: 20.0),
-                      child: SizedBox(
-                        height: 50,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            // fazer a navegação para a DIVIDIR CONTA.
-
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => DividirConta(pedido: widget.pedido, pedidos: widget.pedidos,)));
-
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              side: const BorderSide(color: Colors.black),
-                            ),
-                          ),
-                          child: const Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 20.0),
-                            child: Text(
-                              'DIVIDIR CONTA',
-                              style: TextStyle(color: Colors.black, fontSize: 16),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ), //DIVIDIR CONTA
                     const SizedBox(height: 30),
                     const Center(
                       child: Text('Selecione um método de pagamento:',
@@ -211,19 +181,16 @@ class _Cobrar extends State<Cobrar> {
                                   double dinheiroRecebido = double.parse(_dinheiroRecebidoController.text);
                                   double troco = double.parse(_trocoController.text);
                                   metodos[index].valor += dinheiroRecebido - troco;
-                                  if (metodos[index].nome.toLowerCase() == 'dinheiro' ){
-                                    widget.turno.pagamentosDinheiro = metodos[index].valor;
-                                    database.addTurno(widget.turno);
-                                  }
                                   database.addMetodoPagamento(metodos[index]);
 
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => ConcluirPedido(
+                                          builder: (context) => ConcluirCobrancaDivididaPage(
                                             pedido: widget.pedido,
                                             troco: _trocoController.text,
-                                          )));
+                                          )
+                                      ));
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.white,

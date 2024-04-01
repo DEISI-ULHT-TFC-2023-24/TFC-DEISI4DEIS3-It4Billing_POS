@@ -1,25 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:it4billing_pos/pages/Configuracoes/configuracoes.dart';
-import 'package:it4billing_pos/pages/Login/loginPage.dart';
-import 'package:it4billing_pos/pages/Turnos/turnoFechado.dart';
-import 'package:it4billing_pos/pages/artigos.dart';
-import 'package:it4billing_pos/pages/categorias.dart';
-import 'package:it4billing_pos/pages/Login/setupPage.dart';
-import 'package:it4billing_pos/pages/Vendas/vendas.dart';
-import 'package:it4billing_pos/pages/Turnos/turno.dart';
-import 'package:it4billing_pos/pages/Pedidos/pedidos.dart';
+import 'package:it4billing_pos/Paginas/Configuracoes/configuracoes.dart';
+import 'package:it4billing_pos/Paginas/Login/loginPage.dart';
+import 'package:it4billing_pos/Paginas/Turnos/turnoFechado.dart';
+import 'package:it4billing_pos/Paginas/artigos.dart';
+import 'package:it4billing_pos/Paginas/categorias.dart';
+import 'package:it4billing_pos/Paginas/Login/setupPage.dart';
+import 'package:it4billing_pos/Paginas/Vendas/vendas.dart';
+import 'package:it4billing_pos/Paginas/Turnos/turno.dart';
+import 'package:it4billing_pos/Paginas/Pedidos/pedidos.dart';
 import 'dart:async';
 import 'database/objectbox_database.dart';
 
 late ObjectBoxDatabase database;
 
 Future<void> main() async {
-  // This is required so ObjectBox can get the application directory
-  // to store the database in.
+  // Isso é necessário para que a ObjectBox possa obter o diretório da aplicação
+  // para armazenar o banco de dados.
   WidgetsFlutterBinding.ensureInitialized();
-
   database = await ObjectBoxDatabase.create();
-
   runApp(const MyApp());
 }
 

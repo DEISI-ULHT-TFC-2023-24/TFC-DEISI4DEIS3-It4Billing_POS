@@ -190,9 +190,9 @@ class __FormContentState extends State<_FormContent> {
 
                     bool pinFound = false; // Variável para verificar se o PIN foi encontrado
 
-                    for (int i = 0; i < database.getAllUtilizadores().length; i++) {
-                      if (database.getAllUtilizadores()[i].pin == int.parse(_pinController.text)) {
-                        widget.setup.funcionarioId = database.getAllUtilizadores()[i].id;
+                    for (int i = 0; i < database.getAllFuncionarios().length; i++) {
+                      if (database.getAllFuncionarios()[i].pin == int.parse(_pinController.text)) {
+                        widget.setup.funcionarioId = database.getAllFuncionarios()[i].id;
                         await database.addSetup(widget.setup);
                         await criarTurno();
                         Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => PedidosPage(),),(route) => false,);

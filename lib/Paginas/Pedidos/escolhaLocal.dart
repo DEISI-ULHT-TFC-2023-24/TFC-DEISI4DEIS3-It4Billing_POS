@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:it4billing_pos/main.dart';
 import 'package:it4billing_pos/objetos/localObj.dart';
-import 'package:it4billing_pos/pages/Pedidos/pedidos.dart';
+import 'package:it4billing_pos/Paginas/Pedidos/pedidos.dart';
 
 import '../../objetos/pedidoObj.dart';
 

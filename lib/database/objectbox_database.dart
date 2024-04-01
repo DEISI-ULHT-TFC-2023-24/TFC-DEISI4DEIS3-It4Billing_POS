@@ -214,24 +214,24 @@ class ObjectBoxDatabase {
   }
 
   ///---------------------------------------------------------
-  // Funções para adicionar e manipular funcionarios
-  Future<void> addUtilizador(Utilizador utilizador) async {
+  // Funções para adicionar e manipular funcionários
+  Future<void> addFuncionario(Utilizador utilizador) async {
     await _utilizadoresBox.put(utilizador);
   }
 
-  Utilizador? getUtilizador(int id) {
+  Utilizador? getFuncionario(int id) {
     return _utilizadoresBox.get(id);
   }
 
-  bool containUtilizador(int id) {
+  bool containFuncionario(int id) {
     return _utilizadoresBox.contains(id);
   }
 
-  List<Utilizador> getAllUtilizadores() {
+  List<Utilizador> getAllFuncionarios() {
     return _utilizadoresBox.getAll();
   }
 
-  Future<void> removeAlUtilizadores() async {
+  Future<void> removeAllFuncionarios() async {
     await _utilizadoresBox.removeAll();
   }
 

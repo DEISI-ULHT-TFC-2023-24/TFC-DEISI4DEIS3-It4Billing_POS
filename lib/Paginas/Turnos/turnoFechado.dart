@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:it4billing_pos/main.dart';
 import 'package:it4billing_pos/objetos/turnoObj.dart';
-import 'package:it4billing_pos/pages/Turnos/turno.dart';
+import 'package:it4billing_pos/Paginas/Turnos/turno.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../objetos/setupObj.dart';
@@ -28,7 +28,7 @@ class TurnoFechado extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          database.getUtilizador(setup.funcionarioId)!.nome,
+          database.getFuncionario(setup.funcionarioId)!.nome,
           style: const TextStyle(fontSize: 24, color: Colors.white),
         ),
         Text(

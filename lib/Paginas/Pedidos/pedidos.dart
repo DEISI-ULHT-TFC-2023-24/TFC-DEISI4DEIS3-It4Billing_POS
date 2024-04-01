@@ -5,8 +5,8 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'package:it4billing_pos/objetos/setupObj.dart';
 import 'package:it4billing_pos/objetos/turnoObj.dart';
-import 'package:it4billing_pos/pages/Pedidos/pedido.dart';
-import 'package:it4billing_pos/pages/Pedidos/pedidoAberto.dart';
+import 'package:it4billing_pos/Paginas/Pedidos/pedido.dart';
+import 'package:it4billing_pos/Paginas/Pedidos/pedidoAberto.dart';
 import 'package:it4billing_pos/objetos/pedidoObj.dart';
 import 'package:it4billing_pos/objetos/artigoObj.dart';
 import 'package:it4billing_pos/objetos/categoriaObj.dart';
@@ -48,7 +48,7 @@ class _PedidosPage extends State<PedidosPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              database.getUtilizador(widget.setup.funcionarioId)!.nome,
+              database.getFuncionario(widget.setup.funcionarioId)!.nome,
               style: const TextStyle(fontSize: 24, color: Colors.white),
             ),
             Text(
@@ -401,7 +401,7 @@ class _PedidosPage extends State<PedidosPage> {
                                             ],
                                           ),
                                           Text(
-                                            'Funcionario: ${database.getUtilizador(widget.pedidos[index].funcionarioID)?.nome}',
+                                            'Funcionario: ${database.getFuncionario(widget.pedidos[index].funcionarioID)?.nome}',
                                             style: const TextStyle(
                                               color: Colors.black,
                                               fontSize: 18,

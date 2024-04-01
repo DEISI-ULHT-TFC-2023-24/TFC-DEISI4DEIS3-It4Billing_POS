@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:it4billing_pos/pages/Pedidos/pedidos.dart';
+import 'package:it4billing_pos/Paginas/Pedidos/pedidos.dart';
 
 import '../../main.dart';
 import '../../objetos/VendaObj.dart';

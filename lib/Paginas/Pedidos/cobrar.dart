@@ -1,30 +1,32 @@
 import 'package:flutter/material.dart';
-import 'package:it4billing_pos/pages/Pedidos/pedidos.dart';
+import 'package:it4billing_pos/Paginas/Pedidos/concluirPedido.dart';
+import 'package:it4billing_pos/Paginas/Pedidos/dividirConta.dart';
 
 import '../../main.dart';
 import '../../objetos/artigoObj.dart';
-import '../../objetos/categoriaObj.dart';
 import '../../objetos/metodoPagamentoObj.dart';
 import '../../objetos/pedidoObj.dart';
+import '../../objetos/turnoObj.dart';
 import '../Cliente/addClientePage.dart';
-import 'concluirCobrancaDividida.dart';
 
-class CobrarDivididoPage extends StatefulWidget {
+class Cobrar extends StatefulWidget {
+  late List<PedidoObj> pedidos = [];
+  late List<Artigo> artigos = [];
   late PedidoObj pedido;
-  double valorCobrar;
+  late TurnoObj turno  =database.getAllTurno()[0];
 
-
-  CobrarDivididoPage({
+  Cobrar({
     Key? key,
-    required this.valorCobrar,
+    required this.pedidos,
+    required this.artigos,
     required this.pedido,
   }) : super(key: key);
 
   @override
-  _CobrarDivididoPage createState() => _CobrarDivididoPage();
+  _Cobrar createState() => _Cobrar();
 }
 
-class _CobrarDivididoPage extends State<CobrarDivididoPage> {
+class _Cobrar extends State<Cobrar> {
   List<MetodoPagamentoObj> metodos = database.getAllMetodosPagamento();
   final FocusNode _focusNode = FocusNode();
 
@@ -36,9 +38,9 @@ class _CobrarDivididoPage extends State<CobrarDivididoPage> {
   void initState() {
     super.initState();
     _dinheiroRecebidoController.text =
-        widget.valorCobrar.toStringAsFixed(2);
+        widget.pedido.calcularValorTotal().toStringAsFixed(2);
     _trocoController.text =
-        (double.parse(_dinheiroRecebidoController.text) - double.parse(widget.valorCobrar.toStringAsFixed(2))).toStringAsFixed(2);
+        (double.parse(_dinheiroRecebidoController.text) - double.parse(widget.pedido.calcularValorTotal().toStringAsFixed(2))).toStringAsFixed(2);
     _focusNode.addListener(_onFocusChanged);
 
   }
@@ -55,7 +57,7 @@ class _CobrarDivididoPage extends State<CobrarDivididoPage> {
     if (!_focusNode.hasFocus) {
       setState(() {
         _trocoController.text =
-            (double.parse(_dinheiroRecebidoController.text) - widget.valorCobrar).toStringAsFixed(2);
+            (double.parse(_dinheiroRecebidoController.text) - widget.pedido.calcularValorTotal()).toStringAsFixed(2);
 
       });
     }
@@ -63,7 +65,7 @@ class _CobrarDivididoPage extends State<CobrarDivididoPage> {
 
   bool _toggleVisibility(){
     bool isVisible = false;
-    if ((double.parse(_dinheiroRecebidoController.text) - double.parse(widget.valorCobrar.toStringAsFixed(2))) >= 0){
+    if ((double.parse(_dinheiroRecebidoController.text) - double.parse(widget.pedido.calcularValorTotal().toStringAsFixed(2))) >= 0){
       isVisible = true;
     }
     return isVisible;
@@ -79,13 +81,6 @@ class _CobrarDivididoPage extends State<CobrarDivididoPage> {
         appBar: AppBar(
           title: Text(widget.pedido.nome),
           backgroundColor: const Color(0xff00afe9),
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back), // Ícone padrão de voltar
-            onPressed: () {
-              // Navegar para a página anterior
-              Navigator.pop(context, false);
-            },
-          ),
           actions: [
             IconButton(
               icon: const Icon(Icons.person_add_outlined),
@@ -94,9 +89,8 @@ class _CobrarDivididoPage extends State<CobrarDivididoPage> {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => AdicionarClientePage(
                         pedido: widget.pedido,
-                        pedidos: database.getAllPedidos(),
-                        artigos: database.getAllArtigos())
-                ));
+                        pedidos: widget.pedidos,
+                        artigos: widget.artigos)));
               },
             ),
           ],
@@ -117,7 +111,7 @@ class _CobrarDivididoPage extends State<CobrarDivididoPage> {
                           fontWeight: FontWeight.bold,
                         )),
                     Text(
-                        '${widget.valorCobrar.toStringAsFixed(2)} €',
+                        '${widget.pedido.calcularValorTotal().toStringAsFixed(2)} €',
                         style: const TextStyle(
                           color: Colors.black,
                           fontSize: 22,
@@ -138,7 +132,7 @@ class _CobrarDivididoPage extends State<CobrarDivididoPage> {
                       decoration: InputDecoration(
                         labelText: 'Dinheiro Recebido',
                         labelStyle: const TextStyle(color: Color(0xff00afe9),fontSize: 14),
-                        hintText: widget.valorCobrar.toStringAsFixed(2),
+                        hintText: widget.pedido.calcularValorTotal().toStringAsFixed(2),
                       ),
                     ),
                   ),
@@ -161,6 +155,37 @@ class _CobrarDivididoPage extends State<CobrarDivididoPage> {
               _toggleVisibility() ? SizedBox(
                 child: Column(
                   children: [
+                    Padding(
+                      padding: const EdgeInsets.only(right: 20.0),
+                      child: SizedBox(
+                        height: 50,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            // fazer a navegação para a DIVIDIR CONTA.
+
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => DividirConta(pedido: widget.pedido, pedidos: widget.pedidos,)));
+
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              side: const BorderSide(color: Colors.black),
+                            ),
+                          ),
+                          child: const Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 20.0),
+                            child: Text(
+                              'DIVIDIR CONTA',
+                              style: TextStyle(color: Colors.black, fontSize: 16),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ), //DIVIDIR CONTA
                     const SizedBox(height: 30),
                     const Center(
                       child: Text('Selecione um método de pagamento:',
@@ -184,16 +209,19 @@ class _CobrarDivididoPage extends State<CobrarDivididoPage> {
                                   double dinheiroRecebido = double.parse(_dinheiroRecebidoController.text);
                                   double troco = double.parse(_trocoController.text);
                                   metodos[index].valor += dinheiroRecebido - troco;
+                                  if (metodos[index].nome.toLowerCase() == 'dinheiro' ){
+                                    widget.turno.pagamentosDinheiro = metodos[index].valor;
+                                    database.addTurno(widget.turno);
+                                  }
                                   database.addMetodoPagamento(metodos[index]);
 
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => ConcluirCobrancaDivididaPage(
+                                          builder: (context) => ConcluirPedido(
                                             pedido: widget.pedido,
                                             troco: _trocoController.text,
-                                          )
-                                      ));
+                                          )));
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.white,

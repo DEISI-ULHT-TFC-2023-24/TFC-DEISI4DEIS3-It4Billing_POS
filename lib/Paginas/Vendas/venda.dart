@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:it4billing_pos/main.dart';
 import 'package:it4billing_pos/objetos/VendaObj.dart';
-import 'package:it4billing_pos/pages/Pedidos/pedidos.dart';
-import 'package:it4billing_pos/pages/Vendas/vendas.dart';
+import 'package:it4billing_pos/Paginas/Pedidos/pedidos.dart';
+import 'package:it4billing_pos/Paginas/Vendas/vendas.dart';
 
 import '../../objetos/artigoObj.dart';
 import '../../objetos/categoriaObj.dart';
-import '../../objetos/pedidoObj.dart';
 import '../../objetos/setupObj.dart';
 
 class VendaPage extends StatefulWidget {

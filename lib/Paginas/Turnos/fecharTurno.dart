@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:it4billing_pos/objetos/metodoPagamentoObj.dart';
-import 'package:it4billing_pos/pages/Turnos/turnoFechado.dart';
+import 'package:it4billing_pos/Paginas/Turnos/turnoFechado.dart';
 
 import '../../main.dart';
 import '../../objetos/turnoObj.dart';

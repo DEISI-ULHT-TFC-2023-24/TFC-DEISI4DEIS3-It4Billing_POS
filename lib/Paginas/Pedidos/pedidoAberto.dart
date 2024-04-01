@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/animation.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
-import 'package:it4billing_pos/pages/Pedidos/carrinho.dart';
-import 'package:it4billing_pos/pages/Pedidos/pedidos.dart';
+import 'package:it4billing_pos/Paginas/Pedidos/carrinho.dart';
+import 'package:it4billing_pos/Paginas/Pedidos/pedidos.dart';
 import '../../main.dart';
 import '../../objetos/artigoObj.dart';
 import '../../objetos/categoriaObj.dart';

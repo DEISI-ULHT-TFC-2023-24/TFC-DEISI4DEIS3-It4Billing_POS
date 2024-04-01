@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:it4billing_pos/main.dart';
-import 'package:it4billing_pos/pages/Cliente/addClientePage.dart';
-import 'package:it4billing_pos/pages/Pedidos/editCarrinho.dart';
-import 'package:it4billing_pos/pages/Pedidos/escolhaLocal.dart';
-import 'package:it4billing_pos/pages/Pedidos/pedidos.dart';
+import 'package:it4billing_pos/Paginas/Cliente/addClientePage.dart';
+import 'package:it4billing_pos/Paginas/Pedidos/editCarrinho.dart';
+import 'package:it4billing_pos/Paginas/Pedidos/escolhaLocal.dart';
+import 'package:it4billing_pos/Paginas/Pedidos/pedidos.dart';
 
 import '../../objetos/artigoObj.dart';
 import '../../objetos/pedidoObj.dart';

@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:it4billing_pos/main.dart';
-import 'package:it4billing_pos/pages/Pedidos/carrinho.dart';
+import 'package:it4billing_pos/Paginas/Pedidos/carrinho.dart';
 
 import '../../objetos/artigoObj.dart';
-import '../../objetos/categoriaObj.dart';
 import '../../objetos/pedidoObj.dart';
 
 class EditCarrinho extends StatefulWidget {

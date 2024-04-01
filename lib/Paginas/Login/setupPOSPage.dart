@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:it4billing_pos/objetos/setupObj.dart';
-import 'package:it4billing_pos/pages/Login/loginPage.dart';
+import 'package:it4billing_pos/Paginas/Login/loginPage.dart';
 
 import '../../main.dart';
 

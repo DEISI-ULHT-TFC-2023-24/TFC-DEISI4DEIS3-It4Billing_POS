@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:it4billing_pos/pages/Turnos/fecharTurno.dart';
+import 'package:it4billing_pos/Paginas/Turnos/fecharTurno.dart';
 
-import 'package:it4billing_pos/pages/artigos.dart';
-import 'package:it4billing_pos/pages/categorias.dart';
-import 'package:it4billing_pos/pages/Vendas/vendas.dart';
+import 'package:it4billing_pos/Paginas/artigos.dart';
+import 'package:it4billing_pos/Paginas/categorias.dart';
+import 'package:it4billing_pos/Paginas/Vendas/vendas.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../main.dart';
 import '../../objetos/metodoPagamentoObj.dart';
@@ -34,30 +34,30 @@ class _TurnosPageState extends State<TurnosPage> {
   }
 
   Widget buildHeader(BuildContext context) => Container(
-    color: const Color(0xff00afe9),
-    padding: EdgeInsets.only(
-      top: 50 + MediaQuery.of(context).padding.top,
-      left: 20,
-      bottom: 50,
-    ),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          database.getUtilizador(setup.funcionarioId)!.nome,
-          style: const TextStyle(fontSize: 24, color: Colors.white),
+        color: const Color(0xff00afe9),
+        padding: EdgeInsets.only(
+          top: 50 + MediaQuery.of(context).padding.top,
+          left: 20,
+          bottom: 50,
         ),
-        Text(
-          setup.nomeLoja,
-          style: const TextStyle(fontSize: 18, color: Colors.white),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              database.getFuncionario(setup.funcionarioId)!.nome,
+              style: const TextStyle(fontSize: 24, color: Colors.white),
+            ),
+            Text(
+              setup.nomeLoja,
+              style: const TextStyle(fontSize: 18, color: Colors.white),
+            ),
+            Text(
+              setup.pos,
+              style: const TextStyle(fontSize: 18, color: Colors.white),
+            ),
+          ],
         ),
-        Text(
-          setup.pos,
-          style: const TextStyle(fontSize: 18, color: Colors.white),
-        ),
-      ],
-    ),
-  );
+      );
 
   Widget buildMenuItems(BuildContext context) => Container(
         padding: const EdgeInsets.all(12),
@@ -69,8 +69,8 @@ class _TurnosPageState extends State<TurnosPage> {
               title: const Text('Pedidos'),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) => PedidosPage()));
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => PedidosPage()));
               },
             ),
             ListTile(
@@ -78,8 +78,8 @@ class _TurnosPageState extends State<TurnosPage> {
               title: const Text('Vendas concluidas'),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) => VendasPage()));
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => VendasPage()));
               },
             ),
             ListTile(
@@ -94,8 +94,8 @@ class _TurnosPageState extends State<TurnosPage> {
               title: const Text('Artigos'),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) => ArtigosPage()));
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => ArtigosPage()));
               },
             ),
             ListTile(
@@ -134,7 +134,7 @@ class _TurnosPageState extends State<TurnosPage> {
             ),
           ],
         ),
-  );
+      );
 
   _launchURL(String url) async {
     try {
@@ -176,9 +176,7 @@ class _TurnosPageState extends State<TurnosPage> {
                   horizontal: isHorizontal ? 40.0 : 20.0), // Alteração aqui
               child: SizedBox(
                 height: isHorizontal ? 45 : 40, // Altura fixa do botão
-                child:
-
-                ElevatedButton(
+                child: ElevatedButton(
                   onPressed: () {
                     // Ação do botão "GESTÃO DO DINHEIRO NA GAVETA"
                     Navigator.push(
@@ -201,10 +199,10 @@ class _TurnosPageState extends State<TurnosPage> {
                     ),
                   ),
                   child: const FittedBox(
-                    child: Text('GESTÃO DO DINHEIRO NA GAVETA', style: TextStyle(fontSize: 16)),
+                    child: Text('GESTÃO DO DINHEIRO NA GAVETA',
+                        style: TextStyle(fontSize: 16)),
                   ),
                 ),
-
               ),
             ),
             const SizedBox(height: 20),
@@ -220,7 +218,8 @@ class _TurnosPageState extends State<TurnosPage> {
                         MaterialPageRoute(builder: (context) => FecharTurno()));
                   },
                   style: ElevatedButton.styleFrom(
-                    foregroundColor: const Color(0xff00afe9), backgroundColor: Colors.white,
+                    foregroundColor: const Color(0xff00afe9),
+                    backgroundColor: Colors.white,
                     side: const BorderSide(color: Color(0xff00afe9)),
                     elevation: 0,
                     shape: RoundedRectangleBorder(
@@ -241,7 +240,8 @@ class _TurnosPageState extends State<TurnosPage> {
                 children: [
                   Expanded(
                     flex: 1,
-                    child: Text( database.getUtilizador(turno.funcionarioID)!.nome,
+                    child: Text(
+                      database.getFuncionario(turno.funcionarioID)!.nome,
                       textAlign: TextAlign.left,
                     ),
                   ),
@@ -249,8 +249,8 @@ class _TurnosPageState extends State<TurnosPage> {
                   // Espaço vazio proporcional ao tamanho da tela
                   Expanded(
                     flex: 1,
-                    child: Text( DateFormat('dd/MM/yyyy HH:mm')
-                        .format(turno.horaAbertura),
+                    child: Text(
+                      DateFormat('dd/MM/yyyy HH:mm').format(turno.horaAbertura),
                       textAlign: TextAlign.right,
                     ),
                   ),
@@ -272,7 +272,7 @@ class _TurnosPageState extends State<TurnosPage> {
                     ),
                   ),
                   const SizedBox(height: 8),
-                   Row(
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const Text(
@@ -281,7 +281,8 @@ class _TurnosPageState extends State<TurnosPage> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      Text( '${turno.vendasBrutas.toStringAsFixed(2)} €',
+                      Text(
+                        '${turno.vendasBrutas.toStringAsFixed(2)} €',
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
@@ -323,7 +324,8 @@ class _TurnosPageState extends State<TurnosPage> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      Text('${turno.vendasliquidas.toStringAsFixed(2)} €',
+                      Text(
+                        '${turno.vendasliquidas.toStringAsFixed(2)} €',
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
@@ -331,18 +333,19 @@ class _TurnosPageState extends State<TurnosPage> {
                     ],
                   ),
                   const SizedBox(height: 4),
-
                   ListView.builder(
                     shrinkWrap: true,
                     itemCount: metodos.length,
                     itemBuilder: (context, index) {
                       return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 0),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 4, horizontal: 0),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(metodos[index].nome),
-                            Text('${metodos[index].valor.toStringAsFixed(2)} €'),
+                            Text(
+                                '${metodos[index].valor.toStringAsFixed(2)} €'),
                           ],
                         ),
                       );
@@ -415,7 +418,8 @@ class _TurnosPageState extends State<TurnosPage> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      Text('${turno.dinheiroEsperado.toStringAsFixed(2)} €',
+                      Text(
+                        '${turno.dinheiroEsperado.toStringAsFixed(2)} €',
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                         ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/animation.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
-import 'package:it4billing_pos/pages/Pedidos/carrinho.dart';
+import 'package:it4billing_pos/Paginas/Pedidos/carrinho.dart';
 import '../../main.dart';
 import '../../objetos/artigoObj.dart';
 import '../../objetos/categoriaObj.dart';
@@ -107,7 +107,7 @@ class _PedidoPage extends State<PedidoPage> with TickerProviderStateMixin {
 
   Future<void> addUserAoPedido() async {
     /// isto vai ser alterrado porque tenho de ter o utilizador da seção
-    pedido.funcionarioID = database.getAllUtilizadores()[0].id;
+    pedido.funcionarioID = database.getAllFuncionarios()[0].id;
     print('estive aqui e entao o pedido tem utilizador ${pedido.funcionarioID}');
 
     ///este zer0 tera de ser mudado ele escolhe qual é o utilizador
