@@ -45,7 +45,6 @@ class _AdicionarClientePageState extends State<AdicionarClientePage> {
   @override
   Widget build(BuildContext context) {
 
-
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -55,6 +54,7 @@ class _AdicionarClientePageState extends State<AdicionarClientePage> {
           },
         ),
         title: const Text('Adicionar cliente ao pedido'),
+        backgroundColor: const Color(0xff00afe9),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -180,12 +180,12 @@ class _AdicionarClientePageState extends State<AdicionarClientePage> {
                     database.addPedido(widget.pedido);
                   }
                   Navigator.pop(context);
-                  Navigator.pop(context);
-                  Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => CarrinhoPage(
-                          pedidos: widget.pedidos,
-                          artigos: widget.artigos,
-                          pedido: widget.pedido)));
+                  //Navigator.pop(context);
+                  //Navigator.of(context).push(
+                  //    MaterialPageRoute(builder: (context) => CarrinhoPage(
+                  //        pedidos: widget.pedidos,
+                  //        artigos: widget.artigos,
+                  //        pedido: widget.pedido)));
                 },
                 child: const Text('SALVAR',
                     style: TextStyle(

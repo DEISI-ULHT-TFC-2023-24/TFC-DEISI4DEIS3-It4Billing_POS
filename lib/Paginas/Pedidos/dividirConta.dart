@@ -92,23 +92,48 @@ class _DividirConta extends State<DividirConta> {
   }
 
   void cobrarValor(int index) {
-    Navigator.push(
+    double somaValores =
+        valoresIndividuais.reduce((value, element) => value + element);
+
+    if (somaValores < widget.pedido.total) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Dinheiro insuficiente.'),
+            content: const Text(
+                'A soma dos valores cobrados é inferior ao total do pedido.'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    } else {
+      Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => CobrarDivididoPage(
-                  pedido: widget.pedido,
-                  valorCobrar: valoresIndividuais[index],
-                )
-        )).then((troca) {
-      if (troca) {
-        setState(() {
-          botaoPressionado[index] = troca;
-          if (countPressedButtons() == numPessoas) {
-            mostrarBotaoConcluir = true;
-          }
-        });
-      }
-    });
+          builder: (context) => CobrarDivididoPage(
+            pedido: widget.pedido,
+            valorCobrar: valoresIndividuais[index],
+          ),
+        ),
+      ).then((troca) {
+        if (troca) {
+          setState(() {
+            botaoPressionado[index] = troca;
+            if (countPressedButtons() == numPessoas) {
+              mostrarBotaoConcluir = true;
+            }
+          });
+        }
+      });
+    }
   }
 
   void concluirVenda() {
@@ -185,29 +210,78 @@ class _DividirConta extends State<DividirConta> {
             child: ListView.builder(
               itemCount: numPessoas,
               itemBuilder: (context, index) {
+                TextEditingController controller = TextEditingController(
+                  text: valoresIndividuais[index].toStringAsFixed(2),
+                );
+
+                // Adiciona um listener para capturar o novo valor quando o campo perde o foco
+                controller.addListener(() {
+                  if (controller.text.isNotEmpty) {
+                    valoresIndividuais[index] = double.parse(controller.text);
+                  }
+                });
+
                 return ListTile(
-                  title: Text(
-                      'Valor do cliente ${index + 1}: ${valoresIndividuais[index].toStringAsFixed(2)} €'),
-                  trailing: ElevatedButton(
-                    onPressed: botaoPressionado[index]
-                        ? null
-                        : () => cobrarValor(index),
-                    style: ElevatedButton.styleFrom(
-                      foregroundColor:
-                          botaoPressionado[index] ? Colors.black : Colors.white,
-                      backgroundColor: botaoPressionado[index]
-                          ? Colors.grey
-                          : const Color(0xff00afe9),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        side: const BorderSide(color: Colors.black),
+                  title: Row(
+                    children: [
+                      Text(
+                        'Valor do cliente ${index + 1}: ',
+                        style: const TextStyle(fontSize: 16),
                       ),
-                    ),
-                    child: Text(botaoPressionado[index] ? 'Cobrado' : 'Cobrar'),
+                      Expanded(
+                        child: TextFormField(
+                          keyboardType: const TextInputType.numberWithOptions(
+                            decimal: true,
+                          ),
+                          controller: controller, // Usa o controlador criado acima
+                          onEditingComplete: () {
+                            // Pode ser utilizado para definir ações ao completar a edição
+                            // Neste caso, não faz nada
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (botaoPressionado[index]) // Mostrar apenas quando o botão estiver cobrado
+                        TextButton.icon(
+                          onPressed: () {
+                            setState(() {
+                              botaoPressionado[index] = false;
+                            });
+                          },
+                          icon: const Icon(
+                            Icons.cancel,
+                            color: Colors.red,
+                          ),
+                          label: const Text(
+                            'Anular',
+                            style: TextStyle(
+                              color: Colors.red,
+                            ),
+                          ),
+                        ),
+                      ElevatedButton(
+                        onPressed: botaoPressionado[index]
+                            ? null
+                            : () => cobrarValor(index),
+                        style: ElevatedButton.styleFrom(
+                          primary: botaoPressionado[index] ? Colors.grey : const Color(0xff00afe9),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            side: const BorderSide(color: Colors.black),
+                          ),
+                        ),
+                        child: Text(botaoPressionado[index] ? 'Cobrado' : 'Cobrar'),
+                      ),
+                    ],
                   ),
                 );
               },
             ),
+
           ),
           if (mostrarBotaoConcluir == true)
             SizedBox(

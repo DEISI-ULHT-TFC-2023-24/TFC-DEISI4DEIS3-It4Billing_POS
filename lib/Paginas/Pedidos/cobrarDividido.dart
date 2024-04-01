@@ -189,6 +189,7 @@ class _CobrarDivididoPage extends State<CobrarDivididoPage> {
                                           builder: (context) => ConcluirCobrancaDivididaPage(
                                             pedido: widget.pedido,
                                             troco: _trocoController.text,
+                                            valorCobrar: widget.valorCobrar,
                                           )
                                       ));
                                 },

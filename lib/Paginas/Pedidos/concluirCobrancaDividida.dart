@@ -9,12 +9,14 @@ import '../Cliente/addClientePage.dart';
 class ConcluirCobrancaDivididaPage extends StatefulWidget {
   late PedidoObj pedido;
   late String troco;
+  double valorCobrar;
   SetupObj setup = database.getAllSetup()[0];
 
   ConcluirCobrancaDivididaPage({
     Key? key,
     required this.pedido,
     required this.troco,
+    required this.valorCobrar,
   }) : super(key: key);
 
   @override
@@ -85,7 +87,7 @@ class _ConcluirCobrancaDivididaPage
                         )),
                     const SizedBox(height: 10),
                     Text(
-                        '${widget.pedido.calcularValorTotal().toStringAsFixed(2)} €',
+                        '${widget.valorCobrar} €',
                         style: const TextStyle(
                           color: Colors.black,
                           fontSize: 22,

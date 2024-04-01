@@ -201,6 +201,7 @@ class _ConfiguracoesPageState extends State<ConfiguracoesPage> {
           title: const Text('Suporte'),
           onTap: () {
             Navigator.pop(context);
+            _launchURL('https://www.it4billing.com/suporte/');
           },
         ),
       ],

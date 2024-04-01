@@ -139,6 +139,7 @@ class _PedidosPage extends State<PedidosPage> {
               title: const Text('Suporte'),
               onTap: () {
                 Navigator.pop(context);
+                _launchURL('https://www.it4billing.com/suporte/');
               },
             ),
           ],
