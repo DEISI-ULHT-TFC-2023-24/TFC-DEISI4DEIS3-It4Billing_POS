@@ -41,7 +41,8 @@ class _ConcluirPedidoState extends State<ConcluirPedido> {
 
   @override
   void dispose() {
-    if (widget.pedido.clienteID != 0 && widget.pedido.clienteID != database.getAllClientes()[0].id) {
+    if (widget.pedido.clienteID != 0 &&
+        widget.pedido.clienteID != database.getAllClientes()[0].id) {
       _emailController.dispose();
     }
     super.dispose();
@@ -65,150 +66,157 @@ class _ConcluirPedidoState extends State<ConcluirPedido> {
       }
     }
     //if (widget.pedido.funcionarioID != 0) {   porque que isto esta aqui??
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => PedidosPage(),
-        ),
-      );
-      print('Venda concluída!');
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PedidosPage(),
+      ),
+          (route) => false, // Remove todas as rotas anteriores
+    );
+    print('Venda concluída!');
     //}
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.pedido.nome),
-        backgroundColor: const Color(0xff00afe9),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.person_add_outlined),
-            tooltip: 'Open client',
-            onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => AdicionarClientePage(
-                      pedido: widget.pedido,
-                      pedidos: database.getAllPedidos(),
-                      artigos: database.getAllArtigos())
-              ));
-            },
-          ),
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            const SizedBox(height: 30),
-            Center(
-              child: Padding(
-                padding: const EdgeInsets.only(left: 45, right: 45),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      'Total pago',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
+    return WillPopScope(
+      onWillPop: () async {
+        // Impede que o usuário volte usando o botão de voltar do dispositivo
+        return false;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(widget.pedido.nome),
+          backgroundColor: const Color(0xff00afe9),
+          automaticallyImplyLeading: false, // Remove o ícone de voltar
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.person_add_outlined),
+              tooltip: 'Open client',
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => AdicionarClientePage(
+                        pedido: widget.pedido,
+                        pedidos: database.getAllPedidos(),
+                        artigos: database.getAllArtigos())));
+              },
+            ),
+          ],
+        ),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              const SizedBox(height: 30),
+              Center(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 45, right: 45),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Total pago',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 10),
-                    Text(
-                      '${widget.pedido.calcularValorTotal().toStringAsFixed(2)} €',
-                      style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
+                      const SizedBox(height: 10),
+                      Text(
+                        '${widget.pedido.calcularValorTotal().toStringAsFixed(2)} €',
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 30),
-                    const Text(
-                      'Troco',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
+                      const SizedBox(height: 30),
+                      const Text(
+                        'Troco',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 10),
-                    Text(
-                      '${widget.troco} €',
-                      style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
+                      const SizedBox(height: 10),
+                      Text(
+                        '${widget.troco} €',
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 20),
-                    //verifica se tem algum clente ou se é o cliente predefenido
-                    if (widget.pedido.clienteID != 0 && widget.pedido.clienteID != database.getAllClientes()[0].id)
+                      const SizedBox(height: 20),
+                      //verifica se tem algum clente ou se é o cliente predefenido
+                      if (widget.pedido.clienteID != 0 &&
+                          widget.pedido.clienteID !=
+                              database.getAllClientes()[0].id)
+                        Row(
+                          children: [
+                            Checkbox(
+                              value: widget.setup.email,
+                              onChanged: (value) {
+                                setState(() {
+                                  widget.setup.email = value!;
+                                  _showEmailField = value;
+                                });
+                              },
+                            ),
+                            const Text('Enviar por email'),
+                          ],
+                        ),
+                      if (_showEmailField)
+                        TextField(
+                          controller: _emailController,
+                          keyboardType: TextInputType.emailAddress,
+                          decoration: const InputDecoration(
+                            labelText: 'Email',
+                            hintText: 'Digite seu email',
+                          ),
+                        ),
+                      const SizedBox(height: 5),
                       Row(
                         children: [
                           Checkbox(
-                            value: widget.setup.email,
+                            value: widget.setup.imprimir,
                             onChanged: (value) {
                               setState(() {
-                                widget.setup.email = value!;
-                                _showEmailField = value;
+                                widget.setup.imprimir = value!;
                               });
                             },
                           ),
-                          const Text('Enviar por email'),
+                          const Text('Imprimir documento'),
                         ],
                       ),
-                    if (_showEmailField)
-                      TextField(
-                        controller: _emailController,
-                        keyboardType: TextInputType.emailAddress,
-                        decoration: const InputDecoration(
-                          labelText: 'Email',
-                          hintText: 'Digite seu email',
-                        ),
-                      ),
-                    const SizedBox(height: 5),
-                    Row(
-                      children: [
-                        Checkbox(
-                          value: widget.setup.imprimir,
-                          onChanged: (value) {
-                            setState(() {
-                              widget.setup.imprimir = value!;
-                            });
-                          },
-                        ),
-                        const Text('Imprimir documento'),
-                      ],
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(height: 30),
-          ],
+              const SizedBox(height: 30),
+            ],
+          ),
         ),
-      ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.only(bottom: 30, left: 80, right: 80),
-        child: SizedBox(
-          width: double.infinity,
-          child: ElevatedButton(
-            onPressed: concluirVenda,
-
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xff00afe9),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-                side: const BorderSide(color: Colors.black),
+        bottomNavigationBar: Padding(
+          padding: const EdgeInsets.only(bottom: 30, left: 80, right: 80),
+          child: SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: concluirVenda,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xff00afe9),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  side: const BorderSide(color: Colors.black),
+                ),
               ),
-            ),
-
-            child: const Padding(
-              padding: EdgeInsets.symmetric(vertical: 15.0),
-              child: Text(
-                'CONCLUIR VENDA',
-                style: TextStyle(color: Colors.white, fontSize: 18),
+              child: const Padding(
+                padding: EdgeInsets.symmetric(vertical: 15.0),
+                child: Text(
+                  'CONCLUIR VENDA',
+                  style: TextStyle(color: Colors.white, fontSize: 18),
+                ),
               ),
             ),
           ),

@@ -33,7 +33,12 @@ class PedidoObj {
   double calcularValorTotal() {
     total = 0;
     for (var artigoId in artigosPedidoIds) {
-      total += database.getArtigo(artigoId)!.price;
+      for (var artigo in artigosPedido){
+        if (artigo.nome == database.getArtigo(artigoId)!.nome){
+          total += artigo.price;
+          break;
+        }
+      }
     }
     return total;
   }

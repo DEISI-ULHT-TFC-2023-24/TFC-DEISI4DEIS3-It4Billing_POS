@@ -26,11 +26,39 @@ class _DividirConta extends State<DividirConta> {
   bool mostrarBotaoConcluir = false;
   List<bool> botaoPressionado = [];
 
+  late List<TextEditingController> controllers;
+
   @override
   void initState() {
     super.initState();
     calcularValoresIndividuais();
     botaoPressionado = List.generate(numPessoas, (index) => false);
+
+    // Inicialize os controllers e adicione listeners para limpar os campos quando ganharem foco
+    controllers = List.generate(
+      numPessoas,
+          (index) {
+        TextEditingController controller = TextEditingController(
+          text: valoresIndividuais[index].toStringAsFixed(2),
+        );
+        controller.addListener(() {
+          final text = controller.text;
+          if (text.isNotEmpty) {
+            valoresIndividuais[index] = double.parse(text);
+          }
+        });
+        return controller;
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    // Dispose os controllers
+    for (var controller in controllers) {
+      controller.dispose();
+    }
+    super.dispose();
   }
 
   void calcularValoresIndividuais() {
@@ -92,10 +120,12 @@ class _DividirConta extends State<DividirConta> {
   }
 
   void cobrarValor(int index) {
+    bool algumValorInvalido = false;
     double somaValores =
         valoresIndividuais.reduce((value, element) => value + element);
 
     if (somaValores < widget.pedido.total) {
+      algumValorInvalido = true;
       showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -115,6 +145,32 @@ class _DividirConta extends State<DividirConta> {
         },
       );
     } else {
+      for (int i = 0; i < valoresIndividuais.length; i++) {
+        if (valoresIndividuais[i] < 0.00) {
+          algumValorInvalido = true;
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text('Valor inserido é inválido.'),
+                content: const Text(
+                    'Por favor, insira um valor válido para prosseguir com a cobrança.'),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text('OK'),
+                  ),
+                ],
+              );
+            },
+          );
+        }
+      }
+    }
+
+    if (!algumValorInvalido) {
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -165,143 +221,146 @@ class _DividirConta extends State<DividirConta> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Dividir Conta'),
-        backgroundColor: const Color(0xff00afe9),
-        leading: Visibility(
-          visible: botaoPressionado.every((element) => element == false),
-          child: IconButton(
-            icon: const Icon(Icons.arrow_back), // Ícone padrão de voltar
-            onPressed: () {
-              // Navegar para a página anterior
-              Navigator.pop(context, false);
-            },
-          ),
-        ),
-      ),
-      body: Column(
-        children: [
-          const SizedBox(height: 20),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              IconButton(
-                icon: const Icon(Icons.remove),
-                onPressed: diminuirPessoas,
-              ),
-              Text(
-                '$numPessoas Clientes',
-                style: const TextStyle(fontSize: 20),
-              ),
-              IconButton(
-                icon: const Icon(Icons.add),
-                onPressed: aumentarPessoas,
-              ),
-            ],
-          ),
-          const SizedBox(height: 20),
-          Text(
-            'Total do Pedido: ${widget.pedido.total.toStringAsFixed(2)}',
-            style: const TextStyle(fontSize: 20),
-          ),
-          const SizedBox(height: 20),
-          Expanded(
-            child: ListView.builder(
-              itemCount: numPessoas,
-              itemBuilder: (context, index) {
-                TextEditingController controller = TextEditingController(
-                  text: valoresIndividuais[index].toStringAsFixed(2),
-                );
-
-                // Adiciona um listener para capturar o novo valor quando o campo perde o foco
-                controller.addListener(() {
-                  if (controller.text.isNotEmpty) {
-                    valoresIndividuais[index] = double.parse(controller.text);
-                  }
-                });
-
-                return ListTile(
-                  title: Row(
-                    children: [
-                      Text(
-                        'Valor do cliente ${index + 1}: ',
-                        style: const TextStyle(fontSize: 16),
-                      ),
-                      Expanded(
-                        child: TextFormField(
-                          keyboardType: const TextInputType.numberWithOptions(
-                            decimal: true,
-                          ),
-                          controller: controller, // Usa o controlador criado acima
-                          onEditingComplete: () {
-                            // Pode ser utilizado para definir ações ao completar a edição
-                            // Neste caso, não faz nada
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      if (botaoPressionado[index]) // Mostrar apenas quando o botão estiver cobrado
-                        TextButton.icon(
-                          onPressed: () {
-                            setState(() {
-                              botaoPressionado[index] = false;
-                            });
-                          },
-                          icon: const Icon(
-                            Icons.cancel,
-                            color: Colors.red,
-                          ),
-                          label: const Text(
-                            'Anular',
-                            style: TextStyle(
-                              color: Colors.red,
-                            ),
-                          ),
-                        ),
-                      ElevatedButton(
-                        onPressed: botaoPressionado[index]
-                            ? null
-                            : () => cobrarValor(index),
-                        style: ElevatedButton.styleFrom(
-                          primary: botaoPressionado[index] ? Colors.grey : const Color(0xff00afe9),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            side: const BorderSide(color: Colors.black),
-                          ),
-                        ),
-                        child: Text(botaoPressionado[index] ? 'Cobrado' : 'Cobrar'),
-                      ),
-                    ],
-                  ),
-                );
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Dividir Conta'),
+          backgroundColor: const Color(0xff00afe9),
+          leading: Visibility(
+            visible: botaoPressionado.every((element) => element == false),
+            child: IconButton(
+              icon: const Icon(Icons.arrow_back), // Ícone padrão de voltar
+              onPressed: () {
+                // Navegar para a página anterior
+                Navigator.pop(context, false);
               },
             ),
-
           ),
-          if (mostrarBotaoConcluir == true)
-            SizedBox(
-                height: 50.0,
-                child: ElevatedButton(
-                  onPressed: concluirVenda,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xff00afe9),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12.0),
-                      side: const BorderSide(color: Colors.black),
+        ),
+        body: Column(
+          children: [
+            const SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.remove),
+                  onPressed: diminuirPessoas,
+                ),
+                Text(
+                  '$numPessoas Clientes',
+                  style: const TextStyle(fontSize: 20),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.add),
+                  onPressed: aumentarPessoas,
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+            Text(
+              'Total do Pedido: ${widget.pedido.total.toStringAsFixed(2)} €',
+              style: const TextStyle(fontSize: 20),
+            ),
+            const SizedBox(height: 20),
+            Text(
+              'Total Recebido: ${valoresIndividuais.reduce((value, element) => value + element).toStringAsFixed(2)} €',
+              style: const TextStyle(fontSize: 20),
+            ),
+            const SizedBox(height: 20),
+            Expanded(
+              child: ListView.builder(
+                itemCount: numPessoas,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    title: Row(
+                      children: [
+                        Text(
+                          'Cliente ${index + 1}: € ',
+                          style: const TextStyle(fontSize: 16),
+                        ),
+                        Expanded(
+                          child: TextFormField(
+                            keyboardType: TextInputType.numberWithOptions(decimal: true),
+                            controller: controllers[index],
+                            onTap: () {
+                              // Limpe o campo quando ganhar foco
+                              controllers[index].clear();
+                            },
+                            onEditingComplete: () {
+                              // Atualize a lista de valores quando a edição for concluída
+                              final text = controllers[index].text;
+                              if (text.isNotEmpty) {
+                                valoresIndividuais[index] = double.parse(text);
+                              }
+                            },
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                  child: const Text(
-                    'CONCLUIR VENDA',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                )),
-          const SizedBox(height: 20),
-        ],
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (botaoPressionado[index]) // Mostrar apenas quando o botão estiver cobrado
+                          TextButton.icon(
+                            onPressed: () {
+                              setState(() {
+                                botaoPressionado[index] = false;
+                              });
+                            },
+                            icon: const Icon(
+                              Icons.cancel,
+                              color: Colors.red,
+                            ),
+                            label: const Text(
+                              'Anular',
+                              style: TextStyle(
+                                color: Colors.red,
+                              ),
+                            ),
+                          ),
+                        ElevatedButton(
+                          onPressed: botaoPressionado[index]
+                              ? null
+                              : () => cobrarValor(index),
+                          style: ElevatedButton.styleFrom(
+                            primary: botaoPressionado[index] ? Colors.grey : const Color(0xff00afe9),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              side: const BorderSide(color: Colors.black),
+                            ),
+                          ),
+                          child: Text(botaoPressionado[index] ? 'Cobrado' : 'Cobrar'),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ),
+            if (mostrarBotaoConcluir == true)
+              SizedBox(
+                  height: 50.0,
+                  child: ElevatedButton(
+                    onPressed: concluirVenda,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xff00afe9),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12.0),
+                        side: const BorderSide(color: Colors.black),
+                      ),
+                    ),
+                    child: const Text(
+                      'CONCLUIR VENDA',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  )),
+            const SizedBox(height: 20),
+          ],
+        ),
       ),
     );
   }
