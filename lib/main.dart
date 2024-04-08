@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
       }
     }
 
-    pagina = '/pedidos'; /// TESTES
+    //pagina = '/config'; /// TESTES
 
     return MaterialApp(
       title: 'it4billing_pos',
@@ -48,7 +48,6 @@ class MyApp extends StatelessWidget {
       routes: {
         '/setupPage': (context) => const SetupPage(),
         '/loginPage': (context) => LoginPage(),
-        '/cofig': (context) => ConfiguracoesPage(),
         '/pedidos': (context) => PedidosPage(),
         '/turno': (context) => TurnosPage(),
         '/turnoF': (context) => TurnoFechado(),
@@ -57,8 +56,6 @@ class MyApp extends StatelessWidget {
         '/categorias': (context) => CategoriasPage(),
         //'/cliente': (context) => AdicionarClientePage(),
         '/config': (context) => ConfiguracoesPage()
-
-
       },
       debugShowCheckedModeBanner: false,
     );

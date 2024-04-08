@@ -553,9 +553,33 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "14:7876964514982937286",
+      "lastPropertyId": "3:9039751828394950964",
+      "name": "ImpressoraObj",
+      "properties": [
+        {
+          "id": "1:2001770326559077686",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:2468479007092347046",
+          "name": "nome",
+          "type": 9
+        },
+        {
+          "id": "3:9039751828394950964",
+          "name": "iP",
+          "type": 9
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "13:9134296771102256354",
+  "lastEntityId": "14:7876964514982937286",
   "lastIndexId": "1:2709143836952813707",
   "lastRelationId": "2:764650263908402594",
   "lastSequenceId": "0:0",

@@ -8,6 +8,7 @@ import 'package:path/path.dart' as p;
 import '../objetos/VendaObj.dart';
 import '../objetos/artigoObj.dart';
 import '../objetos/categoriaObj.dart';
+import '../objetos/impressoraObj.dart';
 import '../objetos/localObj.dart';
 import '../objetos/metodoPagamentoObj.dart';
 import '../objetos/pedidoObj.dart';
@@ -33,6 +34,7 @@ class ObjectBoxDatabase {
   late final Box<SetupObj> _setupBox;
   late final Box<TurnoObj> _turnosBox;
   late final Box<MetodoPagamentoObj> _metodoPagamentoBox;
+  late final Box<ImpressoraObj> _impressorasBox;
 
   ObjectBoxDatabase._create(this._store) {
     _pedidosBox = Box<PedidoObj>(_store);
@@ -47,6 +49,7 @@ class ObjectBoxDatabase {
     _setupBox = Box<SetupObj>(_store);
     _turnosBox = Box<TurnoObj>(_store);
     _metodoPagamentoBox = Box<MetodoPagamentoObj>(_store);
+    _impressorasBox = Box<ImpressoraObj>(_store);
 
   }
 
@@ -377,6 +380,28 @@ class ObjectBoxDatabase {
 
   Future<void> removeAllMetodosPagamento() async {
     await _metodoPagamentoBox.removeAll();
+  }
+
+  ///---------------------------------------------------------
+  // Funções para manipular as Impressoras
+  Future<void> addImpressora(ImpressoraObj impressora) async {
+    await _impressorasBox.put(impressora);
+  }
+
+  Future<void> removeImpressora(int index) async {
+    await _impressorasBox.remove(index);
+  }
+
+  ImpressoraObj? getImpressora(int id) {
+    return _impressorasBox.get(id);
+  }
+
+  List<ImpressoraObj> getAllImpressoras() {
+    return _impressorasBox.getAll();
+  }
+
+  Future<void> removeAllImpressoras() async {
+    await _impressorasBox.removeAll();
   }
 
 }

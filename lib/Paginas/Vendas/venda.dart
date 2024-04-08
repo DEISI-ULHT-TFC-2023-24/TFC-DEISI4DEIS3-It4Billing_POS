@@ -10,16 +10,12 @@ import '../../objetos/setupObj.dart';
 
 class VendaPage extends StatefulWidget {
   late List<VendaObj> vendas = [];
-  late List<Categoria> categorias = [];
-  late List<Artigo> artigos = [];
   late VendaObj venda;
   SetupObj setup = database.getAllSetup()[0];
 
   VendaPage({
     Key? key,
     required this.vendas,
-    required this.categorias,
-    required this.artigos,
     required this.venda,
   }) : super(key: key);
 

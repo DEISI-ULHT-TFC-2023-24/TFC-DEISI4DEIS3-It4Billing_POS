@@ -124,7 +124,7 @@ class _CarrinhoPageState extends State<CarrinhoPage> {
                   }
                   valor = artigo?.price;
 
-                  /// isto vai dar problemas no editar carrinho
+                  /// isto vai dar problemas no editar carrinho??
                   return Padding(
                     padding: const EdgeInsets.only(
                         left: 20, right: 20, bottom: 10.0),

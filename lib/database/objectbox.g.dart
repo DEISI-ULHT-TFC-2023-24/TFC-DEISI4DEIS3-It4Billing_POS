@@ -19,6 +19,7 @@ import '../objetos/VendaObj.dart';
 import '../objetos/artigoObj.dart';
 import '../objetos/categoriaObj.dart';
 import '../objetos/clienteObj.dart';
+import '../objetos/impressoraObj.dart';
 import '../objetos/localObj.dart';
 import '../objetos/metodoPagamentoObj.dart';
 import '../objetos/pedidoObj.dart';
@@ -578,6 +579,30 @@ final _entities = <obx_int.ModelEntity>[
             flags: 0)
       ],
       relations: <obx_int.ModelRelation>[],
+      backlinks: <obx_int.ModelBacklink>[]),
+  obx_int.ModelEntity(
+      id: const obx_int.IdUid(14, 7876964514982937286),
+      name: 'ImpressoraObj',
+      lastPropertyId: const obx_int.IdUid(3, 9039751828394950964),
+      flags: 0,
+      properties: <obx_int.ModelProperty>[
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(1, 2001770326559077686),
+            name: 'id',
+            type: 6,
+            flags: 1),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(2, 2468479007092347046),
+            name: 'nome',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(3, 9039751828394950964),
+            name: 'iP',
+            type: 9,
+            flags: 0)
+      ],
+      relations: <obx_int.ModelRelation>[],
       backlinks: <obx_int.ModelBacklink>[])
 ];
 
@@ -616,7 +641,7 @@ Future<obx.Store> openStore(
 obx_int.ModelDefinition getObjectBoxModel() {
   final model = obx_int.ModelInfo(
       entities: _entities,
-      lastEntityId: const obx_int.IdUid(13, 9134296771102256354),
+      lastEntityId: const obx_int.IdUid(14, 7876964514982937286),
       lastIndexId: const obx_int.IdUid(1, 2709143836952813707),
       lastRelationId: const obx_int.IdUid(2, 764650263908402594),
       lastSequenceId: const obx_int.IdUid(0, 0),
@@ -1217,6 +1242,36 @@ obx_int.ModelDefinition getObjectBoxModel() {
             ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
 
           return object;
+        }),
+    ImpressoraObj: obx_int.EntityDefinition<ImpressoraObj>(
+        model: _entities[10],
+        toOneRelations: (ImpressoraObj object) => [],
+        toManyRelations: (ImpressoraObj object) => {},
+        getId: (ImpressoraObj object) => object.id,
+        setId: (ImpressoraObj object, int id) {
+          object.id = id;
+        },
+        objectToFB: (ImpressoraObj object, fb.Builder fbb) {
+          final nomeOffset = fbb.writeString(object.nome);
+          final iPOffset = fbb.writeString(object.iP);
+          fbb.startTable(4);
+          fbb.addInt64(0, object.id);
+          fbb.addOffset(1, nomeOffset);
+          fbb.addOffset(2, iPOffset);
+          fbb.finish(fbb.endTable());
+          return object.id;
+        },
+        objectFromFB: (obx.Store store, ByteData fbData) {
+          final buffer = fb.BufferContext(fbData);
+          final rootOffset = buffer.derefObject(0);
+          final nomeParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGet(buffer, rootOffset, 6, '');
+          final iPParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGet(buffer, rootOffset, 8, '');
+          final object = ImpressoraObj(nomeParam, iPParam)
+            ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
+
+          return object;
         })
   };
 
@@ -1619,4 +1674,19 @@ class MetodoPagamentoObj_ {
   /// see [MetodoPagamentoObj.valor]
   static final valor =
       obx.QueryDoubleProperty<MetodoPagamentoObj>(_entities[9].properties[2]);
+}
+
+/// [ImpressoraObj] entity fields to define ObjectBox queries.
+class ImpressoraObj_ {
+  /// see [ImpressoraObj.id]
+  static final id =
+      obx.QueryIntegerProperty<ImpressoraObj>(_entities[10].properties[0]);
+
+  /// see [ImpressoraObj.nome]
+  static final nome =
+      obx.QueryStringProperty<ImpressoraObj>(_entities[10].properties[1]);
+
+  /// see [ImpressoraObj.iP]
+  static final iP =
+      obx.QueryStringProperty<ImpressoraObj>(_entities[10].properties[2]);
 }

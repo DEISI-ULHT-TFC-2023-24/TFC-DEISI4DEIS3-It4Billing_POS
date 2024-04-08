@@ -202,8 +202,6 @@ class TurnoFechado extends StatelessWidget {
                         database.addTurno(turno);
                         print('Esta aberto? DEVIA!! -> ${database.getAllTurno()[0].turnoAberto}');
 
-
-
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context) => TurnosPage()));
                       },
