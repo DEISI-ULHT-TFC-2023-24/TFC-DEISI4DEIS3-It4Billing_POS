@@ -583,7 +583,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
       id: const obx_int.IdUid(14, 7876964514982937286),
       name: 'ImpressoraObj',
-      lastPropertyId: const obx_int.IdUid(3, 9039751828394950964),
+      lastPropertyId: const obx_int.IdUid(4, 6111044580795165338),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
@@ -600,6 +600,11 @@ final _entities = <obx_int.ModelEntity>[
             id: const obx_int.IdUid(3, 9039751828394950964),
             name: 'iP',
             type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(4, 6111044580795165338),
+            name: 'port',
+            type: 6,
             flags: 0)
       ],
       relations: <obx_int.ModelRelation>[],
@@ -1254,10 +1259,11 @@ obx_int.ModelDefinition getObjectBoxModel() {
         objectToFB: (ImpressoraObj object, fb.Builder fbb) {
           final nomeOffset = fbb.writeString(object.nome);
           final iPOffset = fbb.writeString(object.iP);
-          fbb.startTable(4);
+          fbb.startTable(5);
           fbb.addInt64(0, object.id);
           fbb.addOffset(1, nomeOffset);
           fbb.addOffset(2, iPOffset);
+          fbb.addInt64(3, object.port);
           fbb.finish(fbb.endTable());
           return object.id;
         },
@@ -1268,7 +1274,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
               .vTableGet(buffer, rootOffset, 6, '');
           final iPParam = const fb.StringReader(asciiOptimization: true)
               .vTableGet(buffer, rootOffset, 8, '');
-          final object = ImpressoraObj(nomeParam, iPParam)
+          final portParam =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 10, 0);
+          final object = ImpressoraObj(nomeParam, iPParam, portParam)
             ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
 
           return object;
@@ -1689,4 +1697,8 @@ class ImpressoraObj_ {
   /// see [ImpressoraObj.iP]
   static final iP =
       obx.QueryStringProperty<ImpressoraObj>(_entities[10].properties[2]);
+
+  /// see [ImpressoraObj.port]
+  static final port =
+      obx.QueryIntegerProperty<ImpressoraObj>(_entities[10].properties[3]);
 }

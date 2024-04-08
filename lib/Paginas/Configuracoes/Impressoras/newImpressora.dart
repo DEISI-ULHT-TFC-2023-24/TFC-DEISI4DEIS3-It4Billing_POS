@@ -1,4 +1,7 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:it4billing_pos/objetos/impressoraObj.dart';
 import 'dart:convert';
 import 'dart:io';
@@ -14,6 +17,7 @@ class CriarImpressoraPage extends StatefulWidget {
 class _CriarImpressoraPageState extends State<CriarImpressoraPage> {
   final TextEditingController nomeController = TextEditingController();
   final TextEditingController ipController = TextEditingController();
+  final TextEditingController portController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -42,14 +46,20 @@ class _CriarImpressoraPageState extends State<CriarImpressoraPage> {
               ),
             ),
             SizedBox(height: 20),
+            TextField(
+              controller: portController,
+              keyboardType: TextInputType.numberWithOptions(decimal: true),
+              decoration: InputDecoration(
+                labelText: 'Porta da Impressora',
+              ),
+            ),
+            SizedBox(height: 20),
             ElevatedButton(
               onPressed: () async {
                 // Adicionar ação para testar a impressão
 
                 final ip = ipController.text;
-                const port = 9100;
-                /// Aqui perceber como mandar imprimir alguma coisa ????
-
+                final int port = int.parse(portController.text);
                 try {
                   // Conectando à impressora
                   Socket socket = await Socket.connect(ip, port);
@@ -79,7 +89,8 @@ class _CriarImpressoraPageState extends State<CriarImpressoraPage> {
                   // Adicionar ação para guardar a impressora
                   String nome = nomeController.text;
                   String ip = ipController.text;
-                  ImpressoraObj impressora = ImpressoraObj(nome, ip);
+                  int port = int.parse(portController.text);
+                  ImpressoraObj impressora = ImpressoraObj(nome, ip, port);
                   database.addImpressora(impressora);
                   Navigator.pop(context);
                   Navigator.pop(context);
