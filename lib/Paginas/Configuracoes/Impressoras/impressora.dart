@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:it4billing_pos/objetos/impressoraObj.dart';
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/services.dart';
 
 
 import '../../../main.dart';
@@ -25,6 +25,7 @@ class _ImpressoraPageState extends State<ImpressoraPage> {
   final TextEditingController nomeController = TextEditingController();
   final TextEditingController ipController = TextEditingController();
   final TextEditingController portController = TextEditingController();
+  bool camposAlterados = false; // Adicione esta variável
 
   @override
   void initState() {
@@ -33,6 +34,49 @@ class _ImpressoraPageState extends State<ImpressoraPage> {
     nomeController.text = widget.impressora.nome;
     ipController.text = widget.impressora.iP;
     portController.text = widget.impressora.port.toString();
+
+    // Adicione listeners aos controladores para detectar alterações nos campos
+    nomeController.addListener(() {
+      if (nomeController.text != widget.impressora.nome ||
+          ipController.text != widget.impressora.iP ||
+          portController.text != widget.impressora.port.toString()) {
+        setState(() {
+          camposAlterados = true;
+        });
+      } else {
+        setState(() {
+          camposAlterados = false;
+        });
+      }
+    });
+
+    ipController.addListener(() {
+      if (nomeController.text != widget.impressora.nome ||
+          ipController.text != widget.impressora.iP ||
+          portController.text != widget.impressora.port.toString()) {
+        setState(() {
+          camposAlterados = true;
+        });
+      } else {
+        setState(() {
+          camposAlterados = false;
+        });
+      }
+    });
+
+    portController.addListener(() {
+      if (nomeController.text != widget.impressora.nome ||
+          ipController.text != widget.impressora.iP ||
+          portController.text != widget.impressora.port.toString()) {
+        setState(() {
+          camposAlterados = true;
+        });
+      } else {
+        setState(() {
+          camposAlterados = false;
+        });
+      }
+    });
   }
 
   @override
@@ -53,11 +97,11 @@ class _ImpressoraPageState extends State<ImpressoraPage> {
                 labelText: 'Nome da Impressora',
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             TextField(
               controller: ipController,
               keyboardType:
-                  const TextInputType.numberWithOptions(decimal: true),
+              const TextInputType.numberWithOptions(decimal: true),
               decoration: const InputDecoration(
                 labelText: 'Endereço IP da Impressora',
               ),
@@ -66,7 +110,7 @@ class _ImpressoraPageState extends State<ImpressoraPage> {
             TextField(
               controller: portController,
               keyboardType:
-                  const TextInputType.numberWithOptions(decimal: true),
+              const TextInputType.numberWithOptions(decimal: true),
               decoration: const InputDecoration(
                 labelText: 'Porta da Impressora',
               ),
@@ -74,8 +118,7 @@ class _ImpressoraPageState extends State<ImpressoraPage> {
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: () async {
-                // Adicionar ação para testar a impressão
-
+                // Ação para testar a impressão
                 final ip = ipController.text;
                 final int port = int.parse(portController.text);
 
@@ -120,9 +163,6 @@ class _ImpressoraPageState extends State<ImpressoraPage> {
                   // Comandos para imprimir a data e hora do sistema
                   final dataHora = DateFormat('dd/MM/yyyy HH:mm').format(DateTime.now());
 
-                  String linkQRcode = 'https://www.it4billing.com/';
-
-                  
 
                   // Enviar comandos para a impressora
                   socket.add(tituloCentrado);
@@ -146,7 +186,51 @@ class _ImpressoraPageState extends State<ImpressoraPage> {
               },
               child: const Text('Testar Impressão'),
             ),
-            Spacer(),
+            const SizedBox(height: 20),
+            const Spacer(),
+            Visibility( // Adicione a visibilidade com base em camposAlterados
+              visible: camposAlterados,
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: 50.0,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        // Adicionar ação para guardar a impressora
+                        String nome = nomeController.text;
+                        String ip = ipController.text;
+                        int port = int.parse(portController.text);
+                        ImpressoraObj impressora = ImpressoraObj(nome, ip, port);
+                        database.removeImpressora(widget.impressora.id);
+                        database.addImpressora(impressora);
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => ImpressorasPage()));
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xff00afe9),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12.0),
+                          side: const BorderSide(color: Colors.black),
+                        ),
+                      ),
+                      child: const Padding(
+                        padding: EdgeInsets.all(10.0),
+                        child: Text(
+                          'GUARDAR',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16.0,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                ],
+              ),
+            ),
             SizedBox(
               height: 50.0,
               child: ElevatedButton(
@@ -188,6 +272,7 @@ class _ImpressoraPageState extends State<ImpressoraPage> {
     // Clean up the controller when the widget is disposed.
     nomeController.dispose();
     ipController.dispose();
+    portController.dispose();
     super.dispose();
   }
 }

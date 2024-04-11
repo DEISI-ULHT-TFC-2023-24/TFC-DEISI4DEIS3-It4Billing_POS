@@ -12,7 +12,7 @@ class Artigo {
   String productType;
 
   late double price; //valor com iva
-
+  late double discount = 0;
   double unitPrice; // Valor sem iva
 
   int idArticlesCategories;

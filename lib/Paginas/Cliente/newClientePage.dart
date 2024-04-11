@@ -35,6 +35,7 @@ class _NovoClientePageState extends State<NovoClientePage> {
           },
         ),
         title: const Text('Criar novo cliente'),
+        backgroundColor: const Color(0xff00afe9),
       ),
       body: ListView(
         padding: const EdgeInsets.all(20.0),

@@ -18,31 +18,35 @@ class _SetupPageState extends State<SetupPage> {
     return Scaffold(
       body: Center(
         child: isSmallScreen
-            ? Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            _Logo(),
-            _FormContent(),
-          ],
+            ? const Scrollbar(
+                child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        _Logo(),
+                        _FormContent(),
+                      ],
+                    )
+                )
         )
             : Container(
-          padding: const EdgeInsets.all(32.0),
-          constraints: const BoxConstraints(maxWidth: 800),
-          child: Row(
-            children: [
-              Expanded(
-                child: _Logo(),
-              ),
-              Expanded(
-                child: Scrollbar(
-                  child: SingleChildScrollView(
-                    child: _FormContent(),
-                  ),
+                padding: const EdgeInsets.all(32.0),
+                constraints: const BoxConstraints(maxWidth: 800),
+                child: const Row(
+                  children: [
+                    Expanded(
+                      child: _Logo(),
+                    ),
+                    Expanded(
+                      child: Scrollbar(
+                        child: SingleChildScrollView(
+                          child: _FormContent(),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
-        ),
       ),
     );
   }
@@ -66,7 +70,10 @@ class _Logo extends StatelessWidget {
             textAlign: TextAlign.center,
             style: isSmallScreen
                 ? Theme.of(context).textTheme.headline5
-                : Theme.of(context).textTheme.headline4?.copyWith(color: Colors.black),
+                : Theme.of(context)
+                    .textTheme
+                    .headline4
+                    ?.copyWith(color: Colors.black),
           ),
         )
       ],
@@ -105,12 +112,16 @@ class __FormContentState extends State<_FormContent> {
     });
   }
 
-
   bool _isPasswordVisible = false;
   bool _showConfirmation = false;
   String? _selectedStore;
   String? _selectedPos;
-  final List<String> _stores = ['Selecione a loja', 'Loja 1', 'Loja 2', 'Loja 3'];
+  final List<String> _stores = [
+    'Selecione a loja',
+    'Loja 1',
+    'Loja 2',
+    'Loja 3'
+  ];
   final List<String> _poss = ['Selecione o POS', 'POS 1', 'POS 2', 'POS 3'];
   SetupObj setup = SetupObj();
 
@@ -121,6 +132,7 @@ class __FormContentState extends State<_FormContent> {
       await database.putDemoUsers();
     }
   }
+
   Future<void> carregarMetodoPagamento() async {
     if (database.getAllMetodosPagamento().isEmpty) {
       await database.putDemoMetodosPagamento();
@@ -193,7 +205,9 @@ class __FormContentState extends State<_FormContent> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                   suffixIcon: IconButton(
-                    icon: Icon(_isPasswordVisible ? Icons.visibility_off : Icons.visibility),
+                    icon: Icon(_isPasswordVisible
+                        ? Icons.visibility_off
+                        : Icons.visibility),
                     onPressed: () {
                       setState(() {
                         _isPasswordVisible = !_isPasswordVisible;
@@ -207,24 +221,22 @@ class __FormContentState extends State<_FormContent> {
               children: [
                 SizedBox(
                   height: 50,
-                  child:
-
-                  ElevatedButton(
+                  child: ElevatedButton(
                     style: _showConfirmation
                         ? ElevatedButton.styleFrom(
-                      backgroundColor: Colors.grey,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        side: const BorderSide(color: Colors.black),
-                      ),
-                    )
+                            backgroundColor: Colors.grey,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              side: const BorderSide(color: Colors.black),
+                            ),
+                          )
                         : ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xff00afe9),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        side: const BorderSide(color: Colors.black),
-                      ),
-                    ),
+                            backgroundColor: const Color(0xff00afe9),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              side: const BorderSide(color: Colors.black),
+                            ),
+                          ),
                     onPressed: () {
                       setState(() {
                         setup.url = urlController.text;
@@ -240,15 +252,14 @@ class __FormContentState extends State<_FormContent> {
                       child: Text(
                         _showConfirmation ? 'Conectado' : 'Conectar',
                         style: TextStyle(
-                          color: _showConfirmation ? Colors.black : Colors.white,
+                          color:
+                              _showConfirmation ? Colors.black : Colors.white,
                           fontWeight: FontWeight.bold,
                           fontSize: 16.0,
                         ),
                       ),
                     ),
                   ),
-
-
                 ),
                 if (_showConfirmation)
                   const Row(
@@ -278,7 +289,8 @@ class __FormContentState extends State<_FormContent> {
                         _selectedStore = newValue!;
                       });
                     },
-                    items: _stores.map<DropdownMenuItem<String>>((String? value) {
+                    items:
+                        _stores.map<DropdownMenuItem<String>>((String? value) {
                       return DropdownMenuItem<String>(
                         value: value,
                         child: Text(value!),
@@ -293,7 +305,8 @@ class __FormContentState extends State<_FormContent> {
                         value: _selectedPos,
                         hint: const Text('Selecione o POS'),
                         decoration: InputDecoration(
-                          label: const Text('POS', style: TextStyle(fontSize: 20)),
+                          label:
+                              const Text('POS', style: TextStyle(fontSize: 20)),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
@@ -303,7 +316,8 @@ class __FormContentState extends State<_FormContent> {
                             _selectedPos = newValue!;
                           });
                         },
-                        items: _poss.map<DropdownMenuItem<String>>((String? value) {
+                        items: _poss
+                            .map<DropdownMenuItem<String>>((String? value) {
                           return DropdownMenuItem<String>(
                             value: value,
                             child: Text(value!),
@@ -333,14 +347,17 @@ class __FormContentState extends State<_FormContent> {
 
                           Navigator.of(context).pushAndRemoveUntil(
                             MaterialPageRoute(
-                              builder: (BuildContext context) => SetupPOSPage(setup: setup,),
+                              builder: (BuildContext context) => SetupPOSPage(
+                                setup: setup,
+                              ),
                             ),
-                                (route) => false,
+                            (route) => false,
                           );
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
-                              content: Text('Por favor, selecione a loja e o POS.'),
+                              content:
+                                  Text('Por favor, selecione a loja e o POS.'),
                               duration: Duration(seconds: 3),
                             ),
                           );
@@ -348,7 +365,10 @@ class __FormContentState extends State<_FormContent> {
                       },
                       child: const Text(
                         'Entrar',
-                        style: TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold),
                       ),
                     ),
                   ),

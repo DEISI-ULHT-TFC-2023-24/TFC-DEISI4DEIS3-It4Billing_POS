@@ -1,6 +1,7 @@
 import 'package:it4billing_pos/main.dart';
 import 'package:it4billing_pos/objetos/clienteObj.dart';
 import 'package:it4billing_pos/objetos/setupObj.dart';
+import 'package:it4billing_pos/objetos/transacoesObj.dart';
 import 'package:it4billing_pos/objetos/turnoObj.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
@@ -35,6 +36,7 @@ class ObjectBoxDatabase {
   late final Box<TurnoObj> _turnosBox;
   late final Box<MetodoPagamentoObj> _metodoPagamentoBox;
   late final Box<ImpressoraObj> _impressorasBox;
+  late final Box<TransactionObj> _transactionsBox;
 
   ObjectBoxDatabase._create(this._store) {
     _pedidosBox = Box<PedidoObj>(_store);
@@ -50,6 +52,7 @@ class ObjectBoxDatabase {
     _turnosBox = Box<TurnoObj>(_store);
     _metodoPagamentoBox = Box<MetodoPagamentoObj>(_store);
     _impressorasBox = Box<ImpressoraObj>(_store);
+    _transactionsBox = Box<TransactionObj>(_store);
 
   }
 
@@ -84,7 +87,7 @@ class ObjectBoxDatabase {
   Future<void> putDemoClientes() async {
     final demoClients = [
       ClienteObj('Consumidor Final', 999999990, 'N/D', 'N/D', '0000-000', 'N/D',
-          'N/D', 987654321, 'N/D'),
+          'N/D', 0, 'N/D'),
       ClienteObj('Beatriz Silva', 240548921, 'Portugal', 'N/D', '0000-000',
           'Lisboa', 'email001@gmail.com', 926545742, 'N/D'),
       ClienteObj('Diogo Figueira', 270785524, 'Portugal', 'Av. de Berna 4 1D',
@@ -160,7 +163,7 @@ class ObjectBoxDatabase {
             idArticlesCategories: idCategorias[2]),
         Artigo(
             referencia: "003",
-            nome: "Artigo 3 com um nome grande PARA TESTES",
+            nome: "Artigo 3 - com um nome grande PARA TESTES",
             barCod: '',
             description: '',
             productType: '',
@@ -381,6 +384,17 @@ class ObjectBoxDatabase {
   Future<void> removeAllMetodosPagamento() async {
     await _metodoPagamentoBox.removeAll();
   }
+  List<int> getAllMetodosPagamentoIds() {
+    List<int> ids = [];
+    List<MetodoPagamentoObj> metodos = _metodoPagamentoBox.getAll();
+
+    for (var metodo in metodos) {
+      ids.add(metodo.id);
+    }
+
+    return ids;
+  }
+
 
   ///---------------------------------------------------------
   // Funções para manipular as Impressoras
@@ -402,6 +416,24 @@ class ObjectBoxDatabase {
 
   Future<void> removeAllImpressoras() async {
     await _impressorasBox.removeAll();
+  }
+
+  ///---------------------------------------------------------
+  // Funções para manipular as Impressoras
+  Future<void> addTransaction(TransactionObj impressora) async {
+    await _transactionsBox.put(impressora);
+  }
+
+  TransactionObj? getTransaction(int id) {
+    return _transactionsBox.get(id);
+  }
+
+  List<TransactionObj> getAllTransactions() {
+    return _transactionsBox.getAll();
+  }
+
+  Future<void> removeAllTransactions() async {
+    await _transactionsBox.removeAll();
   }
 
 }

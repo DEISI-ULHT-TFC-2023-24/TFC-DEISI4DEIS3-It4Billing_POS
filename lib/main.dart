@@ -24,7 +24,6 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     String pagina = '/setupPage';
@@ -38,13 +37,12 @@ class MyApp extends StatelessWidget {
       }
     }
 
-    pagina = '/config'; /// TESTES
+    //pagina = '/turno'; /// TESTES
 
     return MaterialApp(
       title: 'it4billing_pos',
       theme: ThemeData(primarySwatch: Colors.blue),
       initialRoute: pagina,
-      // Trocar depois quando funcionar bem
       routes: {
         '/setupPage': (context) => const SetupPage(),
         '/loginPage': (context) => LoginPage(),

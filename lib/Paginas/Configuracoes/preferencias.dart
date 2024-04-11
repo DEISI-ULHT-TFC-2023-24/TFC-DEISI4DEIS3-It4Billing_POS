@@ -79,6 +79,20 @@ class _PreferenciasPageState extends State<PreferenciasPage> {
                         },
                       ),
                     ),
+                    ListTile(
+                      title: const Text('Dispositivo principal'),
+                      trailing: Switch(
+                        activeTrackColor: const Color(0xff00afe9),
+                        activeColor: Colors.white,
+                        value: setup.dispositivoPrincipal,
+                        onChanged: (value) {
+                          setState(() {
+                            setup.dispositivoPrincipal = value;
+                            database.addSetup(setup);
+                          });
+                        },
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -131,6 +145,20 @@ class _PreferenciasPageState extends State<PreferenciasPage> {
                         onChanged: (value) {
                           setState(() {
                             setup.notaCredito = value;
+                            database.addSetup(setup);
+                          });
+                        },
+                      ),
+                    ),
+                    ListTile(
+                      title: const Text('Dispositivo principal'),
+                      trailing: Switch(
+                        activeTrackColor: const Color(0xff00afe9),
+                        activeColor: Colors.white,
+                        value: setup.dispositivoPrincipal,
+                        onChanged: (value) {
+                          setState(() {
+                            setup.dispositivoPrincipal = value;
                             database.addSetup(setup);
                           });
                         },

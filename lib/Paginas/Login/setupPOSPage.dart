@@ -128,6 +128,19 @@ class __FormContentState extends State<_FormContent> {
                 const Text('Emitir nota de credito'),
               ],
             ),
+            Row(
+              children: [
+                Checkbox(
+                  value: widget.setup.dispositivoPrincipal,
+                  onChanged: (value) {
+                    setState(() {
+                      widget.setup.dispositivoPrincipal = value!;
+                    });
+                  },
+                ),
+                const Text('Dispositivo principal'),
+              ],
+            ),
             _gap(),
             const Text('Selecione o documento para a faturação:'),
             _gap(),

@@ -1,13 +1,22 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:it4billing_pos/Paginas/Pedidos/pedidos.dart';
 
 import '../../main.dart';
 import '../../objetos/VendaObj.dart';
+import '../../objetos/artigoObj.dart';
+import '../../objetos/impressoraObj.dart';
 import '../../objetos/pedidoObj.dart';
+import '../../objetos/setupObj.dart';
 import 'cobrarDividido.dart';
 
 class DividirConta extends StatefulWidget {
   List<PedidoObj> pedidos = [];
+  SetupObj setup = database.getAllSetup()[0];
+  List<ImpressoraObj> impressoras = database.getAllImpressoras();
   late PedidoObj pedido;
 
   DividirConta({
@@ -25,8 +34,23 @@ class _DividirConta extends State<DividirConta> {
   List<double> valoresIndividuais = []; // Valores individuais de cada pessoa
   bool mostrarBotaoConcluir = false;
   List<bool> botaoPressionado = [];
-
   late List<TextEditingController> controllers;
+
+  late Map<int, int> artigosAgrupados;
+
+  Map<int, int> groupItems(List<int> listaIds) {
+    Map<int, int> frequenciaIds = {};
+
+    for (int id in listaIds) {
+      if (frequenciaIds.containsKey(id)) {
+        frequenciaIds[id] = (frequenciaIds[id] ?? 0) + 1;
+      } else {
+        frequenciaIds[id] = 1;
+      }
+    }
+
+    return frequenciaIds;
+  }
 
   @override
   void initState() {
@@ -92,15 +116,21 @@ class _DividirConta extends State<DividirConta> {
       valoresIndividuais[0] += totalPedido -
           valoresIndividuais.reduce((value, element) => value + element);
     });
+    print(valoresIndividuais);
   }
 
   void aumentarPessoas() {
     setState(() {
       numPessoas++;
       botaoPressionado.add(false);
-      mostrarBotaoConcluir =
-          false; // Se aumentar o número de pessoas, o botão "Concluir Venda" deve desaparecer
+      mostrarBotaoConcluir = false; // Se aumentar o número de pessoas, o botão "Concluir Venda" deve desaparecer
+      controllers.add(TextEditingController());
+      valoresIndividuais.add(0.0);
       calcularValoresIndividuais();
+      // Atualize os controladores com os novos valores individuais
+      for (int i = 0; i < numPessoas; i++) {
+        controllers[i].text = valoresIndividuais[i].toStringAsFixed(2);
+      }
     });
   }
 
@@ -109,7 +139,13 @@ class _DividirConta extends State<DividirConta> {
       setState(() {
         numPessoas--;
         botaoPressionado.removeLast();
+        valoresIndividuais.removeLast();
+        controllers.removeLast();
         calcularValoresIndividuais();
+        // Atualize os controladores com os novos valores individuais
+        for (int i = 0; i < numPessoas; i++) {
+          controllers[i].text = valoresIndividuais[i].toStringAsFixed(2);
+        }
       });
     }
   }
@@ -202,7 +238,7 @@ class _DividirConta extends State<DividirConta> {
         total: widget.pedido.total);
     venda.artigosPedidoIds = widget.pedido.artigosPedidoIds;
     venda.nrArtigos = widget.pedido.nrArtigos;
-
+    imprimir();
     database.addVenda(venda);
     if (widget.pedido.id != 0) {
       if (database.getPedido(widget.pedido.id) != null) {
@@ -217,6 +253,187 @@ class _DividirConta extends State<DividirConta> {
       ),
     );
     print('Venda concluída!');
+  }
+
+  Future<void> imprimir() async {
+    ImpressoraObj impressora = widget.impressoras[0];
+    // Dados demo da empresa
+    final String nomeEmpresa = "It4Billing";
+    final String moradaEmpresa = "Rua da Empresa, 123";
+    final String cidadeEstado_CodigopostalEmpresa =
+        "1234-678 - Cidade da Emprresa";
+    final String telefoneEmpresa = "219876543";
+    final String nifEmpresa = '502123456';
+
+    try {
+      // Conectando à impressora
+
+      Socket socket = await Socket.connect(impressora.iP, impressora.port);
+
+      // Comando para centralizar o texto
+      final centralizarTexto = [0x1B, 0x61, 0x01];
+
+      // Comando para ativar negrito
+      final ativarNegrito = [0x1B, 0x45, 0x01];
+
+      // Comando para desativar negrito
+      final desativarNegrito = [0x1B, 0x45, 0x00];
+
+      // Comando para aumentar o tamanho da fonte
+      final aumentarFonte = [0x1B, 0x21, 0x20];
+
+      // Define o tamanho da fonte para o padrão
+      final tamanhoFonte = [0x1B, 0x21, 0x00];
+
+      // Comando para descentralizar o texto (definir alinhamento padrão)
+      final alinhamentoPadrao = [0x1B, 0x61, 0x00];
+
+
+      // Texto a ser enviado
+      final texto = '\n$nomeEmpresa\n\n';
+      // Concatenando os comandos e o texto
+      final tituloCentrado = [
+        ...ativarNegrito,
+        ...centralizarTexto,
+        ...utf8.encode(texto),
+        ...alinhamentoPadrao,
+        ...desativarNegrito
+      ];
+
+      // Cabeçalho
+      String cabecalho = '';
+
+      // Informações da empresa
+      cabecalho += '$moradaEmpresa\n';
+      cabecalho += '$cidadeEstado_CodigopostalEmpresa\n';
+      cabecalho += 'Tel: $telefoneEmpresa\n';
+      cabecalho += 'NIF: $nifEmpresa\n\n';
+
+      // Informações do cliente
+      cabecalho +=
+      'Cliente: ${database.getCliente(widget.pedido.clienteID)!.nome}\n';
+      cabecalho += '${database.getCliente(widget.pedido.clienteID)!.address}\n';
+      cabecalho +=
+      'Cód. Postal: ${database.getCliente(widget.pedido.clienteID)!.postcode}\n';
+      cabecalho +=
+      'NIF: ${database.getCliente(widget.pedido.clienteID)!.NIF}\n';
+      cabecalho +=
+      'Tel: ${database.getCliente(widget.pedido.clienteID)!.phone}\n\n';
+      cabecalho +=
+      'Data de Emissao: ${DateFormat('dd/MM/yyyy HH:mm').format(DateTime.now())}\n';
+      cabecalho +=
+      'Vendador: ${database.getFuncionario(widget.setup.funcionarioId)!.nome}\n';
+
+      // Comando para imprimir separador de linha de traços
+      final separador = '------------------------------------------------\n';
+
+      // Comandos para imprimir a frase "Fatura-recibo de teste"
+      const fatura = 'FT XPTO/158\n';
+      // Concatenando os comandos e o texto
+      final faturaN = [
+        ...ativarNegrito,
+        ...utf8.encode(fatura),
+        ...desativarNegrito
+      ];
+
+      final indice =    'Qtd.---IVA%-----Preco-------Desc.-------Total\n';
+      // Convertendo o texto para UTF-8
+      List<int> indiceUtf8Bytes = utf8.encode(indice);
+
+      String pordutos = '';
+      //                        id       Qtd
+      artigosAgrupados.forEach((chave, valor) {
+        // Verifica se o artigo está presente na lista
+        for (Artigo artigoLista in widget.pedido.artigosPedido) {
+          if (artigoLista.nome == database.getArtigo(chave)!.nome) {
+
+            String nomeArtigo = artigoLista.nome.length > 40
+                ? artigoLista.nome.substring(0, 40)
+                : artigoLista.nome;
+            //Valor representa a quantidade do produto
+            pordutos += '$valor     ${artigoLista.taxPrecentage}%      ${artigoLista.price.toStringAsFixed(2)}EUR     ${artigoLista.discount.toStringAsFixed(2)}EUR    ${(artigoLista.price * valor).toStringAsFixed(2)}EUR\n'
+                '$nomeArtigo\n';
+            break;
+          }
+        }
+
+      });
+      // Convertendo o texto para UTF-8
+      List<int> pordutosUtf8Bytes = utf8.encode(pordutos);
+
+
+      String totalImp = '---------------Impostos Incluidos---------------\n\n';
+      final totalImpE = [
+        ...centralizarTexto,
+        ...utf8.encode(totalImp),
+      ];
+      String total = 'Total EURO ${widget.pedido.calcularValorTotal().toStringAsFixed(2)}\n\n';
+
+      final totalCentrado = [
+        ...ativarNegrito,
+        ...aumentarFonte,
+        ...utf8.encode(total),
+        ...tamanhoFonte,
+        ...alinhamentoPadrao,
+        ...desativarNegrito
+      ];
+
+
+      final indiceImp ='Detalhes do IVA\n\n'
+          'Taxa  x  Incidencia   = Total Impos.\n';
+      List<int> indiceImpUtf8Bytes = utf8.encode(indiceImp);
+
+      Map<int, double> taxPercentageSumMap = {};
+
+// Agrupando os artigos com base no valor de taxPrecentage e calculando a soma de unitPrice para cada grupo
+      for (Artigo artigoLista in widget.pedido.artigosPedido) {
+        int taxPercentage = artigoLista.taxPrecentage;
+        double unitPrice = artigoLista.unitPrice;
+
+        if (taxPercentageSumMap.containsKey(taxPercentage)) {
+          taxPercentageSumMap[taxPercentage] = taxPercentageSumMap[taxPercentage]! + unitPrice;
+        } else {
+          taxPercentageSumMap[taxPercentage] = unitPrice;
+        }
+      }
+
+// Construindo a string com os valores agrupados
+      String IVA = '';
+      taxPercentageSumMap.forEach((taxPercentage, sum) {
+        IVA += '$taxPercentage%      ${sum.toStringAsFixed(2)}EUR       ${(sum * taxPercentage /100).toStringAsFixed(2)}EUR\n';
+      });
+
+
+      // Convertendo o texto para UTF-8
+      List<int> IVAUtf8Bytes = utf8.encode(IVA);
+
+
+      // Enviar comandos para a impressora
+      socket.add(tituloCentrado);
+      socket.write(cabecalho);
+      socket.add(faturaN);
+      socket.write(separador);
+      socket.add(indiceUtf8Bytes);
+      socket.add(pordutosUtf8Bytes);
+      socket.add(totalImpE);
+      socket.add(totalCentrado);
+      socket.write(separador);
+      socket.add(indiceImpUtf8Bytes);
+      socket.add(IVAUtf8Bytes);
+
+
+      // Enviando dados de impressão
+      socket.write('\n\n\n\n\n\n\n');
+
+      // Enviando comando de corte
+      List<int> cutCommand = [0x1D, 0x56, 0x01];
+      socket.add(cutCommand);
+
+      await socket.flush();
+      await socket.close();
+    } catch (e) {
+      print('Erro ao imprimir: $e');
+    }
   }
 
   @override

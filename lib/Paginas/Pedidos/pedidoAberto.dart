@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/animation.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:it4billing_pos/Paginas/Pedidos/carrinho.dart';
 import 'package:it4billing_pos/Paginas/Pedidos/pedidos.dart';
 import '../../main.dart';
@@ -8,6 +9,9 @@ import '../../objetos/artigoObj.dart';
 import '../../objetos/categoriaObj.dart';
 import '../../objetos/localObj.dart';
 import '../../objetos/pedidoObj.dart';
+import 'cobrar.dart';
+import 'editCarrinho.dart';
+import 'escolhaLocal.dart';
 
 class PedidoAbertoPage extends StatefulWidget {
   List<PedidoObj> pedidos = [];
@@ -29,7 +33,7 @@ class PedidoAbertoPage extends StatefulWidget {
 }
 
 class _PedidoAbertoPage extends State<PedidoAbertoPage> with TickerProviderStateMixin {
-  Categoria categoriaSelecionada = Categoria(
+    Categoria categoriaSelecionada = Categoria(
     nome: 'Todos os artigos',
     description: '',
     nomeCurto: '',
@@ -39,6 +43,38 @@ class _PedidoAbertoPage extends State<PedidoAbertoPage> with TickerProviderState
   bool showSearch = false;
   late AnimationController _controller;
   int nrArtigosInicial = 0;
+  bool isTablet = false;
+
+  late Map<int, int> artigosAgrupados;
+
+  Map<int, int> groupItems(List<int> listaIds) {
+    Map<int, int> frequenciaIds = {};
+
+    for (int id in listaIds) {
+      if (frequenciaIds.containsKey(id)) {
+        frequenciaIds[id] = (frequenciaIds[id] ?? 0) + 1;
+      } else {
+        frequenciaIds[id] = 1;
+      }
+    }
+
+    return frequenciaIds;
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    checkDeviceType();
+  }
+
+  void checkDeviceType() {
+    // Getting the screen size
+    final screenSize = MediaQuery.of(context).size;
+    // Arbitrarily defining screen size greater than 600 width and height as tablet
+    setState(() {
+      isTablet = screenSize.width > 600 && screenSize.height > 600;
+    });
+  }
 
   @override
   void initState() {
@@ -52,7 +88,15 @@ class _PedidoAbertoPage extends State<PedidoAbertoPage> with TickerProviderState
       vsync: this,
       duration: const Duration(milliseconds: 300),
     );
+
+    artigosAgrupados = groupItems(widget.pedido.artigosPedidoIds);
   }
+
+    void atulizarArtigosCarrinho(){
+      setState(() {
+        artigosAgrupados = groupItems(widget.pedido.artigosPedidoIds);
+      });
+    }
 
   List<Artigo> artigosFiltrados() {
     if (categoriaSelecionada.nome == 'Todos os artigos') {
@@ -64,7 +108,8 @@ class _PedidoAbertoPage extends State<PedidoAbertoPage> with TickerProviderState
     } else {
       return widget.artigos
           .where((artigo) =>
-              database.getArtigo(artigo.idArticlesCategories)?.nome == categoriaSelecionada.nome &&
+              database.getArtigo(artigo.idArticlesCategories)?.nome ==
+                  categoriaSelecionada.nome &&
               artigo.nome
                   .toLowerCase()
                   .contains(searchController.text.toLowerCase()))
@@ -109,14 +154,12 @@ class _PedidoAbertoPage extends State<PedidoAbertoPage> with TickerProviderState
   }
 
   void _removerObjeto(BuildContext context) {
-
     print(nrArtigosInicial);
     print('${widget.pedido.nrArtigos}');
     // Remover os últimos artigos da lista
     for (int i = nrArtigosInicial; i < widget.pedido.nrArtigos; i++) {
       print('removeu o ultimo obeto $i');
       widget.pedido.artigosPedidoIds.removeLast();
-
     }
     updateNrArtigos();
     // Navegar de volta à tela anterior
@@ -128,16 +171,16 @@ class _PedidoAbertoPage extends State<PedidoAbertoPage> with TickerProviderState
     // mudar o nome do pedido para que seja incrementado por exemplo
 
     return MaterialApp(
-            debugShowCheckedModeBanner: false,
-            home: Scaffold(
-              appBar: AppBar(
-                title: Text(widget.pedido.nome),
-                leading: IconButton(
-                  icon: Icon(Icons.arrow_back),
-                  onPressed: () {
-                    _removerObjeto(context);
-                  },
-                ),
+        debugShowCheckedModeBanner: false,
+        home: Scaffold(
+          appBar: AppBar(
+            title: Text(widget.pedido.nome),
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: () {
+                _removerObjeto(context);
+              },
+            ),
             backgroundColor: const Color(0xff00afe9),
             actions: [
               Stack(
@@ -153,7 +196,6 @@ class _PedidoAbertoPage extends State<PedidoAbertoPage> with TickerProviderState
                       child: const Icon(Icons.shopping_cart_outlined),
                     ),
                     onPressed: () {
-
                       for (int artigoId in widget.pedido.artigosPedidoIds) {
                         print('Nome: ${database.getArtigo(artigoId)?.nome} '
                             'Preço: ${database.getArtigo(artigoId)?.price}');
@@ -220,9 +262,8 @@ class _PedidoAbertoPage extends State<PedidoAbertoPage> with TickerProviderState
                   print('Opção selecionada: ${widget.pedido.nome}');
                   if (value == 'Eliminar pedido') {
                     database.removePedido(widget.pedido.id);
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) =>
-                            PedidosPage()));
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => PedidosPage()));
                   }
                 },
                 itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
@@ -244,130 +285,519 @@ class _PedidoAbertoPage extends State<PedidoAbertoPage> with TickerProviderState
               ),
             ],
           ),
-              body: Column(
-                children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: showSearch
-                        ? Padding(
-                            padding: const EdgeInsets.all(20),
-                            child: TextField(
-                              controller: searchController,
-                              decoration: const InputDecoration(
-                                hintText: 'Pesquisar artigos...',
+          body: isTablet
+              ? Row(
+                  children: [
+                    // Lista de definições
+                    Expanded(
+                      flex: 3,
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              Expanded(
+                                child: showSearch
+                                    ? Padding(
+                                  padding: const EdgeInsets.all(20),
+                                  child: TextField(
+                                    controller: searchController,
+                                    decoration: const InputDecoration(
+                                      hintText: 'Pesquisar artigos...',
+                                    ),
+                                    onChanged: (value) {
+                                      setState(() {});
+                                    },
+                                  ),
+                                )
+                                    : Padding(
+                                  padding: const EdgeInsets.all(20),
+                                  child: DropdownButtonFormField<Categoria>(
+                                    decoration: const InputDecoration(
+                                      label: Text('Categoria'),
+                                      border: OutlineInputBorder(),
+                                    ),
+                                    value: categoriaSelecionada,
+                                    onChanged: (Categoria? newValue) {
+                                      setState(() {
+                                        categoriaSelecionada = newValue!;
+                                      });
+                                    },
+                                    items: widget.categorias
+                                        .map<DropdownMenuItem<Categoria>>(
+                                            (Categoria value) {
+                                          return DropdownMenuItem<Categoria>(
+                                            value: value,
+                                            child: Text(value.nome),
+                                          );
+                                        }).toList(),
+                                  ),
+                                ),
                               ),
-                              onChanged: (value) {
-                                setState(() {});
-                              },
-                            ),
-                          )
-                        : Padding(
-                            padding: const EdgeInsets.all(20),
-                            child: DropdownButtonFormField<Categoria>(
-                              decoration: const InputDecoration(
-                                label: Text('Categoria'),
-                                border: OutlineInputBorder(),
+                              IconButton(
+                                icon: showSearch
+                                    ? const Icon(Icons.close)
+                                    : const Icon(Icons.search),
+                                onPressed: () {
+                                  setState(() {
+                                    // Faz com que apareca todos os artigos novamente
+                                    categoriaSelecionada = Categoria(
+                                      nome: 'Todos os artigos',
+                                      description: '',
+                                      nomeCurto: '',
+                                    );
+                                    showSearch = !showSearch;
+                                    if (!showSearch) {
+                                      searchController.clear();
+                                    }
+                                  });
+                                },
                               ),
-                              value: categoriaSelecionada,
-                              onChanged: (Categoria? newValue) {
-                                setState(() {
-                                  categoriaSelecionada = newValue!;
-                                });
-                              },
-                              items: widget.categorias
-                                  .map<DropdownMenuItem<Categoria>>(
-                                      (Categoria value) {
-                                return DropdownMenuItem<Categoria>(
-                                  value: value,
-                                  child: Text(value.nome),
-                                );
-                              }).toList(),
+                              IconButton(
+                                icon: const Icon(Icons.camera_alt_outlined),
+                                onPressed: _scanBarcode,
+                              ),
+                            ],
+                          ),
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                              child: artigosFiltrados().isEmpty
+                                  ? const Center(
+                                child: Text('Nenhum artigo encontrado'),
+                              )
+                                  : ListView.builder(
+                                itemCount: artigosFiltrados().length,
+                                itemBuilder: (context, index) {
+                                  return Padding(
+                                    padding:
+                                    const EdgeInsets.only(bottom: 10.0),
+                                    child: ElevatedButton(
+                                      onPressed: () {
+                                        widget.pedido.artigosPedidoIds
+                                            .add(artigosFiltrados()[index].id);
+                                        print('foi adicionado o artigo');
+                                        addItemToCart();
+                                        atulizarArtigosCarrinho();
+                                      },
+                                      style: ButtonStyle(
+                                        side: MaterialStateProperty.all(
+                                            const BorderSide(
+                                                color: Colors.white12)),
+                                        // Linha de borda preta
+                                        backgroundColor:
+                                        MaterialStateProperty.all(
+                                            Colors.white),
+                                        // Fundo white
+                                        fixedSize: MaterialStateProperty.all(
+                                            const Size(50, 60)),
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            artigosFiltrados()[index]
+                                                .nome
+                                                .length >
+                                                10
+                                                ? artigosFiltrados()[index]
+                                                .nome
+                                                .substring(0, 20)
+                                                : artigosFiltrados()[index]
+                                                .nome,
+                                            style: const TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 16),
+                                          ),
+                                          Text(
+                                            'Preço: € ${artigosFiltrados()[index].price}',
+                                            style: const TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 16),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
                             ),
                           ),
-                  ),
-                  IconButton(
-                    icon: showSearch
-                        ? const Icon(Icons.close)
-                        : const Icon(Icons.search),
-                    onPressed: () {
-                      setState(() {
-                        // Faz com que apareca todos os artigos novamente
-                        categoriaSelecionada = Categoria(
-                          nome: 'Todos os artigos',
-                          description: '',
-                          nomeCurto: '',
-                        );
-                        showSearch = !showSearch;
-                        if (!showSearch) {
-                          searchController.clear();
-                        }
-                      });
-                    },
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.camera_alt_outlined),
-                    onPressed: _scanBarcode,
-                  ),
-                ],
-              ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                  child: artigosFiltrados().isEmpty
-                      ? const Center(
-                          child: Text('Nenhum artigo encontrado'),
-                        )
-                      : ListView.builder(
-                          itemCount: artigosFiltrados().length,
-                          itemBuilder: (context, index) {
-                            return Padding(
-                              padding: const EdgeInsets.only(bottom: 10.0),
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  widget.pedido.artigosPedidoIds
-                                      .add(artigosFiltrados()[index].id);
-                                  print('foi adicionado o artigo');
-                                  addItemToCart();
-                                },
-                                style: ButtonStyle(
-                                  side: MaterialStateProperty.all(
-                                      const BorderSide(color: Colors.white12)),
-                                  // Linha de borda preta
-                                  backgroundColor:
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      flex: 4,
+                      child: Column(
+                        children: [
+                          const SizedBox(height: 20),
+                          Expanded(
+                            child: ListView.builder(
+                              itemCount: artigosAgrupados.length,
+                              itemBuilder: (context, index) {
+                                int artigoId =
+                                artigosAgrupados.keys.elementAt(index);
+                                int quantidade = artigosAgrupados[artigoId]!;
+                                double? valor;
+                                Artigo? artigo;
+
+                                // Verifica se o artigo está presente na lista
+                                for (Artigo artigoLista in widget.pedido.artigosPedido) {
+                                  if (artigoLista.nome ==
+                                      database.getArtigo(artigoId)!.nome) {
+                                    print(
+                                        'preço do artigo na lista do pedido ${artigoLista.price}');
+                                    artigo = artigoLista;
+                                    break;
+                                  }
+                                }
+                                valor = artigo?.price;
+
+                                /// isto vai dar problemas no editar carrinho
+                                return Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 20, right: 20, bottom: 10.0),
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      //entrar no artigo e quantidades e tal
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => EditCarrinho(
+                                                artigo: artigo!,
+                                                quantidade: quantidade,
+                                                pedido: widget.pedido,
+                                                artigos: widget.artigos,
+                                                pedidos: widget.pedidos,
+                                              )));
+                                    },
+                                    style: ButtonStyle(
+                                      side: MaterialStateProperty.all(
+                                          const BorderSide(color: Colors.white12)),
+                                      // Linha de borda preta
+                                      backgroundColor:
                                       MaterialStateProperty.all(Colors.white),
-                                  // Fundo white
-                                  fixedSize: MaterialStateProperty.all(
-                                      const Size(50, 60)),
-                                ),
-                                child: Row(
-                                  mainAxisAlignment:
+                                      // Fundo white
+                                      fixedSize: MaterialStateProperty.all(
+                                          const Size(50, 60)),
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      artigosFiltrados()[index].nome.length > 10
-                                          ? artigosFiltrados()[index]
-                                              .nome
-                                              .substring(0, 20)
-                                          : artigosFiltrados()[index].nome,
-                                      style: const TextStyle(
-                                          color: Colors.black, fontSize: 16),
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                                artigo!.nome.length > 10
+                                                    ? artigo.nome.substring(0, 20)
+                                                    : artigo.nome,
+                                                style: const TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 16)),
+                                            const SizedBox(width: 10),
+                                            Text('x $quantidade',
+                                                style: const TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 16)),
+                                          ],
+                                        ),
+                                        Text(
+                                            '${(valor! * quantidade).toStringAsFixed(2)} €',
+                                            style: const TextStyle(
+                                                color: Colors.black, fontSize: 16)),
+                                      ],
                                     ),
-                                    Text(
-                                      'Preço: € ${artigosFiltrados()[index].price}',
-                                      style: const TextStyle(
-                                          color: Colors.black, fontSize: 16),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                          const SizedBox(height: 30),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 45, right: 45),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text('Total',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.bold,
+                                    )),
+                                Text(
+                                    '${widget.pedido.calcularValorTotal().toStringAsFixed(2)} €',
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.bold,
+                                    )),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 30),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Padding(
+                                  padding:
+                                  const EdgeInsets.only(left: 20.0, bottom: 30),
+                                  child: SizedBox(
+                                    height: 50,
+                                    child: ElevatedButton(
+                                      onPressed: () async {
+                                        if (widget.pedido.artigosPedidoIds.isNotEmpty) {
+                                          if (widget.pedido.localId == -1) {
+                                            print(
+                                                'Lista de locais: ${database.getAllLocal().length}');
+                                            database
+                                                .getAllLocal()
+                                                .forEach((element) {
+                                              print(element.nome);
+                                            });
+
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) => LocalPage(
+                                                      pedidos: widget.pedidos,
+                                                      pedido: widget.pedido,
+                                                    )));
+                                          } else {
+                                            await database.addPedido(widget.pedido);
+                                            Navigator.of(context).push(
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        PedidosPage()));
+                                          }
+                                        } else {
+                                          Fluttertoast.showToast(
+                                            msg: "Adicionar artigos primeiro",
+                                            toastLength: Toast.LENGTH_SHORT,
+                                            gravity: ToastGravity.CENTER,
+                                            timeInSecForIosWeb: 1,
+                                            backgroundColor: Colors.grey,
+                                            textColor: Colors.white,
+                                            fontSize: 16.0,
+                                          );
+                                        }
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.grey,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(12),
+                                          side:
+                                          const BorderSide(color: Colors.black),
+                                        ),
+                                      ),
+                                      child: const Padding(
+                                        padding:
+                                        EdgeInsets.symmetric(horizontal: 10.0),
+                                        child: Text(
+                                          'GRAVAR',
+                                          style: TextStyle(
+                                              color: Colors.black, fontSize: 18),
+                                        ),
+                                      ),
                                     ),
-                                  ],
+                                  ),
                                 ),
                               ),
-                            );
+                              const SizedBox(width: 20), // Espaço entre os botões
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                      right: 20.0, bottom: 30),
+                                  child: SizedBox(
+                                    height: 50,
+                                    child: ElevatedButton(
+                                      onPressed: () {
+                                        if (widget.pedido.artigosPedidoIds.isNotEmpty) {
+                                          // fazer a navegação para a proxima pag a de cobrança.
+
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) => Cobrar(
+                                                    pedidos: widget.pedidos,
+                                                    pedido: widget.pedido,
+                                                    artigos: widget.artigos,
+                                                  )));
+                                        } else {
+                                          Fluttertoast.showToast(
+                                            msg: "Adicionar artigos primeiro",
+                                            toastLength: Toast.LENGTH_SHORT,
+                                            gravity: ToastGravity.CENTER,
+                                            timeInSecForIosWeb: 1,
+                                            backgroundColor: Colors.grey,
+                                            textColor: Colors.white,
+                                            fontSize: 16.0,
+                                          );
+                                        }
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: const Color(0xff00afe9),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(12),
+                                          side:
+                                          const BorderSide(color: Colors.black),
+                                        ),
+                                      ),
+                                      child: const Padding(
+                                        padding:
+                                        EdgeInsets.symmetric(horizontal: 20.0),
+                                        child: Text(
+                                          'COBRAR',
+                                          style: TextStyle(
+                                              color: Colors.white, fontSize: 18),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                )
+              : Column(
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: showSearch
+                              ? Padding(
+                                  padding: const EdgeInsets.all(20),
+                                  child: TextField(
+                                    controller: searchController,
+                                    decoration: const InputDecoration(
+                                      hintText: 'Pesquisar artigos...',
+                                    ),
+                                    onChanged: (value) {
+                                      setState(() {});
+                                    },
+                                  ),
+                                )
+                              : Padding(
+                                  padding: const EdgeInsets.all(20),
+                                  child: DropdownButtonFormField<Categoria>(
+                                    decoration: const InputDecoration(
+                                      label: Text('Categoria'),
+                                      border: OutlineInputBorder(),
+                                    ),
+                                    value: categoriaSelecionada,
+                                    onChanged: (Categoria? newValue) {
+                                      setState(() {
+                                        categoriaSelecionada = newValue!;
+                                      });
+                                    },
+                                    items: widget.categorias
+                                        .map<DropdownMenuItem<Categoria>>(
+                                            (Categoria value) {
+                                      return DropdownMenuItem<Categoria>(
+                                        value: value,
+                                        child: Text(value.nome),
+                                      );
+                                    }).toList(),
+                                  ),
+                                ),
+                        ),
+                        IconButton(
+                          icon: showSearch
+                              ? const Icon(Icons.close)
+                              : const Icon(Icons.search),
+                          onPressed: () {
+                            setState(() {
+                              // Faz com que apareca todos os artigos novamente
+                              categoriaSelecionada = Categoria(
+                                nome: 'Todos os artigos',
+                                description: '',
+                                nomeCurto: '',
+                              );
+                              showSearch = !showSearch;
+                              if (!showSearch) {
+                                searchController.clear();
+                              }
+                            });
                           },
                         ),
+                        IconButton(
+                          icon: const Icon(Icons.camera_alt_outlined),
+                          onPressed: _scanBarcode,
+                        ),
+                      ],
+                    ),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                        child: artigosFiltrados().isEmpty
+                            ? const Center(
+                                child: Text('Nenhum artigo encontrado'),
+                              )
+                            : ListView.builder(
+                                itemCount: artigosFiltrados().length,
+                                itemBuilder: (context, index) {
+                                  return Padding(
+                                    padding:
+                                        const EdgeInsets.only(bottom: 10.0),
+                                    child: ElevatedButton(
+                                      onPressed: () {
+                                        widget.pedido.artigosPedidoIds
+                                            .add(artigosFiltrados()[index].id);
+                                        print('foi adicionado o artigo');
+                                        addItemToCart();
+                                      },
+                                      style: ButtonStyle(
+                                        side: MaterialStateProperty.all(
+                                            const BorderSide(
+                                                color: Colors.white12)),
+                                        // Linha de borda preta
+                                        backgroundColor:
+                                            MaterialStateProperty.all(
+                                                Colors.white),
+                                        // Fundo white
+                                        fixedSize: MaterialStateProperty.all(
+                                            const Size(50, 60)),
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            artigosFiltrados()[index]
+                                                        .nome
+                                                        .length >
+                                                    10
+                                                ? artigosFiltrados()[index]
+                                                    .nome
+                                                    .substring(0, 20)
+                                                : artigosFiltrados()[index]
+                                                    .nome,
+                                            style: const TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 16),
+                                          ),
+                                          Text(
+                                            'Preço: € ${artigosFiltrados()[index].price}',
+                                            style: const TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 16),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-            ],
-          ),
         ));
   }
 }

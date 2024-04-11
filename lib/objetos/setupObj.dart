@@ -13,6 +13,7 @@ class SetupObj {
   late bool imprimir = false;
   late bool email = false;
   late bool notaCredito = false;
+  late bool dispositivoPrincipal  = false;
 
   late int posID = 0;
   late String pos = '';

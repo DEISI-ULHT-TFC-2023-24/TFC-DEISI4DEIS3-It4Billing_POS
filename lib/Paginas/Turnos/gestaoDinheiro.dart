@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:flutter/services.dart';
 import 'package:it4billing_pos/main.dart';
 
+import '../../objetos/transacoesObj.dart';
 import '../../objetos/turnoObj.dart';
 
 class CustomNumberTextInputFormatter extends TextInputFormatter {
@@ -23,16 +24,9 @@ class CustomNumberTextInputFormatter extends TextInputFormatter {
   }
 }
 
-class Transaction {
-  final String time;
-  final String description;
-  final String amount;
-
-  Transaction(
-      {required this.time, required this.description, required this.amount});
-}
 
 class GestaoDinheiro extends StatefulWidget {
+
   @override
   _GestaoDinheiroState createState() => _GestaoDinheiroState();
 }
@@ -41,7 +35,7 @@ class _GestaoDinheiroState extends State<GestaoDinheiro> {
   late TurnoObj turno;
   TextEditingController _moneyController = TextEditingController();
   TextEditingController _descriptionController = TextEditingController();
-  List<Transaction> transactions = [];
+  List<TransactionObj> transactions = database.getAllTransactions();
   bool _canAddTransaction = false;
 
   @override
@@ -153,7 +147,7 @@ class _GestaoDinheiroState extends State<GestaoDinheiro> {
                 itemBuilder: (BuildContext context, int index) {
                   return ListTile(
                     title: Text(
-                        '${transactions[index].time} - Utilizador 01 - ${transactions[index].description} - ${transactions[index].amount} €'),
+                        '${transactions[index].time} - ${database.getFuncionario(turno.funcionarioID)?.nome} - ${transactions[index].description} - ${transactions[index].amount} €'),
                   );
                 },
               ),
@@ -173,7 +167,7 @@ class _GestaoDinheiroState extends State<GestaoDinheiro> {
 
   void _addTransaction() {
     String currentTime = DateFormat.Hm().format(DateTime.now());
-    Transaction newTransaction = Transaction(
+    TransactionObj newTransaction = TransactionObj(
       time: currentTime,
       description: _descriptionController.text,
       amount: _moneyController.text,
@@ -181,6 +175,7 @@ class _GestaoDinheiroState extends State<GestaoDinheiro> {
 
     setState(() {
       transactions.add(newTransaction);
+      database.addTransaction(newTransaction);
       _moneyController.clear();
       _descriptionController.clear();
       _canAddTransaction = false;

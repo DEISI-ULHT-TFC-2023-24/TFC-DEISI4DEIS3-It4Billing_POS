@@ -1,9 +1,8 @@
-import 'dart:typed_data';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:it4billing_pos/objetos/impressoraObj.dart';
-import 'dart:convert';
 import 'dart:io';
 
 import '../../../main.dart';
@@ -23,7 +22,7 @@ class _CriarImpressoraPageState extends State<CriarImpressoraPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Criar Impressora'),
+        title: const Text('Criar Impressora'),
         backgroundColor: const Color(0xff00afe9),
       ),
       body: Padding(
@@ -33,27 +32,27 @@ class _CriarImpressoraPageState extends State<CriarImpressoraPage> {
           children: <Widget>[
             TextField(
               controller: nomeController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Nome da Impressora',
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             TextField(
               controller: ipController,
-              keyboardType: TextInputType.numberWithOptions(decimal: true),
-              decoration: InputDecoration(
+              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              decoration: const InputDecoration(
                 labelText: 'Endereço IP da Impressora',
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             TextField(
               controller: portController,
-              keyboardType: TextInputType.numberWithOptions(decimal: true),
-              decoration: InputDecoration(
+              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              decoration: const InputDecoration(
                 labelText: 'Porta da Impressora',
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () async {
                 // Adicionar ação para testar a impressão
@@ -64,14 +63,58 @@ class _CriarImpressoraPageState extends State<CriarImpressoraPage> {
                   // Conectando à impressora
                   Socket socket = await Socket.connect(ip, port);
 
+                  // Comando para centralizar o texto
+                  final centralizarTexto = [0x1B, 0x61, 0x01];
+
+                  // Comando para ativar negrito
+                  final ativarNegrito = [0x1B, 0x45, 0x01];
+
+                  // Comando para desativar negrito
+                  final desativarNegrito = [0x1B, 0x45, 0x00];
+
+                  // Comando para aumentar o tamanho da fonte
+                  final aumentarFonte = [0x1D, 0x21, 0x09];
+
+                  // Comando para definir o tamanho da fonte
+                  final tamanhoFonte = [0x1B, 0x21, 0x00]; // Define o tamanho da fonte para o padrão
+
+
+                  // Comando para descentralizar o texto (definir alinhamento padrão)
+                  final alinhamentoPadrao = [0x1B, 0x61, 0x00];
+
+
+                  // Texto a ser enviado
+                  final texto = '\nTeste\n\n';
+
+                  // Concatenando os comandos e o texto
+                  final tituloCentrado = [...ativarNegrito,...centralizarTexto,...utf8.encode(texto), ...alinhamentoPadrao, ...desativarNegrito];
+
+                  // Comando para imprimir separador de linha de traços
+                  final separador = '-----------------------------------------------\n';
+
+                  // Comandos para imprimir a frase "Fatura-recibo de teste"
+                  const frase = '\nFatura-recibo de teste\n\n';
+                  // Concatenando os comandos e o texto
+                  final fraseCentrada = [...ativarNegrito,...centralizarTexto, ...aumentarFonte, ...utf8.encode(frase), ...alinhamentoPadrao, ...desativarNegrito, ...tamanhoFonte];
+
+                  // Comandos para imprimir a data e hora do sistema
+                  final dataHora = DateFormat('dd/MM/yyyy HH:mm').format(DateTime.now());
+
+
+                  // Enviar comandos para a impressora
+                  socket.add(tituloCentrado);
+                  socket.write(separador);
+                  socket.add(fraseCentrada);
+                  socket.write(separador);
+                  socket.write(dataHora);
+
                   // Enviando dados de impressão
-                  socket.write('Teste de Impressao\n\n\n\n\n\n\n\n\n');
+                  socket.write('\n\n\n\n\n\n\n');
 
                   // Enviando comando de corte
                   List<int> cutCommand = [0x1D, 0x56, 0x01];
                   socket.add(cutCommand);
 
-                  // Finalizando conexão
                   await socket.flush();
                   await socket.close();
                 } catch (e) {
@@ -81,7 +124,7 @@ class _CriarImpressoraPageState extends State<CriarImpressoraPage> {
               },
               child: const Text('Testar Impressão'),
             ),
-            Spacer(),
+            const Spacer(),
             SizedBox(
               height: 50.0,
               child: ElevatedButton(

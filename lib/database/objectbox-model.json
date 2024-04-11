@@ -5,7 +5,7 @@
   "entities": [
     {
       "id": "1:3191427397601551436",
-      "lastPropertyId": "19:6647574119315711060",
+      "lastPropertyId": "20:6076959972606485429",
       "name": "Artigo",
       "properties": [
         {
@@ -98,6 +98,11 @@
           "id": "19:6647574119315711060",
           "name": "idArticlesCategories",
           "type": 6
+        },
+        {
+          "id": "20:6076959972606485429",
+          "name": "discount",
+          "type": 8
         }
       ],
       "relations": []
@@ -241,7 +246,7 @@
     },
     {
       "id": "9:6051910675640835218",
-      "lastPropertyId": "23:7909175669971041779",
+      "lastPropertyId": "24:1275842620692263523",
       "name": "TurnoObj",
       "properties": [
         {
@@ -319,6 +324,11 @@
           "id": "18:2585488299434047412",
           "name": "reembolsosDinheiro",
           "type": 8
+        },
+        {
+          "id": "24:1275842620692263523",
+          "name": "metodosIds",
+          "type": 27
         }
       ],
       "relations": []
@@ -379,7 +389,7 @@
     },
     {
       "id": "11:5421798492171887830",
-      "lastPropertyId": "18:9140654380790352588",
+      "lastPropertyId": "19:7496210554902445990",
       "name": "SetupObj",
       "properties": [
         {
@@ -467,6 +477,11 @@
           "id": "18:9140654380790352588",
           "name": "funcionarioId",
           "type": 6
+        },
+        {
+          "id": "19:7496210554902445990",
+          "name": "dispositivoPrincipal",
+          "type": 1
         }
       ],
       "relations": []
@@ -582,9 +597,38 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "15:3569101965829348778",
+      "lastPropertyId": "4:3638143305504483043",
+      "name": "TransactionObj",
+      "properties": [
+        {
+          "id": "1:8797290854895690678",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:4834860376154190329",
+          "name": "time",
+          "type": 9
+        },
+        {
+          "id": "3:2994001118139056904",
+          "name": "description",
+          "type": 9
+        },
+        {
+          "id": "4:3638143305504483043",
+          "name": "amount",
+          "type": 9
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "14:7876964514982937286",
+  "lastEntityId": "15:3569101965829348778",
   "lastIndexId": "1:2709143836952813707",
   "lastRelationId": "2:764650263908402594",
   "lastSequenceId": "0:0",

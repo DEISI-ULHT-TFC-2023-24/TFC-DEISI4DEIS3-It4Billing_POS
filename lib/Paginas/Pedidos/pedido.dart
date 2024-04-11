@@ -132,7 +132,7 @@ class _PedidoPage extends State<PedidoPage> with TickerProviderStateMixin {
   PedidoObj pedido = PedidoObj(
       nome: "Pedido 01",
       hora: DateTime.now(),
-      funcionarioID: 0,
+      funcionarioID: database.getAllTurno()[0].funcionarioID,
       total: 0,
       localId: -1,
       clienteID: database.getAllClientes()[0].id);
@@ -157,8 +157,7 @@ class _PedidoPage extends State<PedidoPage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    pedido.nome =
-        "Pedido ${database.getAllVendas().length + widget.pedidos.length + 1}";
+    pedido.nome = "Pedido ${database.getAllVendas().length + widget.pedidos.length + 1}";
     //isTablet ? TabletLayout() : PhoneLayout()
     return isTablet
         ? Scaffold(

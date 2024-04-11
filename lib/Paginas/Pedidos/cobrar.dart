@@ -345,28 +345,18 @@ class _Cobrar extends State<Cobrar> {
                                         child: SizedBox(
                                           height: 50,
                                           child: ElevatedButton(
-                                            onPressed: () {
+                                            onPressed: () async {
                                               // Entrar no final da compra
 
-                                              double dinheiroRecebido =
-                                              double.parse(
-                                                  _dinheiroRecebidoController
-                                                      .text);
-                                              double troco = double.parse(
-                                                  _trocoController.text);
-                                              metodos[index].valor +=
-                                                  dinheiroRecebido - troco;
-                                              if (metodos[index]
-                                                  .nome
-                                                  .toLowerCase() ==
-                                                  'dinheiro') {
-                                                widget.turno
-                                                    .pagamentosDinheiro =
-                                                    metodos[index].valor;
-                                                database.addTurno(widget.turno);
+                                              double dinheiroRecebido = double.parse(_dinheiroRecebidoController.text);
+                                              double troco = double.parse(_trocoController.text);metodos[index].valor += dinheiroRecebido - troco;
+                                              if (metodos[index].nome.toLowerCase() == 'dinheiro') {
+                                                widget.turno.setPagamentosDinheiro = metodos[index].valor;
                                               }
-                                              database.addMetodoPagamento(
-                                                  metodos[index]);
+                                              print('CAGUEIIIII');
+                                              widget.turno.setMetudo=0;
+                                              database.addTurno(widget.turno);
+                                              database.addMetodoPagamento(metodos[index]);
 
                                               Navigator.push(
                                                   context,
@@ -544,26 +534,17 @@ class _Cobrar extends State<Cobrar> {
                                           child: ElevatedButton(
                                             onPressed: () {
                                               // Entrar no final da compra
+                                              double dinheiroRecebido = double.parse(_dinheiroRecebidoController.text);
+                                              double troco = double.parse(_trocoController.text);
+                                              metodos[index].valor += dinheiroRecebido - troco;
 
-                                              double dinheiroRecebido =
-                                                  double.parse(
-                                                      _dinheiroRecebidoController
-                                                          .text);
-                                              double troco = double.parse(
-                                                  _trocoController.text);
-                                              metodos[index].valor +=
-                                                  dinheiroRecebido - troco;
-                                              if (metodos[index]
-                                                      .nome
-                                                      .toLowerCase() ==
-                                                  'dinheiro') {
-                                                widget.turno
-                                                        .pagamentosDinheiro =
-                                                    metodos[index].valor;
+                                              if (metodos[index].nome.toLowerCase() == 'dinheiro') {
+                                                widget.turno.setPagamentosDinheiro = metodos[index].valor;
                                                 database.addTurno(widget.turno);
                                               }
-                                              database.addMetodoPagamento(
-                                                  metodos[index]);
+                                              database.addMetodoPagamento(metodos[index]);
+                                              widget.turno.setMetudo=0;
+                                              database.addTurno(widget.turno);
 
                                               Navigator.push(
                                                   context,

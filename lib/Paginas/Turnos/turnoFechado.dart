@@ -197,7 +197,7 @@ class TurnoFechado extends StatelessWidget {
                           valorInicialController.text = '0';
                         }
 
-                        turno.dinheiroInicial = double.parse(valorInicialController.text); // Valor do controlador adicionado aqui
+                        turno.setDinheiroInicial = double.parse(valorInicialController.text); // Valor do controlador adicionado aqui
                         await database.removeAllTurno();
                         database.addTurno(turno);
                         print('Esta aberto? DEVIA!! -> ${database.getAllTurno()[0].turnoAberto}');

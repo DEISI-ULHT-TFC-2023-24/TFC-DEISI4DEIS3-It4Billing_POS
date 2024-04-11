@@ -159,7 +159,7 @@ class _CarrinhoPageState extends State<CarrinhoPage> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Text(
-                                  artigo!.nome.length > 10
+                                  artigo!.nome.length > 20
                                       ? artigo.nome.substring(0, 20)
                                       : artigo.nome,
                                   style: const TextStyle(

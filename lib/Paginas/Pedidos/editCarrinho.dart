@@ -74,6 +74,7 @@ class _EditCarrinhoState extends State<EditCarrinho> {
   void _aplicarDesconto() {
     double novoPreco = widget.artigo.price - double.parse(_controllerD.text);
     setState(() {
+      widget.artigo.discount = widget.artigo.price - novoPreco;
       widget.artigo.price = novoPreco;
       widget.pedido.artigosPedido.add(widget.artigo);
     });
