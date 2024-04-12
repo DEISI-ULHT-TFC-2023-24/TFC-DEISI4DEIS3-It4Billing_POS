@@ -1,16 +1,17 @@
-# it4billing_pos
+# It4Billing POS
 
-A new Flutter project.
+## Desenvolvido por: Rafael Sousa
 
-## Getting Started
+### Instruções de instalação
 
-This project is a starting point for a Flutter application.
+1. Habilitar instalação de aplicações de fontes desconhecidas no dispositivo Android.
+2. Transferir o arquivo APK para o dispositivo.
+3. Localizar o arquivo APK.
+4. Abrir o arquivo e instalar a aplicação seguindo os passos apresentados no ecrã.
+5. Procurar o ícone da aplicação na gaveta de aplicações ou no ecrã inicial.
+6. Abrir a aplicação.
+7. No login inicial para a conexão com os webservices não existe um URL específico e a palavra-passe tem de ter no mínimo 6 caracteres para poder avançar para o próximo passo (ex.: “123456” ou “abcdef”).
+8. De seguida, selecionar uma das opções para a loja e o POS no ecrã seguinte fazer o mesmo para o tipo de ficheiros nos três campos.
+9. Quando concluído o setup irá ser pedido um PIN, este deverá ser “1234” ou “4321”.
+10. A partir deste último passo já tem acesso à aplicação IT4Billing POS.
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
