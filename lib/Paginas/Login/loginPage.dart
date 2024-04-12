@@ -241,9 +241,7 @@ class __FormContentState extends State<_FormContent> {
     turno.funcionarioID = database.getAllSetup()[0].funcionarioId;
 
     if (database.getAllTurno().isEmpty) {
-      print('tenho turno');
       await database.addTurno(turno);
-      print('adicionei sem problemas acho');
     } else {
       turno = database.getAllTurno()[0];
       turno.funcionarioID = database.getAllSetup()[0].funcionarioId;

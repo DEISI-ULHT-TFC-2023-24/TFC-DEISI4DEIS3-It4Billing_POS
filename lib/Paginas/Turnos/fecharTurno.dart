@@ -63,7 +63,7 @@ class _FecharTurnoState extends State<FecharTurno> {
           elevation: 0, // Remover a sombra da AppBar
         ),
         body: Padding(
-          padding: EdgeInsets.all(20.0),
+          padding: const EdgeInsets.all(20.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -80,7 +80,7 @@ class _FecharTurnoState extends State<FecharTurno> {
                   ),
                 ],
               ),
-              SizedBox(height: 10.0),
+              const SizedBox(height: 10.0),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -88,13 +88,13 @@ class _FecharTurnoState extends State<FecharTurno> {
                     'Quantidade de dinheiro real:',
                     style: TextStyle(fontSize: 16),
                   ),
-                  SizedBox(width: 50.0),
+                  const SizedBox(width: 50.0),
                   Expanded(
                     flex: 2,
                     child: TextFormField(
                       controller: _textEditingController,
                       focusNode: _focusNode,
-                      keyboardType: TextInputType.numberWithOptions(decimal: true),
+                      keyboardType: const TextInputType.numberWithOptions(decimal: true),
                       textAlign: TextAlign.right,
                       inputFormatters: <TextInputFormatter>[
                         FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
@@ -116,9 +116,9 @@ class _FecharTurnoState extends State<FecharTurno> {
                   ),
                 ],
               ),
-              SizedBox(height: 10.0),
-              Divider(),
-              SizedBox(height: 10.0),
+              const SizedBox(height: 10.0),
+              const Divider(),
+              const SizedBox(height: 10.0),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -136,7 +136,7 @@ class _FecharTurnoState extends State<FecharTurno> {
           ),
         ),
         bottomNavigationBar: Padding(
-          padding: EdgeInsets.all(20.0),
+          padding: const EdgeInsets.all(20.0),
           child: SizedBox(
             width: double.infinity,
             height: 50.0,
@@ -160,8 +160,6 @@ class _FecharTurnoState extends State<FecharTurno> {
                 }
 
                 database.addTurno(novoturno);
-                print('Esta aberto? DEVIA!! -> ${database.getAllTurno()[0].turnoAberto}');
-
 
                 Navigator.push(
                     context,

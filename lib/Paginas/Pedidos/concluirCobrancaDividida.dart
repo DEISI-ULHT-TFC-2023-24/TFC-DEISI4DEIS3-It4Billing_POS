@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../main.dart';
-import '../../objetos/artigoObj.dart';
+import '../../objetos/meusargumentos.dart';
 import '../../objetos/pedidoObj.dart';
 import '../../objetos/setupObj.dart';
 import '../Cliente/addClientePage.dart';
@@ -9,6 +9,7 @@ import '../Cliente/addClientePage.dart';
 class ConcluirCobrancaDivididaPage extends StatefulWidget {
   late PedidoObj pedido;
   late String troco;
+  late int idMetudoUsado;
   double valorCobrar;
   SetupObj setup = database.getAllSetup()[0];
 
@@ -17,6 +18,7 @@ class ConcluirCobrancaDivididaPage extends StatefulWidget {
     required this.pedido,
     required this.troco,
     required this.valorCobrar,
+    required this.idMetudoUsado,
   }) : super(key: key);
 
   @override
@@ -26,7 +28,7 @@ class ConcluirCobrancaDivididaPage extends StatefulWidget {
 
 class _ConcluirCobrancaDivididaPage
     extends State<ConcluirCobrancaDivididaPage> {
-  late TextEditingController _emailController;
+  TextEditingController _emailController = TextEditingController();
   bool _showEmailField = false;
 
   @override
@@ -163,8 +165,11 @@ class _ConcluirCobrancaDivididaPage
           child: ElevatedButton(
             onPressed: () {
               // acrescentar a lógica de pagamento, impressora, enviar e-mail, etc.
+
+
               Navigator.pop(context);
-              Navigator.pop(context, true);
+              Navigator.pop(context, MeusArgumentos(true, widget.idMetudoUsado));
+
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xff00afe9),

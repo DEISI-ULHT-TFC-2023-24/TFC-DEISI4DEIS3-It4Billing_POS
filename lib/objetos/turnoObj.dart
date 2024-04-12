@@ -1,7 +1,6 @@
 import 'package:objectbox/objectbox.dart';
 import '../database/objectbox.g.dart';
 import '../main.dart';
-import 'metodoPagamentoObj.dart';
 
 @Entity()
 class TurnoObj {
@@ -96,7 +95,6 @@ class TurnoObj {
   set setSangria(double valor) {
     sangria = valor;
     dinheiroEsperado = calcularDinheiroEsperado();
-    print('estive aqui na sangria');
   }
 
 

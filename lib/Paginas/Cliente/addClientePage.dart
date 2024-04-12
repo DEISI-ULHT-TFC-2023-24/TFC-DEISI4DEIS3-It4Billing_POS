@@ -49,7 +49,7 @@ class _AdicionarClientePageState extends State<AdicionarClientePage> {
         leading: IconButton(
           icon: const Icon(Icons.close),
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.pop(context, false);
           },
         ),
         title: const Text('Adicionar cliente ao pedido'),
@@ -61,7 +61,7 @@ class _AdicionarClientePageState extends State<AdicionarClientePage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Container(
-              padding: EdgeInsets.all(10.0),
+              padding: const EdgeInsets.all(10.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -178,7 +178,7 @@ class _AdicionarClientePageState extends State<AdicionarClientePage> {
                   if (widget.pedido.id != 0){
                     database.addPedido(widget.pedido);
                   }
-                  Navigator.pop(context);
+                  Navigator.pop(context, true);
                   //Navigator.pop(context);
                   //Navigator.of(context).push(
                   //    MaterialPageRoute(builder: (context) => CarrinhoPage(

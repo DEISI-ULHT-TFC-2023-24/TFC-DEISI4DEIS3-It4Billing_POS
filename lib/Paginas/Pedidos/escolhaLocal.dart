@@ -42,13 +42,7 @@ class LocalPage extends StatelessWidget {
                         // Lógica para lidar com a seleção do local
                         pedido.localId = local.id;
 
-                        print('tamanho da lista de artigos: ${pedido.artigosPedidoIds.length}');
-
                         await database.addPedido(pedido);
-
-                        print('tamanho da lista de artigos do pedido na BD: '
-                            '${database.getAllPedidos().last.artigosPedidoIds.length}');
-                        print('o teste aqui ${pedido.funcionarioID} | ${database.getPedido(pedido.id)?.funcionarioID}');
 
                         Navigator.of(context).pop();
                         Navigator.of(context).push(MaterialPageRoute(

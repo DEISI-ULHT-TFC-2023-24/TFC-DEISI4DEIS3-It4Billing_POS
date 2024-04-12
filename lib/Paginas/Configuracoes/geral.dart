@@ -127,11 +127,11 @@ class _GeralPageState extends State<GeralPage> {
                   children: [
                     TextField(
                       controller: urlController,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         labelText: 'URL',
                       ),
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     TextField(
                       controller: passwordController,
                       decoration: const InputDecoration(
@@ -152,10 +152,8 @@ class _GeralPageState extends State<GeralPage> {
                                     /// colocar na BD a nova info
                                     setup.url = urlController.text;
                                     setup.password = passwordController.text;
-                                    print(database.getAllSetup().length);
                                     //database.removeAllSetup();
                                     database.addSetup(setup);
-                                    print(database.getAllSetup().length);
                                     setState(() {
                                       _showConfirmation = true;
                                       ischanged = false;
@@ -224,7 +222,7 @@ class _GeralPageState extends State<GeralPage> {
                           updateButtonState(); // Chama a função para verificar alterações
                         });
                       },
-                      icon: Icon(Icons.arrow_drop_down),
+                      icon: const Icon(Icons.arrow_drop_down),
                       items: _stores
                           .map<DropdownMenuItem<String>>((String? value) {
                         return DropdownMenuItem<String>(
@@ -414,9 +412,7 @@ class _GeralPageState extends State<GeralPage> {
                                     setup.pos = _selectedPos!;
                                     setup.faturacao = _selectedDocInvoice!;
                                     setup.reembolso = _selectedDocRefund!;
-                                    setup.contaCorrente =
-                                        _selectedDocCurrentAccount!;
-                                    print(database.getAllSetup().length);
+                                    setup.contaCorrente = _selectedDocCurrentAccount!;
                                     //database.removeAllSetup();
                                     database.addSetup(setup);
                                     // Temporizador para reativar o botão após 5 segundos
@@ -459,11 +455,11 @@ class _GeralPageState extends State<GeralPage> {
                   children: [
                     TextField(
                       controller: urlController,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         labelText: 'URL',
                       ),
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     TextField(
                       controller: passwordController,
                       decoration: const InputDecoration(
@@ -484,10 +480,8 @@ class _GeralPageState extends State<GeralPage> {
                                     /// colocar na BD a nova info
                                     setup.url = urlController.text;
                                     setup.password = passwordController.text;
-                                    print(database.getAllSetup().length);
                                     //database.removeAllSetup();
                                     database.addSetup(setup);
-                                    print(database.getAllSetup().length);
                                     setState(() {
                                       _showConfirmation = true;
                                       ischanged = false;
@@ -556,7 +550,7 @@ class _GeralPageState extends State<GeralPage> {
                           updateButtonState(); // Chama a função para verificar alterações
                         });
                       },
-                      icon: Icon(Icons.arrow_drop_down),
+                      icon: const Icon(Icons.arrow_drop_down),
                       items: _stores
                           .map<DropdownMenuItem<String>>((String? value) {
                         return DropdownMenuItem<String>(

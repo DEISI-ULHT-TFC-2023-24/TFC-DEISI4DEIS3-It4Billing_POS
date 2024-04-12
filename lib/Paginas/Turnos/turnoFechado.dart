@@ -168,7 +168,7 @@ class TurnoFechado extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 60.0),
               child: TextFormField(
                 controller: valorInicialController, // Controlador adicionado aqui
-                keyboardType: TextInputType.numberWithOptions(decimal: true),
+                keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 textAlign: TextAlign.center,
                 inputFormatters: [
                   FilteringTextInputFormatter.allow(
@@ -200,7 +200,6 @@ class TurnoFechado extends StatelessWidget {
                         turno.setDinheiroInicial = double.parse(valorInicialController.text); // Valor do controlador adicionado aqui
                         await database.removeAllTurno();
                         database.addTurno(turno);
-                        print('Esta aberto? DEVIA!! -> ${database.getAllTurno()[0].turnoAberto}');
 
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context) => TurnosPage()));

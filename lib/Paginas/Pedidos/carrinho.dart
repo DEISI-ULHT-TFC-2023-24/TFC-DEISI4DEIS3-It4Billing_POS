@@ -68,8 +68,6 @@ class _CarrinhoPageState extends State<CarrinhoPage> {
             ),
             PopupMenuButton<String>(
               onSelected: (value) {
-                // Lógica para lidar com as opções selecionadas
-                print('Opção selecionada: ${widget.pedido.nome}');
                 if (value == 'Eliminar pedido') {
                   database.removePedido(widget.pedido.id);
                   Navigator.of(context).push(
@@ -117,7 +115,6 @@ class _CarrinhoPageState extends State<CarrinhoPage> {
                   // Verifica se o artigo está presente na lista
                   for (Artigo artigoLista in widget.pedido.artigosPedido) {
                     if (artigoLista.nome == database.getArtigo(artigoId)!.nome) {
-                      print('preço do artigo na lista do pedido ${artigoLista.price}');
                       artigo = artigoLista;
                       break;
                     }
@@ -215,10 +212,7 @@ class _CarrinhoPageState extends State<CarrinhoPage> {
                         onPressed: () async {
                           if (widget.pedido.artigosPedidoIds.isNotEmpty) {
                             if (widget.pedido.localId == -1) {
-                              print(
-                                  'Lista de locais: ${database.getAllLocal().length}');
                               database.getAllLocal().forEach((element) {
-                                print(element.nome);
                               });
 
                               Navigator.push(

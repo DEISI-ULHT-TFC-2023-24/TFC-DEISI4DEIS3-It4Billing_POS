@@ -29,7 +29,7 @@ class ConcluirPedido extends StatefulWidget {
 }
 
 class _ConcluirPedidoState extends State<ConcluirPedido> {
-  late TextEditingController _emailController;
+  TextEditingController _emailController = TextEditingController();
   bool _showEmailField = false;
 
   late Map<int, int> artigosAgrupados;
@@ -101,7 +101,6 @@ class _ConcluirPedidoState extends State<ConcluirPedido> {
       ),
       (route) => false, // Remove todas as rotas anteriores
     );
-    print('Venda concluída!');
   }
 
   Future<void> imprimir() async {
@@ -109,7 +108,7 @@ class _ConcluirPedidoState extends State<ConcluirPedido> {
     // Dados demo da empresa
     final String nomeEmpresa = "It4Billing";
     final String moradaEmpresa = "Rua da Empresa, 123";
-    final String cidadeEstado_CodigopostalEmpresa =
+    final String cidadeEstadoCodigoPostalEmpresa =
         "1234-678 - Cidade da Emprresa";
     final String telefoneEmpresa = "219876543";
     final String nifEmpresa = '502123456';
@@ -137,7 +136,6 @@ class _ConcluirPedidoState extends State<ConcluirPedido> {
       // Comando para descentralizar o texto (definir alinhamento padrão)
       final alinhamentoPadrao = [0x1B, 0x61, 0x00];
 
-
       // Texto a ser enviado
       final texto = '\n$nomeEmpresa\n\n';
       // Concatenando os comandos e o texto
@@ -154,7 +152,7 @@ class _ConcluirPedidoState extends State<ConcluirPedido> {
 
       // Informações da empresa
       cabecalho += '$moradaEmpresa\n';
-      cabecalho += '$cidadeEstado_CodigopostalEmpresa\n';
+      cabecalho += '$cidadeEstadoCodigoPostalEmpresa\n';
       cabecalho += 'Tel: $telefoneEmpresa\n';
       cabecalho += 'NIF: $nifEmpresa\n\n';
 
@@ -163,7 +161,7 @@ class _ConcluirPedidoState extends State<ConcluirPedido> {
           'Cliente: ${database.getCliente(widget.pedido.clienteID)!.nome}\n';
       cabecalho += '${database.getCliente(widget.pedido.clienteID)!.address}\n';
       cabecalho +=
-          'Cód. Postal: ${database.getCliente(widget.pedido.clienteID)!.postcode}\n';
+          'Cod. Postal: ${database.getCliente(widget.pedido.clienteID)!.postcode}\n';
       cabecalho +=
           'NIF: ${database.getCliente(widget.pedido.clienteID)!.NIF}\n';
       cabecalho +=
@@ -185,7 +183,7 @@ class _ConcluirPedidoState extends State<ConcluirPedido> {
         ...desativarNegrito
       ];
 
-      final indice =    'Qtd.---IVA%-----Preco-------Desc.-------Total\n';
+      final indice = 'Qtd.---IVA%-----Preco-------Desc.-------Total\n';
       // Convertendo o texto para UTF-8
       List<int> indiceUtf8Bytes = utf8.encode(indice);
 
@@ -195,28 +193,27 @@ class _ConcluirPedidoState extends State<ConcluirPedido> {
         // Verifica se o artigo está presente na lista
         for (Artigo artigoLista in widget.pedido.artigosPedido) {
           if (artigoLista.nome == database.getArtigo(chave)!.nome) {
-
             String nomeArtigo = artigoLista.nome.length > 40
                 ? artigoLista.nome.substring(0, 40)
                 : artigoLista.nome;
             //Valor representa a quantidade do produto
-            pordutos += '$valor     ${artigoLista.taxPrecentage}%      ${artigoLista.price.toStringAsFixed(2)}EUR     ${artigoLista.discount.toStringAsFixed(2)}EUR    ${(artigoLista.price * valor).toStringAsFixed(2)}EUR\n'
+            pordutos +=
+                '$valor     ${artigoLista.taxPrecentage}%      ${artigoLista.price.toStringAsFixed(2)}EUR     ${artigoLista.discount.toStringAsFixed(2)}EUR    ${(artigoLista.price * valor).toStringAsFixed(2)}EUR\n'
                 '$nomeArtigo\n';
             break;
           }
         }
-
       });
       // Convertendo o texto para UTF-8
       List<int> pordutosUtf8Bytes = utf8.encode(pordutos);
-
 
       String totalImp = '---------------Impostos Incluidos---------------\n\n';
       final totalImpE = [
         ...centralizarTexto,
         ...utf8.encode(totalImp),
       ];
-      String total = 'Total EURO ${widget.pedido.calcularValorTotal().toStringAsFixed(2)}\n\n';
+      String total =
+          'Total EURO ${widget.pedido.calcularValorTotal().toStringAsFixed(2)}\n\n';
 
       final totalCentrado = [
         ...ativarNegrito,
@@ -227,35 +224,40 @@ class _ConcluirPedidoState extends State<ConcluirPedido> {
         ...desativarNegrito
       ];
 
-
-      final indiceImp ='Detalhes do IVA\n\n'
-                       'Taxa  x  Incidencia   = Total Impos.\n';
+      final indiceImp = 'Detalhes do IVA\n\n'
+          'Taxa  x  Incidencia   = Total Impto.\n';
       List<int> indiceImpUtf8Bytes = utf8.encode(indiceImp);
 
       Map<int, double> taxPercentageSumMap = {};
 
-// Agrupando os artigos com base no valor de taxPrecentage e calculando a soma de unitPrice para cada grupo
-      for (Artigo artigoLista in widget.pedido.artigosPedido) {
-        int taxPercentage = artigoLista.taxPrecentage;
-        double unitPrice = artigoLista.unitPrice;
+// Agrupando os artigos com base no valor de taxPercentage e calculando a soma de unitPrice para cada grupo
+      artigosAgrupados.forEach((chave, valor) {
+        // Verifica se o artigo está presente na lista
+        for (Artigo artigoLista in widget.pedido.artigosPedido) {
+          if (artigoLista.nome == database.getArtigo(chave)!.nome) {
+            int taxPercentage = artigoLista.taxPrecentage;
+            double unitPrice = artigoLista.unitPrice;
 
-        if (taxPercentageSumMap.containsKey(taxPercentage)) {
-          taxPercentageSumMap[taxPercentage] = taxPercentageSumMap[taxPercentage]! + unitPrice;
-        } else {
-          taxPercentageSumMap[taxPercentage] = unitPrice;
+            if (taxPercentageSumMap.containsKey(taxPercentage)) {
+              taxPercentageSumMap[taxPercentage] = taxPercentageSumMap[taxPercentage]! + (unitPrice * valor);
+            } else {
+              taxPercentageSumMap[taxPercentage] = unitPrice * valor;
+            }
+          }
         }
-      }
+      });
 
 // Construindo a string com os valores agrupados
       String IVA = '';
+
       taxPercentageSumMap.forEach((taxPercentage, sum) {
-        IVA += '$taxPercentage%      ${sum.toStringAsFixed(2)}EUR       ${(sum * taxPercentage /100).toStringAsFixed(2)}EUR\n';
+        IVA +=
+            '$taxPercentage%      ${sum.toStringAsFixed(2)}EUR       ${(sum * taxPercentage / 100).toStringAsFixed(2)}EUR\n';
       });
 
 
       // Convertendo o texto para UTF-8
       List<int> IVAUtf8Bytes = utf8.encode(IVA);
-
 
       // Enviar comandos para a impressora
       socket.add(tituloCentrado);
@@ -270,7 +272,6 @@ class _ConcluirPedidoState extends State<ConcluirPedido> {
       socket.add(indiceImpUtf8Bytes);
       socket.add(IVAUtf8Bytes);
 
-
       // Enviando dados de impressão
       socket.write('\n\n\n\n\n\n\n');
 
@@ -284,7 +285,6 @@ class _ConcluirPedidoState extends State<ConcluirPedido> {
       print('Erro ao imprimir: $e');
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -307,7 +307,16 @@ class _ConcluirPedidoState extends State<ConcluirPedido> {
                     builder: (context) => AdicionarClientePage(
                         pedido: widget.pedido,
                         pedidos: database.getAllPedidos(),
-                        artigos: database.getAllArtigos())));
+                        artigos: database.getAllArtigos())
+                )).then((value) {
+                  if (value == true) {
+                    // Atualize a página aqui
+                    setState(() {
+                      // Execute qualquer lógica de atualização necessária
+                      _emailController.text = database.getCliente(widget.pedido.clienteID)!.email;
+                    });
+                  }
+                });
               },
             ),
           ],

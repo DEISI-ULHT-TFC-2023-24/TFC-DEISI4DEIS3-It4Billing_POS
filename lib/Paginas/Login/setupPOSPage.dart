@@ -237,14 +237,11 @@ class __FormContentState extends State<_FormContent> {
                     widget.setup.reembolso = _selectedDocRefund!;
                     widget.setup.contaCorrente = _selectedDocCurrentAccount!;
 
-                    print(database.getAllSetup().length);
                     if (database.getAllSetup().isEmpty) {
                       await database.addSetup(widget.setup);
-                      print('Não tinha setup');
                     } else {
-                      print('Tenho setup e não criei outro');
+                      //'Tenho setup e não criei outro'
                     }
-                    print(database.getAllSetup().length);
 
                     Navigator.of(context).pushAndRemoveUntil(
                         MaterialPageRoute(

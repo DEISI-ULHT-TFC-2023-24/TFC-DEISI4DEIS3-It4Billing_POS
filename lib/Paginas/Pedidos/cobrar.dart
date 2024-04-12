@@ -11,10 +11,10 @@ import '../Cliente/addClientePage.dart';
 import 'editCarrinho.dart';
 
 class Cobrar extends StatefulWidget {
-  late List<PedidoObj> pedidos = [];
-  late List<Artigo> artigos = [];
+  List<PedidoObj> pedidos = [];
+  List<Artigo> artigos = [];
   late PedidoObj pedido;
-  late TurnoObj turno = database.getAllTurno()[0];
+  TurnoObj turno = database.getAllTurno()[0];
 
   Cobrar({
     Key? key,
@@ -137,7 +137,7 @@ class _Cobrar extends State<Cobrar> {
                 children: [
                   // Lista de definições
                   Expanded(
-                    flex: 2,
+                    flex: 3,
                     child: Column(
                       children: [
                         const SizedBox(height: 20),
@@ -153,7 +153,6 @@ class _Cobrar extends State<Cobrar> {
                               // Verifica se o artigo está presente na lista
                               for (Artigo artigoLista in widget.pedido.artigosPedido) {
                                 if (artigoLista.nome == database.getArtigo(artigoId)!.nome) {
-                                  print('preço do artigo na lista do pedido ${artigoLista.price}');
                                   artigo = artigoLista;
                                   break;
                                 }
@@ -353,7 +352,7 @@ class _Cobrar extends State<Cobrar> {
                                               if (metodos[index].nome.toLowerCase() == 'dinheiro') {
                                                 widget.turno.setPagamentosDinheiro = metodos[index].valor;
                                               }
-                                              print('CAGUEIIIII');
+
                                               widget.turno.setMetudo=0;
                                               database.addTurno(widget.turno);
                                               database.addMetodoPagamento(metodos[index]);

@@ -5,7 +5,6 @@ import 'package:it4billing_pos/Paginas/Pedidos/pedidos.dart';
 import 'package:it4billing_pos/Paginas/Vendas/vendas.dart';
 
 import '../../objetos/artigoObj.dart';
-import '../../objetos/categoriaObj.dart';
 import '../../objetos/setupObj.dart';
 
 class VendaPage extends StatefulWidget {
@@ -56,7 +55,6 @@ class _VendaPageState extends State<VendaPage> {
             PopupMenuButton<String>(
               onSelected: (value) {
                 // Lógica para lidar com as opções selecionadas
-                print('Opção selecionada: ${widget.venda.nome}');
                 if (value == 'Eliminar pedido') {
                   database.removePedido(widget.venda.id);
                   Navigator.of(context).push(

@@ -91,6 +91,11 @@ class _ConfiguracoesPageState extends State<ConfiguracoesPage> {
                     },
                   ),
                 ),
+                // Linha vertical
+                Container(
+                  width: 1.0,
+                  color: Colors.black, // Cor da linha vertical
+                ),
                 // Conteúdo da definição selecionada
                 Expanded(
                   flex: 3,
@@ -119,7 +124,7 @@ class _ConfiguracoesPageState extends State<ConfiguracoesPage> {
                               builder: (context) => GeralPage()));
                         },
                       ),
-                      Divider(), // Linha divisória
+                      const Divider(), // Linha divisória
                       ListTile(
                         leading: const Icon(Icons.local_print_shop_outlined),
                         title: const Text('Impressoras'),
@@ -128,7 +133,7 @@ class _ConfiguracoesPageState extends State<ConfiguracoesPage> {
                               builder: (context) => ImpressorasPage()));
                         },
                       ),
-                      Divider(), // Linha divisória
+                      const Divider(), // Linha divisória
                       ListTile(
                         leading: const Icon(Icons.display_settings_outlined),
                         //
@@ -138,7 +143,7 @@ class _ConfiguracoesPageState extends State<ConfiguracoesPage> {
                               builder: (context) => ExposicaoPage()));
                         },
                       ),
-                      Divider(),
+                      const Divider(),
                       ListTile(
                         leading:
                             const Icon(Icons.settings_input_component_outlined),
@@ -149,7 +154,7 @@ class _ConfiguracoesPageState extends State<ConfiguracoesPage> {
                               builder: (context) => PreferenciasPage()));
                         },
                       ),
-                      Divider(), // Linha divisória
+                      const Divider(), // Linha divisória
                     ],
                   ),
                 ],

@@ -28,7 +28,6 @@ class PedidosPage extends StatefulWidget {
     Key? key,
   }) : super(key: key);
 
-
   @override
   State<PedidosPage> createState() => _PedidosPage();
 }
@@ -223,24 +222,13 @@ class _PedidosPage extends State<PedidosPage> {
   @override
   void initState() {
     super.initState();
-    //print('Tamanho da lista de pedidos BD depois d vir do carrinho ${database.getAllPedidos().length}');
 
     carregarTurno();
     carregarPedidos();
-
-    //print('Tamanho da lista de pedidos depois d vir do carrinho ${widget.pedidos.length}');
-    if (widget.pedidos.isNotEmpty) {
-      //print('id do primeiro pedido: ${widget.pedidos[0].id}');
-    } else {
-      print('Pedidos estam vazios');
-    }
-
     carregarLocais();
     carregarClientes();
     carregarCategorias();
     carregarArtigos();
-
-    print('Esta aberto? -> ${widget.turno.turnoAberto}');
   }
 
   @override
@@ -322,7 +310,10 @@ class _PedidosPage extends State<PedidosPage> {
                   widget.pedidos.isEmpty
                       ? const Expanded(
                           child: Center(
-                              child: Text('Não existem pedidos abertos')))
+                              child: Text('Não existem pedidos abertos',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                  ))))
                       : Expanded(
                           child: ListView.builder(
                             itemCount: widget.pedidos.length,
@@ -333,7 +324,6 @@ class _PedidosPage extends State<PedidosPage> {
                                   child: ElevatedButton(
                                     onPressed: () {
                                       // entrar dentro do pedido ainda aberto
-                                      print(widget.pedidos[index].nrArtigos);
                                       Navigator.push(
                                           context,
                                           MaterialPageRoute(

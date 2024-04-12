@@ -154,11 +154,8 @@ class _PedidoAbertoPage extends State<PedidoAbertoPage> with TickerProviderState
   }
 
   void _removerObjeto(BuildContext context) {
-    print(nrArtigosInicial);
-    print('${widget.pedido.nrArtigos}');
     // Remover os últimos artigos da lista
     for (int i = nrArtigosInicial; i < widget.pedido.nrArtigos; i++) {
-      print('removeu o ultimo obeto $i');
       widget.pedido.artigosPedidoIds.removeLast();
     }
     updateNrArtigos();
@@ -196,10 +193,6 @@ class _PedidoAbertoPage extends State<PedidoAbertoPage> with TickerProviderState
                       child: const Icon(Icons.shopping_cart_outlined),
                     ),
                     onPressed: () {
-                      for (int artigoId in widget.pedido.artigosPedidoIds) {
-                        print('Nome: ${database.getArtigo(artigoId)?.nome} '
-                            'Preço: ${database.getArtigo(artigoId)?.price}');
-                      }
                       widget.pedido.total = 0;
                       Navigator.push(
                           context,
@@ -259,7 +252,7 @@ class _PedidoAbertoPage extends State<PedidoAbertoPage> with TickerProviderState
               PopupMenuButton<String>(
                 onSelected: (value) {
                   // Aqui você pode adicionar a lógica para lidar com as opções selecionadas
-                  print('Opção selecionada: ${widget.pedido.nome}');
+
                   if (value == 'Eliminar pedido') {
                     database.removePedido(widget.pedido.id);
                     Navigator.of(context).push(
@@ -375,7 +368,6 @@ class _PedidoAbertoPage extends State<PedidoAbertoPage> with TickerProviderState
                                       onPressed: () {
                                         widget.pedido.artigosPedidoIds
                                             .add(artigosFiltrados()[index].id);
-                                        print('foi adicionado o artigo');
                                         addItemToCart();
                                         atulizarArtigosCarrinho();
                                       },
@@ -443,10 +435,7 @@ class _PedidoAbertoPage extends State<PedidoAbertoPage> with TickerProviderState
 
                                 // Verifica se o artigo está presente na lista
                                 for (Artigo artigoLista in widget.pedido.artigosPedido) {
-                                  if (artigoLista.nome ==
-                                      database.getArtigo(artigoId)!.nome) {
-                                    print(
-                                        'preço do artigo na lista do pedido ${artigoLista.price}');
+                                  if (artigoLista.nome == database.getArtigo(artigoId)!.nome) {
                                     artigo = artigoLista;
                                     break;
                                   }
@@ -550,14 +539,6 @@ class _PedidoAbertoPage extends State<PedidoAbertoPage> with TickerProviderState
                                       onPressed: () async {
                                         if (widget.pedido.artigosPedidoIds.isNotEmpty) {
                                           if (widget.pedido.localId == -1) {
-                                            print(
-                                                'Lista de locais: ${database.getAllLocal().length}');
-                                            database
-                                                .getAllLocal()
-                                                .forEach((element) {
-                                              print(element.nome);
-                                            });
-
                                             Navigator.push(
                                                 context,
                                                 MaterialPageRoute(
@@ -747,9 +728,7 @@ class _PedidoAbertoPage extends State<PedidoAbertoPage> with TickerProviderState
                                         const EdgeInsets.only(bottom: 10.0),
                                     child: ElevatedButton(
                                       onPressed: () {
-                                        widget.pedido.artigosPedidoIds
-                                            .add(artigosFiltrados()[index].id);
-                                        print('foi adicionado o artigo');
+                                        widget.pedido.artigosPedidoIds.add(artigosFiltrados()[index].id);
                                         addItemToCart();
                                       },
                                       style: ButtonStyle(

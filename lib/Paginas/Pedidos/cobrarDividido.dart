@@ -3,13 +3,14 @@ import 'package:flutter/material.dart';
 import '../../main.dart';
 import '../../objetos/metodoPagamentoObj.dart';
 import '../../objetos/pedidoObj.dart';
+import '../../objetos/turnoObj.dart';
 import '../Cliente/addClientePage.dart';
 import 'concluirCobrancaDividida.dart';
 
 class CobrarDivididoPage extends StatefulWidget {
   late PedidoObj pedido;
   double valorCobrar;
-
+  TurnoObj turno = database.getAllTurno()[0];
 
   CobrarDivididoPage({
     Key? key,
@@ -181,7 +182,14 @@ class _CobrarDivididoPage extends State<CobrarDivididoPage> {
                                   double dinheiroRecebido = double.parse(_dinheiroRecebidoController.text);
                                   double troco = double.parse(_trocoController.text);
                                   metodos[index].valor += dinheiroRecebido - troco;
+
+                                  if (metodos[index].nome.toLowerCase() == 'dinheiro') {
+                                    widget.turno.setPagamentosDinheiro = metodos[index].valor;
+                                    database.addTurno(widget.turno);
+                                  }
                                   database.addMetodoPagamento(metodos[index]);
+                                  widget.turno.setMetudo=0;
+                                  database.addTurno(widget.turno);
 
                                   Navigator.push(
                                       context,
@@ -190,6 +198,7 @@ class _CobrarDivididoPage extends State<CobrarDivididoPage> {
                                             pedido: widget.pedido,
                                             troco: _trocoController.text,
                                             valorCobrar: widget.valorCobrar,
+                                            idMetudoUsado: metodos[index].id,
                                           )
                                       ));
                                 },

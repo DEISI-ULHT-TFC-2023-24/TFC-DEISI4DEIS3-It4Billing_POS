@@ -9,8 +9,11 @@ import '../../main.dart';
 import '../../objetos/VendaObj.dart';
 import '../../objetos/artigoObj.dart';
 import '../../objetos/impressoraObj.dart';
+import '../../objetos/metodoPagamentoObj.dart';
+import '../../objetos/meusargumentos.dart';
 import '../../objetos/pedidoObj.dart';
 import '../../objetos/setupObj.dart';
+import '../../objetos/turnoObj.dart';
 import 'cobrarDividido.dart';
 
 class DividirConta extends StatefulWidget {
@@ -18,6 +21,8 @@ class DividirConta extends StatefulWidget {
   SetupObj setup = database.getAllSetup()[0];
   List<ImpressoraObj> impressoras = database.getAllImpressoras();
   late PedidoObj pedido;
+  TurnoObj turno = database.getAllTurno()[0];
+
 
   DividirConta({
     Key? key,
@@ -35,8 +40,9 @@ class _DividirConta extends State<DividirConta> {
   bool mostrarBotaoConcluir = false;
   List<bool> botaoPressionado = [];
   late List<TextEditingController> controllers;
-
+  List<int> listaMetudoUsados = [];
   late Map<int, int> artigosAgrupados;
+  late MetodoPagamentoObj metodo;
 
   Map<int, int> groupItems(List<int> listaIds) {
     Map<int, int> frequenciaIds = {};
@@ -116,7 +122,6 @@ class _DividirConta extends State<DividirConta> {
       valoresIndividuais[0] += totalPedido -
           valoresIndividuais.reduce((value, element) => value + element);
     });
-    print(valoresIndividuais);
   }
 
   void aumentarPessoas() {
@@ -126,6 +131,7 @@ class _DividirConta extends State<DividirConta> {
       mostrarBotaoConcluir = false; // Se aumentar o número de pessoas, o botão "Concluir Venda" deve desaparecer
       controllers.add(TextEditingController());
       valoresIndividuais.add(0.0);
+      listaMetudoUsados.add(0);
       calcularValoresIndividuais();
       // Atualize os controladores com os novos valores individuais
       for (int i = 0; i < numPessoas; i++) {
@@ -140,6 +146,7 @@ class _DividirConta extends State<DividirConta> {
         numPessoas--;
         botaoPressionado.removeLast();
         valoresIndividuais.removeLast();
+        listaMetudoUsados.removeLast();
         controllers.removeLast();
         calcularValoresIndividuais();
         // Atualize os controladores com os novos valores individuais
@@ -216,14 +223,18 @@ class _DividirConta extends State<DividirConta> {
           ),
         ),
       ).then((troca) {
-        if (troca) {
+        MeusArgumentos args = troca;
+        if (args.meuBool) {
           setState(() {
-            botaoPressionado[index] = troca;
+            botaoPressionado[index] = args.meuBool;
             if (countPressedButtons() == numPessoas) {
               mostrarBotaoConcluir = true;
             }
           });
         }
+        // retirar o dinheiro do metudo e atualizar o turno
+        metodo = database.getMetodoPagamento(args.meuInt)!;
+
       });
     }
   }
@@ -238,7 +249,9 @@ class _DividirConta extends State<DividirConta> {
         total: widget.pedido.total);
     venda.artigosPedidoIds = widget.pedido.artigosPedidoIds;
     venda.nrArtigos = widget.pedido.nrArtigos;
-    imprimir();
+    if (database.getAllImpressoras().isNotEmpty) {
+      imprimir();
+    }
     database.addVenda(venda);
     if (widget.pedido.id != 0) {
       if (database.getPedido(widget.pedido.id) != null) {
@@ -252,7 +265,6 @@ class _DividirConta extends State<DividirConta> {
         builder: (context) => PedidosPage(),
       ),
     );
-    print('Venda concluída!');
   }
 
   Future<void> imprimir() async {
@@ -501,7 +513,7 @@ class _DividirConta extends State<DividirConta> {
                         ),
                         Expanded(
                           child: TextFormField(
-                            keyboardType: TextInputType.numberWithOptions(decimal: true),
+                            keyboardType: const TextInputType.numberWithOptions(decimal: true),
                             controller: controllers[index],
                             onTap: () {
                               // Limpe o campo quando ganhar foco
@@ -526,6 +538,11 @@ class _DividirConta extends State<DividirConta> {
                             onPressed: () {
                               setState(() {
                                 botaoPressionado[index] = false;
+                                mostrarBotaoConcluir = false;
+                                metodo.valor -= valoresIndividuais[index];
+                                database.addMetodoPagamento(metodo);
+                                widget.turno.setMetudo=0;
+                                database.addTurno(widget.turno);
                               });
                             },
                             icon: const Icon(

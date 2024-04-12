@@ -65,7 +65,7 @@ class _GestaoDinheiroState extends State<GestaoDinheiro> {
           children: [
             TextField(
               controller: _moneyController,
-              keyboardType: TextInputType.numberWithOptions(decimal: true),
+              keyboardType: const TextInputType.numberWithOptions(decimal: true),
               inputFormatters: [
                 FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                 CustomNumberTextInputFormatter()
@@ -143,7 +143,7 @@ class _GestaoDinheiroState extends State<GestaoDinheiro> {
               child: ListView.separated(
                 itemCount: transactions.length,
                 separatorBuilder: (BuildContext context, int index) =>
-                    Divider(),
+                const Divider(),
                 itemBuilder: (BuildContext context, int index) {
                   return ListTile(
                     title: Text(

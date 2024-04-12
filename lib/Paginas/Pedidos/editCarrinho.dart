@@ -66,8 +66,13 @@ class _EditCarrinhoState extends State<EditCarrinho> {
     ///ADICIONAR UMA VERIFICAÇÃO
     double novoPreco = double.parse(_controllerP.text);
     setState(() {
+      widget.artigo.unitPrice = novoPreco/(1+(widget.artigo.taxPrecentage/100));
       widget.artigo.price = novoPreco;
-      widget.pedido.artigosPedido.add(widget.artigo);
+      if (widget.pedido.artigosPedido.contains(widget.artigo)){
+        widget.pedido.artigosPedido.remove(widget.artigo);
+        widget.pedido.artigosPedido.add(widget.artigo);
+      }
+
     });
   }
 
@@ -75,8 +80,12 @@ class _EditCarrinhoState extends State<EditCarrinho> {
     double novoPreco = widget.artigo.price - double.parse(_controllerD.text);
     setState(() {
       widget.artigo.discount = widget.artigo.price - novoPreco;
+      widget.artigo.unitPrice = novoPreco/(1+(widget.artigo.taxPrecentage/100));
       widget.artigo.price = novoPreco;
-      widget.pedido.artigosPedido.add(widget.artigo);
+      if (widget.pedido.artigosPedido.contains(widget.artigo)){
+        widget.pedido.artigosPedido.remove(widget.artigo);
+        widget.pedido.artigosPedido.add(widget.artigo);
+      }
     });
   }
 
@@ -91,25 +100,22 @@ class _EditCarrinhoState extends State<EditCarrinho> {
 
   void gravar(){
     setState(() {
-      print(widget.quantidade);
-      print(widget.pedido.nrArtigos);
 
       if (widget.quantidade > widget.qunatidadeInicial){
         for (int i = widget.qunatidadeInicial; i < widget.quantidade; i++) {
           widget.pedido.artigosPedidoIds.add(widget.artigo.id);
         }
-        print('incrementa');
+        //incrementa
       }
 
       if (widget.quantidade < widget.qunatidadeInicial) {
         for (int i = widget.quantidade; i < widget.qunatidadeInicial; i++) {
           widget.pedido.artigosPedidoIds.remove(widget.artigo.id);
         }
-        print('descrementa');
+        //descrementa
       }
 
     });
-  print(widget.pedido.artigosPedidoIds);
   }
 
   @override

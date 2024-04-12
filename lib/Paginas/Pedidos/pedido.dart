@@ -149,9 +149,6 @@ class _PedidoPage extends State<PedidoPage> with TickerProviderStateMixin {
   Future<void> addUserAoPedido() async {
     /// isto vai ser alterrado porque tenho de ter o utilizador da seção
     pedido.funcionarioID = database.getAllFuncionarios()[0].id;
-    print(
-        'estive aqui e entao o pedido tem utilizador ${pedido.funcionarioID}');
-
     ///este zer0 tera de ser mudado ele escolhe qual é o utilizador
   }
 
@@ -167,8 +164,7 @@ class _PedidoPage extends State<PedidoPage> with TickerProviderStateMixin {
               actions: [
                 PopupMenuButton<String>(
                   onSelected: (value) {
-                    // Aqui você pode adicionar a lógica para lidar com as opções selecionadas
-                    print('Opção selecionada: ${pedido.nome}');
+                    //print('Opção selecionada: ${pedido.nome}');
                   },
                   itemBuilder: (BuildContext context) =>
                       <PopupMenuEntry<String>>[
@@ -272,9 +268,9 @@ class _PedidoPage extends State<PedidoPage> with TickerProviderStateMixin {
                                         onPressed: () {
                                           pedido.artigosPedidoIds.add(
                                               artigosFiltrados()[index].id);
-                                          pedido.artigosPedido
-                                              .add(artigosFiltrados()[index]);
-                                          print('foi adicionado o artigo');
+                                          if (!(pedido.artigosPedido.contains(artigosFiltrados()[index]))){
+                                            pedido.artigosPedido.add(artigosFiltrados()[index]);
+                                          }
                                           addItemToCart();
                                           atulizarArtigosCarrinho();
                                         },
@@ -340,8 +336,6 @@ class _PedidoPage extends State<PedidoPage> with TickerProviderStateMixin {
                             for (Artigo artigoLista in pedido.artigosPedido) {
                               if (artigoLista.nome ==
                                   database.getArtigo(artigoId)!.nome) {
-                                print(
-                                    'preço do artigo na lista do pedido ${artigoLista.price}');
                                 artigo = artigoLista;
                                 break;
                               }
@@ -445,13 +439,6 @@ class _PedidoPage extends State<PedidoPage> with TickerProviderStateMixin {
                                   onPressed: () async {
                                     if (pedido.artigosPedidoIds.isNotEmpty) {
                                       if (pedido.localId == -1) {
-                                        print(
-                                            'Lista de locais: ${database.getAllLocal().length}');
-                                        database
-                                            .getAllLocal()
-                                            .forEach((element) {
-                                          print(element.nome);
-                                        });
 
                                         Navigator.push(
                                             context,
@@ -639,7 +626,7 @@ class _PedidoPage extends State<PedidoPage> with TickerProviderStateMixin {
                 PopupMenuButton<String>(
                   onSelected: (value) {
                     // Aqui você pode adicionar a lógica para lidar com as opções selecionadas
-                    print('Opção selecionada: ${pedido.nome}');
+                    //print('Opção selecionada: ${pedido.nome}');
                   },
                   itemBuilder: (BuildContext context) =>
                       <PopupMenuEntry<String>>[
@@ -737,9 +724,9 @@ class _PedidoPage extends State<PedidoPage> with TickerProviderStateMixin {
                                   onPressed: () {
                                     pedido.artigosPedidoIds
                                         .add(artigosFiltrados()[index].id);
-                                    pedido.artigosPedido
-                                        .add(artigosFiltrados()[index]);
-                                    print('foi adicionado o artigo');
+                                    if (!(pedido.artigosPedido.contains(artigosFiltrados()[index]))){
+                                      pedido.artigosPedido.add(artigosFiltrados()[index]);
+                                    }
                                     addItemToCart();
                                   },
                                   style: ButtonStyle(

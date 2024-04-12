@@ -194,7 +194,7 @@ class ObjectBoxDatabase {
             stock: 6,
             idArticlesCategories: idCategorias[2]),
       ];
-      print('estive aqui');
+
       _artigosBox.putMany(artigos);
     }
   }

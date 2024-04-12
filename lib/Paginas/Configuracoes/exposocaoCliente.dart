@@ -27,17 +27,17 @@ class _ExposicaoPageState extends State<ExposicaoPage> {
   Widget build(BuildContext context) {
     //isTablet ? TabletLayout() : PhoneLayout(),
     return isTablet
-        ? Scaffold(
+        ? const Scaffold(
             body: Center(
               child: Text('Conteúdo da Página de Exposição do Cliente'),
             ),
           )
         : Scaffold(
             appBar: AppBar(
-              title: Text('Página de Exposição do Cliente'),
+              title: const Text('Página de Exposição do Cliente'),
               backgroundColor: const Color(0xff00afe9),
             ),
-            body: Center(
+            body: const Center(
               child: Text('Conteúdo da Página de Exposição do Cliente'),
             ),
           );

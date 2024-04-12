@@ -27,7 +27,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String pagina = '/setupPage';
-    print(database.getAllSetup().length);
     if (database.getAllSetup().isNotEmpty) {
       if (database.getAllSetup()[0].url == '' ||
           database.getAllSetup()[0].password == '') {

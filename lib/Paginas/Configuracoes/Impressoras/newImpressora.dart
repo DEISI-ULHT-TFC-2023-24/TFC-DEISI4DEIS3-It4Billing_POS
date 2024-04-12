@@ -6,6 +6,7 @@ import 'package:it4billing_pos/objetos/impressoraObj.dart';
 import 'dart:io';
 
 import '../../../main.dart';
+import '../configuracoes.dart';
 import 'impressoras.dart';
 
 class CriarImpressoraPage extends StatefulWidget {
@@ -17,6 +18,22 @@ class _CriarImpressoraPageState extends State<CriarImpressoraPage> {
   final TextEditingController nomeController = TextEditingController();
   final TextEditingController ipController = TextEditingController();
   final TextEditingController portController = TextEditingController();
+  bool isTablet = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    checkDeviceType();
+  }
+
+  void checkDeviceType() {
+    // Getting the screen size
+    final screenSize = MediaQuery.of(context).size;
+    // Arbitrarily defining screen size greater than 600 width and height as tablet
+    setState(() {
+      isTablet = screenSize.width > 600 && screenSize.height > 600;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -136,9 +153,16 @@ class _CriarImpressoraPageState extends State<CriarImpressoraPage> {
                   ImpressoraObj impressora = ImpressoraObj(nome, ip, port);
                   database.addImpressora(impressora);
                   Navigator.pop(context);
-                  Navigator.pop(context);
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => ImpressorasPage()));
+
+                  if(isTablet){
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => ConfiguracoesPage()));
+                  } else{
+                    Navigator.pop(context);
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => ImpressorasPage()));
+                  }
+
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xff00afe9),

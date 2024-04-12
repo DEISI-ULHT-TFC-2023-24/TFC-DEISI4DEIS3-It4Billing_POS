@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 
 
 import '../../../main.dart';
+import '../configuracoes.dart';
 import 'impressoras.dart';
 
 class ImpressoraPage extends StatefulWidget {
@@ -26,6 +27,22 @@ class _ImpressoraPageState extends State<ImpressoraPage> {
   final TextEditingController ipController = TextEditingController();
   final TextEditingController portController = TextEditingController();
   bool camposAlterados = false; // Adicione esta variável
+  bool isTablet = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    checkDeviceType();
+  }
+
+  void checkDeviceType() {
+    // Getting the screen size
+    final screenSize = MediaQuery.of(context).size;
+    // Arbitrarily defining screen size greater than 600 width and height as tablet
+    setState(() {
+      isTablet = screenSize.width > 600 && screenSize.height > 600;
+    });
+  }
 
   @override
   void initState() {
@@ -204,9 +221,15 @@ class _ImpressoraPageState extends State<ImpressoraPage> {
                         database.removeImpressora(widget.impressora.id);
                         database.addImpressora(impressora);
                         Navigator.pop(context);
-                        Navigator.pop(context);
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => ImpressorasPage()));
+
+                        if(isTablet){
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => ConfiguracoesPage()));
+                        } else{
+                          Navigator.pop(context);
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => ImpressorasPage()));
+                        }
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xff00afe9),
@@ -238,9 +261,15 @@ class _ImpressoraPageState extends State<ImpressoraPage> {
                   // Adicionar ação para eliminar a impressora
                   database.removeImpressora(widget.impressora.id);
                   Navigator.pop(context);
-                  Navigator.pop(context);
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => ImpressorasPage()));
+
+                  if(isTablet){
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => ConfiguracoesPage()));
+                  } else{
+                    Navigator.pop(context);
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => ImpressorasPage()));
+                  }
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.red, // Alterado para vermelho
