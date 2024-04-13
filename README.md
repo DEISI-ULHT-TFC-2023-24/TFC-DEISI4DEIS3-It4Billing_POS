@@ -5,7 +5,7 @@
 ### Instruções de instalação
 
 1. Habilitar instalação de aplicações de fontes desconhecidas no dispositivo Android.
-2. Transferir o arquivo APK para o dispositivo.
+2. Transferir o arquivo APK como o nome de APK_it4billing_pos, para o dispositivo.
 3. Localizar o arquivo APK.
 4. Abrir o arquivo e instalar a aplicação seguindo os passos apresentados no ecrã.
 5. Procurar o ícone da aplicação na gaveta de aplicações ou no ecrã inicial.
