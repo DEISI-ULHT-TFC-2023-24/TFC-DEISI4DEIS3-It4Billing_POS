@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../main.dart';
-import '../../objetos/meusargumentos.dart';
+import '../../objetos/meusArgumentos.dart';
 import '../../objetos/pedidoObj.dart';
 import '../../objetos/setupObj.dart';
 import '../Cliente/addClientePage.dart';

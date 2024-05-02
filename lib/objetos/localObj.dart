@@ -5,6 +5,7 @@ import '../database/objectbox.g.dart';
 class LocalObj {
   int id = 0;
   final String nome;
+  bool ocupado = false;
 
   LocalObj(this.nome);
 }

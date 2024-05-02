@@ -91,8 +91,14 @@ class _ConcluirPedidoState extends State<ConcluirPedido> {
     // IMPRIMIR
     if (widget.setup.imprimir && widget.impressoras.isNotEmpty) {
       imprimir();
-    }
-    ;
+    };
+
+    database.getAllLocal().forEach((local) {
+      if(local.id == widget.pedido.localId){
+        local.ocupado = false;
+        database.addLocal(local);
+      }
+    });
 
     Navigator.pushAndRemoveUntil(
       context,

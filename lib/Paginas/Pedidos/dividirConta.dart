@@ -10,7 +10,7 @@ import '../../objetos/VendaObj.dart';
 import '../../objetos/artigoObj.dart';
 import '../../objetos/impressoraObj.dart';
 import '../../objetos/metodoPagamentoObj.dart';
-import '../../objetos/meusargumentos.dart';
+import '../../objetos/meusArgumentos.dart';
 import '../../objetos/pedidoObj.dart';
 import '../../objetos/setupObj.dart';
 import '../../objetos/turnoObj.dart';
@@ -249,7 +249,7 @@ class _DividirConta extends State<DividirConta> {
         total: widget.pedido.total);
     venda.artigosPedidoIds = widget.pedido.artigosPedidoIds;
     venda.nrArtigos = widget.pedido.nrArtigos;
-    if (database.getAllImpressoras().isNotEmpty) {
+    if (widget.setup.imprimir &&database.getAllImpressoras().isNotEmpty) {
       imprimir();
     }
     database.addVenda(venda);
@@ -258,6 +258,14 @@ class _DividirConta extends State<DividirConta> {
         database.removePedido(widget.pedido.id);
       }
     }
+
+    database.getAllLocal().forEach((local) {
+      if(local.id == widget.pedido.localId){
+        local.ocupado = false;
+        database.addLocal(local);
+      }
+    });
+
 
     Navigator.push(
       context,

@@ -172,7 +172,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
       id: const obx_int.IdUid(3, 3291211985064249028),
       name: 'LocalObj',
-      lastPropertyId: const obx_int.IdUid(2, 8603684169517755335),
+      lastPropertyId: const obx_int.IdUid(3, 3993280899006125693),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
@@ -184,6 +184,11 @@ final _entities = <obx_int.ModelEntity>[
             id: const obx_int.IdUid(2, 8603684169517755335),
             name: 'nome',
             type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(3, 3993280899006125693),
+            name: 'ocupado',
+            type: 1,
             flags: 0)
       ],
       relations: <obx_int.ModelRelation>[],
@@ -896,9 +901,10 @@ obx_int.ModelDefinition getObjectBoxModel() {
         },
         objectToFB: (LocalObj object, fb.Builder fbb) {
           final nomeOffset = fbb.writeString(object.nome);
-          fbb.startTable(3);
+          fbb.startTable(4);
           fbb.addInt64(0, object.id);
           fbb.addOffset(1, nomeOffset);
+          fbb.addBool(2, object.ocupado);
           fbb.finish(fbb.endTable());
           return object.id;
         },
@@ -908,7 +914,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
           final nomeParam = const fb.StringReader(asciiOptimization: true)
               .vTableGet(buffer, rootOffset, 6, '');
           final object = LocalObj(nomeParam)
-            ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
+            ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0)
+            ..ocupado =
+                const fb.BoolReader().vTableGet(buffer, rootOffset, 8, false);
 
           return object;
         }),
@@ -1491,6 +1499,10 @@ class LocalObj_ {
   /// see [LocalObj.nome]
   static final nome =
       obx.QueryStringProperty<LocalObj>(_entities[2].properties[1]);
+
+  /// see [LocalObj.ocupado]
+  static final ocupado =
+      obx.QueryBooleanProperty<LocalObj>(_entities[2].properties[2]);
 }
 
 /// [PedidoObj] entity fields to define ObjectBox queries.

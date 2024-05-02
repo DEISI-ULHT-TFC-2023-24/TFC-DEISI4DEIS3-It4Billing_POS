@@ -3,6 +3,8 @@ import 'package:it4billing_pos/main.dart';
 import 'package:it4billing_pos/objetos/localObj.dart';
 import 'package:it4billing_pos/Paginas/Pedidos/pedidos.dart';
 
+import '../../database/objectbox.g.dart';
+import '../../objetos/artigoObj.dart';
 import '../../objetos/pedidoObj.dart';
 
 class LocalPage extends StatelessWidget {
@@ -41,12 +43,27 @@ class LocalPage extends StatelessWidget {
                       onPressed: () async {
                         // Lógica para lidar com a seleção do local
                         pedido.localId = local.id;
+                        if(local.ocupado){
+                          database.getAllPedidos().forEach((pedidoExistente) {
+                            if(pedidoExistente.localId == local.id){
+                              /// tenho de fazer alguma coisa para juntar ao outro pedido
+                              pedidoExistente.artigosPedidoIds = pedidoExistente.artigosPedidoIds + pedido.artigosPedidoIds;
+                              Set<Artigo> conjuntoArtigos = {...pedidoExistente.artigosPedido, ...pedido.artigosPedido};
+                              pedidoExistente.artigosPedido.clear(); // Limpa os artigos existentes, se necessário
+                              for (var artigo in conjuntoArtigos) {
+                                pedidoExistente.artigosPedido.add(artigo); // Adiciona cada artigo ao pedido existente
+                              }
 
-                        await database.addPedido(pedido);
-
+                          database.addPedido(pedidoExistente);
+                            }
+                          });
+                        } else {
+                          local.ocupado = true;
+                          await database.addLocal(local);
+                          await database.addPedido(pedido);
+                        }
                         Navigator.of(context).pop();
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => PedidosPage()));// Fechar a página
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => PedidosPage()));// Fechar a página
                       },
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all<Color>(Colors.white),

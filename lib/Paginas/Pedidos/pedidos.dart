@@ -329,13 +329,10 @@ class _PedidosPage extends State<PedidosPage> {
                                           MaterialPageRoute(
                                               builder: (context) =>
                                                   PedidoAbertoPage(
-                                                    artigos: database
-                                                        .getAllArtigos(),
-                                                    categorias: database
-                                                        .getAllCategorias(),
+                                                    artigos: database.getAllArtigos(),
+                                                    categorias: database.getAllCategorias(),
                                                     pedidos: widget.pedidos,
-                                                    pedido:
-                                                        widget.pedidos[index],
+                                                    pedido: widget.pedidos[index],
                                                   )));
                                     },
                                     style: ButtonStyle(

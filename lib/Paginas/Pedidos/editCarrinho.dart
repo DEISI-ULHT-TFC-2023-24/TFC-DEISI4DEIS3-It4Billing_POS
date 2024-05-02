@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:it4billing_pos/Paginas/Pedidos/carrinho.dart';
+import 'package:it4billing_pos/Paginas/Pedidos/pedidoAberto.dart';
 
+import '../../main.dart';
 import '../../objetos/artigoObj.dart';
 import '../../objetos/pedidoObj.dart';
 
@@ -33,11 +35,29 @@ class _EditCarrinhoState extends State<EditCarrinho> {
   bool _updatedP = false;
   bool _updatedD = false;
 
+  bool isTablet = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    checkDeviceType();
+  }
+
+  void checkDeviceType() {
+    // Getting the screen size
+    final screenSize = MediaQuery.of(context).size;
+    // Arbitrarily defining screen size greater than 600 width and height as tablet
+    setState(() {
+      isTablet = screenSize.width > 600 && screenSize.height > 600;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
     widget.qunatidadeInicial = widget.quantidade;
-    _observacoesController = TextEditingController(text: widget.artigo.observacoes);
+    _observacoesController =
+        TextEditingController(text: widget.artigo.observacoes);
   }
 
   @override
@@ -66,13 +86,13 @@ class _EditCarrinhoState extends State<EditCarrinho> {
     ///ADICIONAR UMA VERIFICAÇÃO
     double novoPreco = double.parse(_controllerP.text);
     setState(() {
-      widget.artigo.unitPrice = novoPreco/(1+(widget.artigo.taxPrecentage/100));
+      widget.artigo.unitPrice =
+          novoPreco / (1 + (widget.artigo.taxPrecentage / 100));
       widget.artigo.price = novoPreco;
-      if (widget.pedido.artigosPedido.contains(widget.artigo)){
+      if (widget.pedido.artigosPedido.contains(widget.artigo)) {
         widget.pedido.artigosPedido.remove(widget.artigo);
         widget.pedido.artigosPedido.add(widget.artigo);
       }
-
     });
   }
 
@@ -80,9 +100,10 @@ class _EditCarrinhoState extends State<EditCarrinho> {
     double novoPreco = widget.artigo.price - double.parse(_controllerD.text);
     setState(() {
       widget.artigo.discount = widget.artigo.price - novoPreco;
-      widget.artigo.unitPrice = novoPreco/(1+(widget.artigo.taxPrecentage/100));
+      widget.artigo.unitPrice =
+          novoPreco / (1 + (widget.artigo.taxPrecentage / 100));
       widget.artigo.price = novoPreco;
-      if (widget.pedido.artigosPedido.contains(widget.artigo)){
+      if (widget.pedido.artigosPedido.contains(widget.artigo)) {
         widget.pedido.artigosPedido.remove(widget.artigo);
         widget.pedido.artigosPedido.add(widget.artigo);
       }
@@ -98,10 +119,9 @@ class _EditCarrinhoState extends State<EditCarrinho> {
     });
   }
 
-  void gravar(){
+  void gravar() {
     setState(() {
-
-      if (widget.quantidade > widget.qunatidadeInicial){
+      if (widget.quantidade > widget.qunatidadeInicial) {
         for (int i = widget.qunatidadeInicial; i < widget.quantidade; i++) {
           widget.pedido.artigosPedidoIds.add(widget.artigo.id);
         }
@@ -114,7 +134,6 @@ class _EditCarrinhoState extends State<EditCarrinho> {
         }
         //descrementa
       }
-
     });
   }
 
@@ -127,7 +146,6 @@ class _EditCarrinhoState extends State<EditCarrinho> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-
             const SizedBox(height: 30),
             const Text('Quantidade', style: TextStyle(fontSize: 20.0)),
             Center(
@@ -182,8 +200,7 @@ class _EditCarrinhoState extends State<EditCarrinho> {
                                 ? Colors.grey
                                 : const Color(0xff00afe9),
                           ),
-                          child: Text(
-                              _updatedP ? 'Atualizado' : 'Atualizar'),
+                          child: Text(_updatedP ? 'Atualizado' : 'Atualizar'),
                         ),
                       ),
                     ],
@@ -253,7 +270,6 @@ class _EditCarrinhoState extends State<EditCarrinho> {
                 ],
               ),
             ),
-
             const SizedBox(height: 30),
             Padding(
               padding: const EdgeInsets.only(left: 45, right: 45),
@@ -282,8 +298,7 @@ class _EditCarrinhoState extends State<EditCarrinho> {
               children: [
                 Expanded(
                   child: Padding(
-                    padding:
-                    const EdgeInsets.only(left: 20.0, bottom: 30),
+                    padding: const EdgeInsets.only(left: 20.0, bottom: 30),
                     child: SizedBox(
                       height: 50,
                       child: ElevatedButton(
@@ -293,9 +308,10 @@ class _EditCarrinhoState extends State<EditCarrinho> {
                           Navigator.of(context)
                               .pushReplacement(MaterialPageRoute(
                             builder: (BuildContext context) => CarrinhoPage(
-                                pedidos: widget.pedidos,
-                                artigos: widget.artigos,
-                                pedido: widget.pedido,),
+                              pedidos: widget.pedidos,
+                              artigos: widget.artigos,
+                              pedido: widget.pedido,
+                            ),
                           ));
                         },
                         style: ElevatedButton.styleFrom(
@@ -309,8 +325,7 @@ class _EditCarrinhoState extends State<EditCarrinho> {
                           padding: EdgeInsets.symmetric(horizontal: 10.0),
                           child: Text(
                             'ELIMINAR',
-                            style: TextStyle(
-                                color: Colors.black, fontSize: 18),
+                            style: TextStyle(color: Colors.black, fontSize: 18),
                           ),
                         ),
                       ),
@@ -320,24 +335,35 @@ class _EditCarrinhoState extends State<EditCarrinho> {
                 const SizedBox(width: 20), // Espaço entre os botões
                 Expanded(
                   child: Padding(
-                    padding:
-                    const EdgeInsets.only(right: 20.0, bottom: 30),
+                    padding: const EdgeInsets.only(right: 20.0, bottom: 30),
                     child: SizedBox(
                       height: 50,
                       child: ElevatedButton(
                         onPressed: () {
-                            // adicionar o nomero de vezes a mais na lista dos artigos no carrinho ou retirar
-                            // meu deus que confusão...
+                          // adicionar o nomero de vezes a mais na lista dos artigos no carrinho ou retirar
+                          // meu deus que confusão...
                           gravar();
                           Navigator.of(context).pop();
-                          Navigator.of(context)
-                              .pushReplacement(MaterialPageRoute(
-                            builder: (BuildContext context) => CarrinhoPage(
-                                pedidos: widget.pedidos,
-                                artigos: widget.artigos,
-                                pedido: widget.pedido,),
-                          ));
-
+                          isTablet
+                              ? Navigator.of(context)
+                                  .pushReplacement(MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      PedidoAbertoPage(
+                                        artigos: database.getAllArtigos(),
+                                        categorias: database.getAllCategorias(),
+                                        pedidos: widget.pedidos,
+                                        pedido: widget.pedido,
+                                      ),
+                                ))
+                              : Navigator.of(context)
+                                  .pushReplacement(MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      CarrinhoPage(
+                                    pedidos: widget.pedidos,
+                                    artigos: widget.artigos,
+                                    pedido: widget.pedido,
+                                  ),
+                                ));
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xff00afe9),
@@ -350,8 +376,7 @@ class _EditCarrinhoState extends State<EditCarrinho> {
                           padding: EdgeInsets.symmetric(horizontal: 20.0),
                           child: Text(
                             'GRAVAR',
-                            style: TextStyle(
-                                color: Colors.white, fontSize: 18),
+                            style: TextStyle(color: Colors.white, fontSize: 18),
                           ),
                         ),
                       ),

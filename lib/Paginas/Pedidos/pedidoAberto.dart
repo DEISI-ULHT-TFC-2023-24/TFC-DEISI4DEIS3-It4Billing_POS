@@ -180,75 +180,76 @@ class _PedidoAbertoPage extends State<PedidoAbertoPage> with TickerProviderState
             ),
             backgroundColor: const Color(0xff00afe9),
             actions: [
-              Stack(
-                children: [
-                  IconButton(
-                    icon: ScaleTransition(
-                      scale: Tween<double>(begin: 1, end: 1.5).animate(
-                        CurvedAnimation(
-                          parent: _controller,
-                          curve: Curves.easeInOut,
-                        ),
-                      ),
-                      child: const Icon(Icons.shopping_cart_outlined),
-                    ),
-                    onPressed: () {
-                      widget.pedido.total = 0;
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => CarrinhoPage(
-                                    artigos: widget.artigos,
-                                    pedidos: widget.pedidos,
-                                    pedido: widget.pedido,
-                                  )));
-                    },
-                  ),
-                  Positioned(
-                    right: 6,
-                    top: 6,
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => CarrinhoPage(
-                                      artigos: widget.artigos,
-                                      pedidos: widget.pedidos,
-                                      pedido: widget.pedido,
-                                    )));
-                      },
-                      child: ScaleTransition(
+              if (!isTablet)
+                Stack(
+                  children: [
+                    IconButton(
+                      icon: ScaleTransition(
                         scale: Tween<double>(begin: 1, end: 1.5).animate(
                           CurvedAnimation(
                             parent: _controller,
                             curve: Curves.easeInOut,
                           ),
                         ),
-                        child: Container(
-                          padding: const EdgeInsets.all(2),
-                          decoration: BoxDecoration(
-                            color: Colors.red,
-                            borderRadius: BorderRadius.circular(10),
+                        child: const Icon(Icons.shopping_cart_outlined),
+                      ),
+                      onPressed: () {
+                        widget.pedido.total = 0;
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => CarrinhoPage(
+                                  artigos: widget.artigos,
+                                  pedidos: widget.pedidos,
+                                  pedido: widget.pedido,
+                                )));
+                      },
+                    ),
+                    Positioned(
+                      right: 6,
+                      top: 6,
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => CarrinhoPage(
+                                    artigos: widget.artigos,
+                                    pedidos: widget.pedidos,
+                                    pedido: widget.pedido,
+                                  )));
+                        },
+                        child: ScaleTransition(
+                          scale: Tween<double>(begin: 1, end: 1.5).animate(
+                            CurvedAnimation(
+                              parent: _controller,
+                              curve: Curves.easeInOut,
+                            ),
                           ),
-                          constraints: const BoxConstraints(
-                            minWidth: 16,
-                            minHeight: 16,
-                          ),
-                          child: Text(
-                            '${widget.pedido.nrArtigos}',
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              fontSize: 12,
-                              color: Colors.white,
+                          child: Container(
+                            padding: const EdgeInsets.all(2),
+                            decoration: BoxDecoration(
+                              color: Colors.red,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            constraints: const BoxConstraints(
+                              minWidth: 16,
+                              minHeight: 16,
+                            ),
+                            child: Text(
+                              '${widget.pedido.nrArtigos}',
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                fontSize: 12,
+                                color: Colors.white,
+                              ),
                             ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ],
-              ),
+                  ],
+                ),
               PopupMenuButton<String>(
                 onSelected: (value) {
                   // Aqui você pode adicionar a lógica para lidar com as opções selecionadas
@@ -291,16 +292,16 @@ class _PedidoAbertoPage extends State<PedidoAbertoPage> with TickerProviderState
                               Expanded(
                                 child: showSearch
                                     ? Padding(
-                                  padding: const EdgeInsets.all(20),
-                                  child: TextField(
-                                    controller: searchController,
-                                    decoration: const InputDecoration(
-                                      hintText: 'Pesquisar artigos...',
-                                    ),
-                                    onChanged: (value) {
-                                      setState(() {});
-                                    },
-                                  ),
+                                      padding: const EdgeInsets.all(20),
+                                      child: TextField(
+                                        controller: searchController,
+                                        decoration: const InputDecoration(
+                                          hintText: 'Pesquisar artigos...',
+                                        ),
+                                        onChanged: (value) {
+                                          setState(() {});
+                                          },
+                                      ),
                                 )
                                     : Padding(
                                   padding: const EdgeInsets.all(20),
@@ -315,9 +316,7 @@ class _PedidoAbertoPage extends State<PedidoAbertoPage> with TickerProviderState
                                         categoriaSelecionada = newValue!;
                                       });
                                     },
-                                    items: widget.categorias
-                                        .map<DropdownMenuItem<Categoria>>(
-                                            (Categoria value) {
+                                    items: widget.categorias.map<DropdownMenuItem<Categoria>>((Categoria value) {
                                           return DropdownMenuItem<Categoria>(
                                             value: value,
                                             child: Text(value.nome),
@@ -479,7 +478,7 @@ class _PedidoAbertoPage extends State<PedidoAbertoPage> with TickerProviderState
                                           MainAxisAlignment.start,
                                           children: [
                                             Text(
-                                                artigo!.nome.length > 10
+                                                artigo!.nome.length > 20
                                                     ? artigo.nome.substring(0, 20)
                                                     : artigo.nome,
                                                 style: const TextStyle(
