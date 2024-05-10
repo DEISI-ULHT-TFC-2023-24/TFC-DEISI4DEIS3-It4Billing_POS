@@ -84,20 +84,7 @@ class _CobrarDivididoPage extends State<CobrarDivididoPage> {
               Navigator.pop(context, false);
             },
           ),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.person_add_outlined),
-              tooltip: 'Open client',
-              onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => AdicionarClientePage(
-                        pedido: widget.pedido,
-                        pedidos: database.getAllPedidos(),
-                        artigos: database.getAllArtigos())
-                ));
-              },
-            ),
-          ],
+
         ),
         body: SingleChildScrollView(
           child: Column(

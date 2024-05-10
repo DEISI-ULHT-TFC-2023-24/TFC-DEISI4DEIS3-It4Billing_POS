@@ -722,8 +722,7 @@ class _PedidoPage extends State<PedidoPage> with TickerProviderStateMixin {
                                 padding: const EdgeInsets.only(bottom: 10.0),
                                 child: ElevatedButton(
                                   onPressed: () {
-                                    pedido.artigosPedidoIds
-                                        .add(artigosFiltrados()[index].id);
+                                    pedido.artigosPedidoIds.add(artigosFiltrados()[index].id);
                                     if (!(pedido.artigosPedido.contains(artigosFiltrados()[index]))){
                                       pedido.artigosPedido.add(artigosFiltrados()[index]);
                                     }

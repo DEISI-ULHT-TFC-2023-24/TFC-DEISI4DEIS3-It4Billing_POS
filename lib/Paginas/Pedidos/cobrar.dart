@@ -148,7 +148,7 @@ class _Cobrar extends State<Cobrar> {
                               int artigoId = artigosAgrupados.keys.elementAt(index);
                               int quantidade = artigosAgrupados[artigoId]!;
                               double? valor;
-                              Artigo? artigo;
+                              Artigo? artigo = database.getArtigo(artigoId);
 
                               // Verifica se o artigo está presente na lista
                               for (Artigo artigoLista in widget.pedido.artigosPedido) {

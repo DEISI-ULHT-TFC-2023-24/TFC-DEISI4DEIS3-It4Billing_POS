@@ -14,6 +14,7 @@ import '../../objetos/meusArgumentos.dart';
 import '../../objetos/pedidoObj.dart';
 import '../../objetos/setupObj.dart';
 import '../../objetos/turnoObj.dart';
+import '../Cliente/addClientePage.dart';
 import 'cobrarDividido.dart';
 
 class DividirConta extends StatefulWidget {
@@ -22,7 +23,6 @@ class DividirConta extends StatefulWidget {
   List<ImpressoraObj> impressoras = database.getAllImpressoras();
   late PedidoObj pedido;
   TurnoObj turno = database.getAllTurno()[0];
-
 
   DividirConta({
     Key? key,
@@ -38,11 +38,12 @@ class _DividirConta extends State<DividirConta> {
   int numPessoas = 2; // Começa com dois
   List<double> valoresIndividuais = []; // Valores individuais de cada pessoa
   bool mostrarBotaoConcluir = false;
-  List<bool> botaoPressionado = [];
+  List<MetudobotaoPressionado> botaoPressionado = [];
   late List<TextEditingController> controllers;
   List<int> listaMetudoUsados = [];
   late Map<int, int> artigosAgrupados;
-  late MetodoPagamentoObj metodo;
+  bool _showEmailField = false;
+  TextEditingController _emailController = TextEditingController();
 
   Map<int, int> groupItems(List<int> listaIds) {
     Map<int, int> frequenciaIds = {};
@@ -61,8 +62,15 @@ class _DividirConta extends State<DividirConta> {
   @override
   void initState() {
     super.initState();
+    _showEmailField = widget.setup.email;
+    if (database.getCliente(widget.pedido.clienteID)!.email != 'N/D' ||
+        database.getCliente(widget.pedido.clienteID)!.email != '') {
+      _emailController.text = database.getCliente(widget.pedido.clienteID)!.email;
+    }
     calcularValoresIndividuais();
-    botaoPressionado = List.generate(numPessoas, (index) => false);
+    botaoPressionado = List.generate(numPessoas,
+            (index) =>
+            MetudobotaoPressionado(false, MetodoPagamentoObj('', 0)));
 
     // Inicialize os controllers e adicione listeners para limpar os campos quando ganharem foco
     controllers = List.generate(
@@ -95,10 +103,8 @@ class _DividirConta extends State<DividirConta> {
     double totalPedido = widget.pedido.total;
     setState(() {
       valoresIndividuais.clear();
-      double valorIndividual = double.parse((totalPedido / numPessoas)
-          .toStringAsFixed(2)); // Arredondar para 2 casas decimais
-      double totalFixo =
-          double.parse((valorIndividual * numPessoas).toStringAsFixed(2));
+      double valorIndividual = double.parse((totalPedido / numPessoas).toStringAsFixed(2)); // Arredondar para 2 casas decimais
+      double totalFixo = double.parse((valorIndividual * numPessoas).toStringAsFixed(2));
       double diferenca = totalPedido - totalFixo;
       double diferencaPorPessoa = (diferenca / 0.01).abs();
 
@@ -127,8 +133,10 @@ class _DividirConta extends State<DividirConta> {
   void aumentarPessoas() {
     setState(() {
       numPessoas++;
-      botaoPressionado.add(false);
-      mostrarBotaoConcluir = false; // Se aumentar o número de pessoas, o botão "Concluir Venda" deve desaparecer
+      botaoPressionado
+          .add(MetudobotaoPressionado(false, MetodoPagamentoObj('', 0)));
+      mostrarBotaoConcluir =
+      false; // Se aumentar o número de pessoas, o botão "Concluir Venda" deve desaparecer
       controllers.add(TextEditingController());
       valoresIndividuais.add(0.0);
       listaMetudoUsados.add(0);
@@ -157,17 +165,20 @@ class _DividirConta extends State<DividirConta> {
     }
   }
 
-  // Adicione um método para contar quantos botões foram pressionados
+  // Método para contar quantos botões foram pressionados
   int countPressedButtons() {
-    return botaoPressionado.where((pressed) => pressed).length;
+    return botaoPressionado
+        .where((item) => item.pressionado)
+        .length;
   }
 
   void cobrarValor(int index) {
     bool algumValorInvalido = false;
     double somaValores =
-        valoresIndividuais.reduce((value, element) => value + element);
+    valoresIndividuais.reduce((value, element) => value + element);
 
-    if (somaValores < widget.pedido.total) {
+    if (double.parse((somaValores).toStringAsFixed(2)) <
+        double.parse((widget.pedido.total).toStringAsFixed(2))) {
       algumValorInvalido = true;
       showDialog(
         context: context,
@@ -217,24 +228,24 @@ class _DividirConta extends State<DividirConta> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => CobrarDivididoPage(
-            pedido: widget.pedido,
-            valorCobrar: valoresIndividuais[index],
-          ),
+          builder: (context) =>
+              CobrarDivididoPage(
+                pedido: widget.pedido,
+                valorCobrar: valoresIndividuais[index],
+              ),
         ),
       ).then((troca) {
         MeusArgumentos args = troca;
         if (args.meuBool) {
           setState(() {
-            botaoPressionado[index] = args.meuBool;
+            botaoPressionado[index].pressionado = args.meuBool;
             if (countPressedButtons() == numPessoas) {
               mostrarBotaoConcluir = true;
             }
           });
         }
         // retirar o dinheiro do metudo e atualizar o turno
-        metodo = database.getMetodoPagamento(args.meuInt)!;
-
+        botaoPressionado[index].metodo = database.getMetodoPagamento(args.meuInt)!;
       });
     }
   }
@@ -249,9 +260,16 @@ class _DividirConta extends State<DividirConta> {
         total: widget.pedido.total);
     venda.artigosPedidoIds = widget.pedido.artigosPedidoIds;
     venda.nrArtigos = widget.pedido.nrArtigos;
-    if (widget.setup.imprimir &&database.getAllImpressoras().isNotEmpty) {
+
+    // Inclua a lógica para enviar por email e/ou imprimir com base nas escolhas do usuário
+    if (widget.setup.email && _showEmailField) {
+      // Enviar por email para _emailController.text
+    }
+    if (widget.setup.imprimir && database.getAllImpressoras().isNotEmpty) {
+      // Chamar a função imprimir
       imprimir();
     }
+
     database.addVenda(venda);
     if (widget.pedido.id != 0) {
       if (database.getPedido(widget.pedido.id) != null) {
@@ -260,12 +278,11 @@ class _DividirConta extends State<DividirConta> {
     }
 
     database.getAllLocal().forEach((local) {
-      if(local.id == widget.pedido.localId){
+      if (local.id == widget.pedido.localId) {
         local.ocupado = false;
         database.addLocal(local);
       }
     });
-
 
     Navigator.push(
       context,
@@ -274,6 +291,8 @@ class _DividirConta extends State<DividirConta> {
       ),
     );
   }
+
+
 
   Future<void> imprimir() async {
     ImpressoraObj impressora = widget.impressoras[0];
@@ -308,7 +327,6 @@ class _DividirConta extends State<DividirConta> {
       // Comando para descentralizar o texto (definir alinhamento padrão)
       final alinhamentoPadrao = [0x1B, 0x61, 0x00];
 
-
       // Texto a ser enviado
       final texto = '\n$nomeEmpresa\n\n';
       // Concatenando os comandos e o texto
@@ -334,15 +352,18 @@ class _DividirConta extends State<DividirConta> {
       'Cliente: ${database.getCliente(widget.pedido.clienteID)!.nome}\n';
       cabecalho += '${database.getCliente(widget.pedido.clienteID)!.address}\n';
       cabecalho +=
-      'Cód. Postal: ${database.getCliente(widget.pedido.clienteID)!.postcode}\n';
+      'Cód. Postal: ${database.getCliente(widget.pedido.clienteID)!
+          .postcode}\n';
       cabecalho +=
       'NIF: ${database.getCliente(widget.pedido.clienteID)!.NIF}\n';
       cabecalho +=
       'Tel: ${database.getCliente(widget.pedido.clienteID)!.phone}\n\n';
       cabecalho +=
-      'Data de Emissao: ${DateFormat('dd/MM/yyyy HH:mm').format(DateTime.now())}\n';
+      'Data de Emissao: ${DateFormat('dd/MM/yyyy HH:mm').format(
+          DateTime.now())}\n';
       cabecalho +=
-      'Vendador: ${database.getFuncionario(widget.setup.funcionarioId)!.nome}\n';
+      'Vendador: ${database.getFuncionario(widget.setup.funcionarioId)!
+          .nome}\n';
 
       // Comando para imprimir separador de linha de traços
       final separador = '------------------------------------------------\n';
@@ -356,7 +377,7 @@ class _DividirConta extends State<DividirConta> {
         ...desativarNegrito
       ];
 
-      final indice =    'Qtd.---IVA%-----Preco-------Desc.-------Total\n';
+      final indice = 'Qtd.---IVA%-----Preco-------Desc.-------Total\n';
       // Convertendo o texto para UTF-8
       List<int> indiceUtf8Bytes = utf8.encode(indice);
 
@@ -366,28 +387,31 @@ class _DividirConta extends State<DividirConta> {
         // Verifica se o artigo está presente na lista
         for (Artigo artigoLista in widget.pedido.artigosPedido) {
           if (artigoLista.nome == database.getArtigo(chave)!.nome) {
-
             String nomeArtigo = artigoLista.nome.length > 40
                 ? artigoLista.nome.substring(0, 40)
                 : artigoLista.nome;
             //Valor representa a quantidade do produto
-            pordutos += '$valor     ${artigoLista.taxPrecentage}%      ${artigoLista.price.toStringAsFixed(2)}EUR     ${artigoLista.discount.toStringAsFixed(2)}EUR    ${(artigoLista.price * valor).toStringAsFixed(2)}EUR\n'
+            pordutos +=
+            '$valor     ${artigoLista.taxPrecentage}%      ${artigoLista.price
+                .toStringAsFixed(2)}EUR     ${artigoLista.discount
+                .toStringAsFixed(2)}EUR    ${(artigoLista.price * valor)
+                .toStringAsFixed(2)}EUR\n'
                 '$nomeArtigo\n';
             break;
           }
         }
-
       });
       // Convertendo o texto para UTF-8
       List<int> pordutosUtf8Bytes = utf8.encode(pordutos);
-
 
       String totalImp = '---------------Impostos Incluidos---------------\n\n';
       final totalImpE = [
         ...centralizarTexto,
         ...utf8.encode(totalImp),
       ];
-      String total = 'Total EURO ${widget.pedido.calcularValorTotal().toStringAsFixed(2)}\n\n';
+      String total =
+          'Total EURO ${widget.pedido.calcularValorTotal().toStringAsFixed(
+          2)}\n\n';
 
       final totalCentrado = [
         ...ativarNegrito,
@@ -398,8 +422,7 @@ class _DividirConta extends State<DividirConta> {
         ...desativarNegrito
       ];
 
-
-      final indiceImp ='Detalhes do IVA\n\n'
+      final indiceImp = 'Detalhes do IVA\n\n'
           'Taxa  x  Incidencia   = Total Impos.\n';
       List<int> indiceImpUtf8Bytes = utf8.encode(indiceImp);
 
@@ -411,7 +434,8 @@ class _DividirConta extends State<DividirConta> {
         double unitPrice = artigoLista.unitPrice;
 
         if (taxPercentageSumMap.containsKey(taxPercentage)) {
-          taxPercentageSumMap[taxPercentage] = taxPercentageSumMap[taxPercentage]! + unitPrice;
+          taxPercentageSumMap[taxPercentage] =
+              taxPercentageSumMap[taxPercentage]! + unitPrice;
         } else {
           taxPercentageSumMap[taxPercentage] = unitPrice;
         }
@@ -420,13 +444,13 @@ class _DividirConta extends State<DividirConta> {
 // Construindo a string com os valores agrupados
       String IVA = '';
       taxPercentageSumMap.forEach((taxPercentage, sum) {
-        IVA += '$taxPercentage%      ${sum.toStringAsFixed(2)}EUR       ${(sum * taxPercentage /100).toStringAsFixed(2)}EUR\n';
+        IVA +=
+        '$taxPercentage%      ${sum.toStringAsFixed(2)}EUR       ${(sum *
+            taxPercentage / 100).toStringAsFixed(2)}EUR\n';
       });
-
 
       // Convertendo o texto para UTF-8
       List<int> IVAUtf8Bytes = utf8.encode(IVA);
-
 
       // Enviar comandos para a impressora
       socket.add(tituloCentrado);
@@ -440,7 +464,6 @@ class _DividirConta extends State<DividirConta> {
       socket.write(separador);
       socket.add(indiceImpUtf8Bytes);
       socket.add(IVAUtf8Bytes);
-
 
       // Enviando dados de impressão
       socket.write('\n\n\n\n\n\n\n');
@@ -466,8 +489,23 @@ class _DividirConta extends State<DividirConta> {
         appBar: AppBar(
           title: const Text('Dividir Conta'),
           backgroundColor: const Color(0xff00afe9),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.person_add_outlined),
+              tooltip: 'Open client',
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => AdicionarClientePage(
+                        pedido: widget.pedido,
+                        pedidos: database.getAllPedidos(),
+                        artigos: database.getAllArtigos())
+                ));
+              },
+            ),
+          ],
           leading: Visibility(
-            visible: botaoPressionado.every((element) => element == false),
+            visible: botaoPressionado.every((element) =>
+            element.pressionado == false),
             child: IconButton(
               icon: const Icon(Icons.arrow_back), // Ícone padrão de voltar
               onPressed: () {
@@ -484,29 +522,20 @@ class _DividirConta extends State<DividirConta> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 IconButton(
-                  icon: const Icon(Icons.remove),
-                  onPressed: diminuirPessoas,
-                ),
-                Text(
-                  '$numPessoas Clientes',
-                  style: const TextStyle(fontSize: 20),
-                ),
+                  icon: const Icon(Icons.remove), onPressed: diminuirPessoas,),
+                Text('$numPessoas Clientes',
+                  style: const TextStyle(fontSize: 20),),
                 IconButton(
-                  icon: const Icon(Icons.add),
-                  onPressed: aumentarPessoas,
-                ),
+                  icon: const Icon(Icons.add), onPressed: aumentarPessoas,),
               ],
             ),
             const SizedBox(height: 20),
-            Text(
-              'Total do Pedido: ${widget.pedido.total.toStringAsFixed(2)} €',
-              style: const TextStyle(fontSize: 20),
-            ),
+            Text('Total do Pedido: ${widget.pedido.total.toStringAsFixed(2)} €',
+              style: const TextStyle(fontSize: 20),),
             const SizedBox(height: 20),
-            Text(
-              'Total Recebido: ${valoresIndividuais.reduce((value, element) => value + element).toStringAsFixed(2)} €',
-              style: const TextStyle(fontSize: 20),
-            ),
+            Text('Total Recebido: ${valoresIndividuais.reduce((value,
+                element) => value + element).toStringAsFixed(2)} €',
+              style: const TextStyle(fontSize: 20),),
             const SizedBox(height: 20),
             Expanded(
               child: ListView.builder(
@@ -521,7 +550,8 @@ class _DividirConta extends State<DividirConta> {
                         ),
                         Expanded(
                           child: TextFormField(
-                            keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                            keyboardType: const TextInputType.numberWithOptions(
+                                decimal: true),
                             controller: controllers[index],
                             onTap: () {
                               // Limpe o campo quando ganhar foco
@@ -541,15 +571,18 @@ class _DividirConta extends State<DividirConta> {
                     trailing: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        if (botaoPressionado[index]) // Mostrar apenas quando o botão estiver cobrado
+                        if (botaoPressionado[index]
+                            .pressionado) // Mostrar apenas quando o botão estiver cobrado
                           TextButton.icon(
                             onPressed: () {
                               setState(() {
-                                botaoPressionado[index] = false;
+                                botaoPressionado[index].pressionado = false;
                                 mostrarBotaoConcluir = false;
-                                metodo.valor -= valoresIndividuais[index];
-                                database.addMetodoPagamento(metodo);
-                                widget.turno.setMetudo=0;
+                                botaoPressionado[index].metodo.valor -=
+                                valoresIndividuais[index];
+                                database.addMetodoPagamento(
+                                    botaoPressionado[index].metodo);
+                                widget.turno.setMetudo = 0;
                                 database.addTurno(widget.turno);
                               });
                             },
@@ -565,17 +598,21 @@ class _DividirConta extends State<DividirConta> {
                             ),
                           ),
                         ElevatedButton(
-                          onPressed: botaoPressionado[index]
+                          onPressed: botaoPressionado[index].pressionado
                               ? null
                               : () => cobrarValor(index),
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: botaoPressionado[index] ? Colors.grey : const Color(0xff00afe9),
+                            backgroundColor: botaoPressionado[index].pressionado
+                                ? Colors.grey
+                                : const Color(0xff00afe9),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
                               side: const BorderSide(color: Colors.black),
                             ),
                           ),
-                          child: Text(botaoPressionado[index] ? 'Cobrado' : 'Cobrar'),
+                          child: Text(botaoPressionado[index].pressionado
+                              ? 'Cobrado'
+                              : 'Cobrar'),
                         ),
                       ],
                     ),
@@ -583,27 +620,81 @@ class _DividirConta extends State<DividirConta> {
                 },
               ),
             ),
-            if (mostrarBotaoConcluir == true)
-              SizedBox(
-                  height: 50.0,
-                  child: ElevatedButton(
-                    onPressed: concluirVenda,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xff00afe9),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12.0),
-                        side: const BorderSide(color: Colors.black),
+            if (mostrarBotaoConcluir)
+              Column(
+                children: [
+                  Row(
+                    children: [
+                      const SizedBox(width: 30,),
+                      Checkbox(
+                        value: widget.setup.email,
+                        onChanged: (value) {
+                          setState(() {
+                            widget.setup.email = value!;
+                            _showEmailField = value;
+                          });
+                        },
+                      ),
+                      Text('Enviar por email'),
+                    ],
+                  ),
+                  if (_showEmailField)
+                    Padding(padding: const EdgeInsets.only(left: 25, right: 25),
+                      child: TextField(
+                        controller: _emailController,
+                        keyboardType: TextInputType.emailAddress,
+                        decoration: const InputDecoration(
+                          labelText: 'Email',
+                          hintText: 'Digite seu email',
+                        ),
                       ),
                     ),
-                    child: const Text(
-                      'CONCLUIR VENDA',
-                      style: TextStyle(color: Colors.white),
+                  const SizedBox(height: 5),
+                  if (widget.impressoras.isNotEmpty)
+                    Row(
+                      children: [
+                        const SizedBox(width: 30,),
+                        Checkbox(
+                          value: widget.setup.imprimir,
+                          onChanged: (value) {
+                            setState(() {
+                              widget.setup.imprimir = value!;
+                            });
+                          },
+                        ),
+                        Text('Imprimir documento'),
+                      ],
                     ),
-                  )),
-            const SizedBox(height: 20),
+                  const SizedBox(height: 10),
+                  SizedBox(
+                      height: 50.0,
+                      child: ElevatedButton(
+                        onPressed: concluirVenda,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xff00afe9),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12.0),
+                            side: const BorderSide(color: Colors.black),
+                          ),
+                        ),
+                        child: const Text(
+                          'CONCLUIR VENDA',
+                          style: TextStyle(color: Colors.white, fontSize: 18),
+                        ),
+                      )),
+                  const SizedBox(height: 20),
+                ],
+              )
           ],
         ),
       ),
     );
   }
+}
+
+class MetudobotaoPressionado {
+  bool pressionado;
+  MetodoPagamentoObj metodo;
+
+  MetudobotaoPressionado(this.pressionado, this.metodo);
 }

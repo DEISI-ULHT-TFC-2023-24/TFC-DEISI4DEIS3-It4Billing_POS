@@ -305,13 +305,25 @@ class _EditCarrinhoState extends State<EditCarrinho> {
                         onPressed: () {
                           removerArtigo();
                           Navigator.of(context).pop();
-                          Navigator.of(context)
+                          isTablet
+                              ? Navigator.of(context)
                               .pushReplacement(MaterialPageRoute(
-                            builder: (BuildContext context) => CarrinhoPage(
-                              pedidos: widget.pedidos,
-                              artigos: widget.artigos,
-                              pedido: widget.pedido,
-                            ),
+                            builder: (BuildContext context) =>
+                                PedidoAbertoPage(
+                                  artigos: database.getAllArtigos(),
+                                  categorias: database.getAllCategorias(),
+                                  pedidos: widget.pedidos,
+                                  pedido: widget.pedido,
+                                ),
+                          ))
+                              : Navigator.of(context)
+                              .pushReplacement(MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                CarrinhoPage(
+                                  pedidos: widget.pedidos,
+                                  artigos: widget.artigos,
+                                  pedido: widget.pedido,
+                                ),
                           ));
                         },
                         style: ElevatedButton.styleFrom(

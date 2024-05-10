@@ -42,6 +42,7 @@ class EditarClientePage extends StatelessWidget {
           },
         ),
         title: const Text('Editar Cliente'),
+        backgroundColor: const Color(0xff00afe9),
       ),
       body: ListView(
         padding: const EdgeInsets.all(20.0),
@@ -96,28 +97,69 @@ class EditarClientePage extends StatelessWidget {
           ),
 
           const SizedBox(height: 20,),
-          SizedBox(
-            height: 50.0,
-            width: 150,
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xff00afe9),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  side: const BorderSide(color: Colors.black),
+
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                height: 50.0,
+                width: 150,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      side: const BorderSide(color: Colors.black),
+                    ),
+                  ),
+                  onPressed: () async {
+                    // Implemente a lógica para excluir o cliente aqui
+                    database.getAllClientes().forEach((cliente) {
+                      if(cliente.id == this.cliente.id){
+                        database.removeCliente(this.cliente.id);
+                      }
+                    });
+                    Navigator.pop(context, true);
+                  },
+                  child: const Text(
+                    'ELIMINAR',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
               ),
-              onPressed: () async {
-                atualizarValoresCliente();
-                await database.addCliente(cliente);
-                Navigator.pop(context);
-              },
-              child: const Text(
-                  'SALVAR',
-                  style:
-                  TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.bold)
+              const SizedBox(width: 40,),
+              SizedBox(
+                height: 50.0,
+                width: 150,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xff00afe9),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      side: const BorderSide(color: Colors.black),
+                    ),
+                  ),
+                  onPressed: () async {
+                    atualizarValoresCliente();
+                    await database.addCliente(cliente);
+                    Navigator.pop(context, true);
+                  },
+                  child: const Text(
+                    'GUARDAR',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
               ),
-            ),
+
+            ],
           ),
         ],
       ),

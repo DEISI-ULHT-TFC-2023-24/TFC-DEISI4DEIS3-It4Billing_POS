@@ -256,6 +256,12 @@ class _PedidoAbertoPage extends State<PedidoAbertoPage> with TickerProviderState
 
                   if (value == 'Eliminar pedido') {
                     database.removePedido(widget.pedido.id);
+                    database.getAllLocal().forEach((local) {
+                      if(local.id == widget.pedido.localId){
+                        local.ocupado = false;
+                        database.addLocal(local);
+                      }
+                    });
                     Navigator.of(context).push(
                         MaterialPageRoute(builder: (context) => PedidosPage()));
                   }
@@ -365,8 +371,10 @@ class _PedidoAbertoPage extends State<PedidoAbertoPage> with TickerProviderState
                                     const EdgeInsets.only(bottom: 10.0),
                                     child: ElevatedButton(
                                       onPressed: () {
-                                        widget.pedido.artigosPedidoIds
-                                            .add(artigosFiltrados()[index].id);
+                                        widget.pedido.artigosPedidoIds.add(artigosFiltrados()[index].id);
+                                        if (!(widget.pedido.artigosPedido.contains(artigosFiltrados()[index]))){
+                                          widget.pedido.artigosPedido.add(artigosFiltrados()[index]);
+                                        }
                                         addItemToCart();
                                         atulizarArtigosCarrinho();
                                       },
@@ -426,11 +434,10 @@ class _PedidoAbertoPage extends State<PedidoAbertoPage> with TickerProviderState
                             child: ListView.builder(
                               itemCount: artigosAgrupados.length,
                               itemBuilder: (context, index) {
-                                int artigoId =
-                                artigosAgrupados.keys.elementAt(index);
+                                int artigoId = artigosAgrupados.keys.elementAt(index);
                                 int quantidade = artigosAgrupados[artigoId]!;
                                 double? valor;
-                                Artigo? artigo;
+                                Artigo? artigo = database.getArtigo(artigoId);
 
                                 // Verifica se o artigo está presente na lista
                                 for (Artigo artigoLista in widget.pedido.artigosPedido) {
@@ -728,34 +735,28 @@ class _PedidoAbertoPage extends State<PedidoAbertoPage> with TickerProviderState
                                     child: ElevatedButton(
                                       onPressed: () {
                                         widget.pedido.artigosPedidoIds.add(artigosFiltrados()[index].id);
+                                        if (!(widget.pedido.artigosPedido.contains(artigosFiltrados()[index]))){
+                                          widget.pedido.artigosPedido.add(artigosFiltrados()[index]);
+                                        }
                                         addItemToCart();
+                                        atulizarArtigosCarrinho();
                                       },
                                       style: ButtonStyle(
                                         side: MaterialStateProperty.all(
-                                            const BorderSide(
-                                                color: Colors.white12)),
+                                            const BorderSide(color: Colors.white12)),
                                         // Linha de borda preta
-                                        backgroundColor:
-                                            MaterialStateProperty.all(
-                                                Colors.white),
+                                        backgroundColor: MaterialStateProperty.all(Colors.white),
                                         // Fundo white
-                                        fixedSize: MaterialStateProperty.all(
-                                            const Size(50, 60)),
+                                        fixedSize: MaterialStateProperty.all(const Size(50, 60)),
                                       ),
                                       child: Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
-                                            artigosFiltrados()[index]
-                                                        .nome
-                                                        .length >
-                                                    10
-                                                ? artigosFiltrados()[index]
-                                                    .nome
-                                                    .substring(0, 20)
-                                                : artigosFiltrados()[index]
-                                                    .nome,
+                                            artigosFiltrados()[index].nome.length > 20
+                                                ? artigosFiltrados()[index].nome.substring(0, 20)
+                                                : artigosFiltrados()[index].nome,
                                             style: const TextStyle(
                                                 color: Colors.black,
                                                 fontSize: 16),

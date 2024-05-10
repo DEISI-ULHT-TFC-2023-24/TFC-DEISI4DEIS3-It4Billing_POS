@@ -631,9 +631,28 @@
         }
       ],
       "relations": []
+    },
+    {
+      "id": "16:6903469998170742650",
+      "lastPropertyId": "2:8437412139730176818",
+      "name": "TemplateOBJ",
+      "properties": [
+        {
+          "id": "1:4845019854415990572",
+          "name": "id",
+          "type": 6,
+          "flags": 129
+        },
+        {
+          "id": "2:8437412139730176818",
+          "name": "content",
+          "type": 9
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "15:3569101965829348778",
+  "lastEntityId": "16:6903469998170742650",
   "lastIndexId": "1:2709143836952813707",
   "lastRelationId": "2:764650263908402594",
   "lastSequenceId": "0:0",

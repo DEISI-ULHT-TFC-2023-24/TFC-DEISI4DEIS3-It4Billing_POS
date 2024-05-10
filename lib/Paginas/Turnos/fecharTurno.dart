@@ -143,28 +143,33 @@ class _FecharTurnoState extends State<FecharTurno> {
             child: ElevatedButton(
               onPressed: () async {
                 // Ação ao pressionar o botão de fechar turno
+                if (database.getAllPedidos().isEmpty){
+                  turno.turnoAberto = false;
+                  await database.removeAllTurno();
+                  TurnoObj novoturno = TurnoObj();
+                  novoturno.funcionarioID = database.getAllSetup()[0].funcionarioId;
 
-                turno.turnoAberto = false;
-                await database.removeAllTurno();
-                TurnoObj novoturno = TurnoObj();
-                novoturno.funcionarioID = database.getAllSetup()[0].funcionarioId;
-                ///
-                ///  talvez nao faça sentido porque preciso de um turno sem funcionario
-                ///
+                  //limpar os valores dos movimentos
+                  List<MetodoPagamentoObj> metudos = database.getAllMetodosPagamento();
+                  for (int i = 0 ; i < metudos.length ; i++ ){
+                    metudos[i].valor = 0;
+                    database.addMetodoPagamento(metudos[i]);
+                  }
 
-                //limpar os valores dos movimentos
-                List<MetodoPagamentoObj> metudos = database.getAllMetodosPagamento();
-                for (int i = 0 ; i < metudos.length ; i++ ){
-                  metudos[i].valor = 0;
-                  database.addMetodoPagamento(metudos[i]);
+                  database.addTurno(novoturno);
+
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => TurnoFechado()));
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Ainda existem pedidos abertos.'),
+                    ),
+                  );
                 }
 
-                database.addTurno(novoturno);
-
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => TurnoFechado()));
 
               },
               style: ElevatedButton.styleFrom(

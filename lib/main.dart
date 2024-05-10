@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:it4billing_pos/Paginas/Configuracoes/UploadTemplatePage.dart';
 import 'package:it4billing_pos/Paginas/Configuracoes/configuracoes.dart';
 import 'package:it4billing_pos/Paginas/Login/loginPage.dart';
 import 'package:it4billing_pos/Paginas/Turnos/turnoFechado.dart';
@@ -36,7 +37,7 @@ class MyApp extends StatelessWidget {
       }
     }
 
-    //pagina = '/turno'; /// TESTES
+    //pagina = '/upload'; /// TESTES
 
     return MaterialApp(
       title: 'it4billing_pos',
@@ -51,7 +52,7 @@ class MyApp extends StatelessWidget {
         '/vendas': (context) => VendasPage(),
         '/artigos': (context) => ArtigosPage(),
         '/categorias': (context) => CategoriasPage(),
-        //'/cliente': (context) => AdicionarClientePage(),
+        '/upload': (context) => UploadPage(),
         '/config': (context) => ConfiguracoesPage()
       },
       debugShowCheckedModeBanner: false,

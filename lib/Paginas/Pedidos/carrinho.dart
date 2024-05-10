@@ -59,6 +59,7 @@ class _CarrinhoPageState extends State<CarrinhoPage> {
               icon: const Icon(Icons.person_add_outlined),
               tooltip: 'Open client',
               onPressed: () {
+
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => AdicionarClientePage(
                         pedido: widget.pedido,
@@ -69,7 +70,13 @@ class _CarrinhoPageState extends State<CarrinhoPage> {
             PopupMenuButton<String>(
               onSelected: (value) {
                 if (value == 'Eliminar pedido') {
-                  database.removePedido(widget.pedido.id);
+
+                  database.getAllPedidos().forEach((pedido) {
+                    if(pedido.id == widget.pedido.id){
+                      database.removePedido(widget.pedido.id);
+                    }
+                  });
+
                   Navigator.of(context).push(
                       MaterialPageRoute(builder: (context) => PedidosPage()));
                 }
@@ -110,7 +117,7 @@ class _CarrinhoPageState extends State<CarrinhoPage> {
                   int artigoId = artigosAgrupados.keys.elementAt(index);
                   int quantidade = artigosAgrupados[artigoId]!;
                   double? valor;
-                  Artigo? artigo;
+                  Artigo? artigo = database.getArtigo(artigoId);
 
                   // Verifica se o artigo está presente na lista
                   for (Artigo artigoLista in widget.pedido.artigosPedido) {
@@ -140,14 +147,11 @@ class _CarrinhoPageState extends State<CarrinhoPage> {
                                     )));
                       },
                       style: ButtonStyle(
-                        side: MaterialStateProperty.all(
-                            const BorderSide(color: Colors.white12)),
+                        side: MaterialStateProperty.all(const BorderSide(color: Colors.white12)),
                         // Linha de borda preta
-                        backgroundColor:
-                            MaterialStateProperty.all(Colors.white),
+                        backgroundColor: MaterialStateProperty.all(Colors.white),
                         // Fundo white
-                        fixedSize:
-                            MaterialStateProperty.all(const Size(50, 60)),
+                        fixedSize: MaterialStateProperty.all(const Size(50, 60)),
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,

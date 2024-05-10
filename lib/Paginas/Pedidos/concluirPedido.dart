@@ -374,9 +374,7 @@ class _ConcluirPedidoState extends State<ConcluirPedido> {
                       ),
                       const SizedBox(height: 20),
                       //verifica se tem algum clente ou se é o cliente predefenido
-                      if (widget.pedido.clienteID != 0 &&
-                          widget.pedido.clienteID !=
-                              database.getAllClientes()[0].id)
+                      if (widget.pedido.clienteID != 0 && widget.pedido.clienteID != database.getAllClientes()[0].id)
                         Row(
                           children: [
                             Checkbox(

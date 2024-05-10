@@ -27,7 +27,6 @@ class AdicionarClientePage extends StatefulWidget {
 }
 
 class _AdicionarClientePageState extends State<AdicionarClientePage> {
-
   @override
   void initState() {
     super.initState();
@@ -43,7 +42,6 @@ class _AdicionarClientePageState extends State<AdicionarClientePage> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -78,10 +76,17 @@ class _AdicionarClientePageState extends State<AdicionarClientePage> {
                       // Ação para editar o cliente
                       if (widget.clienteSelecionado.nome !=
                           'Consumidor Final') {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => EditarClientePage(
-                                  cliente: widget.clienteSelecionado,
-                                )));
+                        Navigator.of(context)
+                            .push(MaterialPageRoute(
+                                builder: (context) => EditarClientePage(
+                                      cliente: widget.clienteSelecionado,
+                                    )))
+                            .then((troca) {
+                          setState(() {
+                            // Atualize o estado da página aqui
+                            widget.clientes = database.getAllClientes();
+                          });
+                        });
                       }
                     },
                     style: ButtonStyle(
@@ -129,7 +134,12 @@ class _AdicionarClientePageState extends State<AdicionarClientePage> {
               onPressed: () {
                 // Implementar ação para adicionar novo cliente
                 Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => NovoClientePage()));
+                    MaterialPageRoute(builder: (context) => NovoClientePage())).then((troca) {
+                  setState(() {
+                    // Atualize o estado da página aqui
+                    widget.clientes = database.getAllClientes();
+                  });
+                });;
               },
               child: const Text(
                 'Adicionar novo cliente',
@@ -142,7 +152,8 @@ class _AdicionarClientePageState extends State<AdicionarClientePage> {
                 itemCount: widget.clientes.length,
                 itemBuilder: (context, index) {
                   // Ignorar o primeiro elemento
-                  if(index == 0) return SizedBox.shrink(); // ou qualquer outro widget vazio
+                  //if (index == 0)
+                  //  return SizedBox.shrink(); // ou qualquer outro widget vazio
 
                   ClienteObj cliente = widget.clientes[index];
                   return ListTile(
@@ -161,7 +172,6 @@ class _AdicionarClientePageState extends State<AdicionarClientePage> {
                 },
               ),
             ),
-
             SizedBox(
               height: 50.0,
               width: 150,
@@ -175,16 +185,10 @@ class _AdicionarClientePageState extends State<AdicionarClientePage> {
                 ),
                 onPressed: () {
                   widget.pedido.clienteID = widget.clienteSelecionado.id;
-                  if (widget.pedido.id != 0){
+                  if (widget.pedido.id != 0) {
                     database.addPedido(widget.pedido);
                   }
                   Navigator.pop(context, true);
-                  //Navigator.pop(context);
-                  //Navigator.of(context).push(
-                  //    MaterialPageRoute(builder: (context) => CarrinhoPage(
-                  //        pedidos: widget.pedidos,
-                  //        artigos: widget.artigos,
-                  //        pedido: widget.pedido)));
                 },
                 child: const Text('SALVAR',
                     style: TextStyle(

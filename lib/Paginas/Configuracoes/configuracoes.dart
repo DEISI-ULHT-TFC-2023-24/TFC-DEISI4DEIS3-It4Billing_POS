@@ -10,6 +10,7 @@ import '../../objetos/turnoObj.dart';
 import '../Pedidos/pedidos.dart';
 import '../Turnos/turnoFechado.dart';
 import '../categorias.dart';
+import 'UploadTemplatePage.dart';
 import 'exposocaoCliente.dart';
 import 'geral.dart';
 import 'Impressoras/impressoras.dart';
@@ -103,7 +104,8 @@ class _ConfiguracoesPageState extends State<ConfiguracoesPage> {
                     child: definitions[selectedIndex] == 'Geral' ? GeralPage()
                         : definitions[selectedIndex] == 'Impressoras' ? ImpressorasPage()
                         : definitions[selectedIndex] == 'Exposição do Cliente' ? ExposicaoPage()
-                        : PreferenciasPage(),
+                        : definitions[selectedIndex] == 'Preferencias' ? PreferenciasPage()
+                        : UploadPage(),
                   ),
                 ),
               ],
@@ -136,7 +138,6 @@ class _ConfiguracoesPageState extends State<ConfiguracoesPage> {
                       const Divider(), // Linha divisória
                       ListTile(
                         leading: const Icon(Icons.display_settings_outlined),
-                        //
                         title: const Text('Exposição do Cliente'),
                         onTap: () {
                           Navigator.of(context).push(MaterialPageRoute(
@@ -146,12 +147,20 @@ class _ConfiguracoesPageState extends State<ConfiguracoesPage> {
                       const Divider(),
                       ListTile(
                         leading:
-                            const Icon(Icons.settings_input_component_outlined),
-                        //),
+                        const Icon(Icons.settings_input_component_outlined),
                         title: const Text('Preferencias'),
                         onTap: () {
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) => PreferenciasPage()));
+                        },
+                      ),
+                      const Divider(),
+                      ListTile(
+                        leading: const Icon(Icons.upload_file_outlined),
+                        title: const Text('Upload template'),
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => UploadPage()));
                         },
                       ),
                       const Divider(), // Linha divisória

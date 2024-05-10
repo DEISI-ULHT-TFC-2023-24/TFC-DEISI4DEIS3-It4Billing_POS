@@ -13,6 +13,7 @@ import '../objetos/impressoraObj.dart';
 import '../objetos/localObj.dart';
 import '../objetos/metodoPagamentoObj.dart';
 import '../objetos/pedidoObj.dart';
+import '../objetos/templateOBJ.dart';
 import '../objetos/utilizadorObj.dart';
 import 'objectbox.g.dart'; // created by `flutter pub run build_runner build`
 
@@ -37,6 +38,7 @@ class ObjectBoxDatabase {
   late final Box<MetodoPagamentoObj> _metodoPagamentoBox;
   late final Box<ImpressoraObj> _impressorasBox;
   late final Box<TransactionObj> _transactionsBox;
+  late final Box<TemplateOBJ> _templateOBJBox ;
 
   ObjectBoxDatabase._create(this._store) {
     _pedidosBox = Box<PedidoObj>(_store);
@@ -53,7 +55,7 @@ class ObjectBoxDatabase {
     _metodoPagamentoBox = Box<MetodoPagamentoObj>(_store);
     _impressorasBox = Box<ImpressoraObj>(_store);
     _transactionsBox = Box<TransactionObj>(_store);
-
+    _templateOBJBox = Box<TemplateOBJ>(_store);
   }
 
   /// Create an instance of ObjectBox to use throughout the app.
@@ -350,7 +352,7 @@ class ObjectBoxDatabase {
   }
 
   ///---------------------------------------------------------
-  // Funções para manipular o Setup
+  // Funções para manipular o cliente
   Future<void> addCliente(ClienteObj cliente) async {
     await _clientesBox.put(cliente);
   }
@@ -365,6 +367,10 @@ class ObjectBoxDatabase {
 
   Future<void> removeAllClientes() async {
     await _clientesBox.removeAll();
+  }
+
+  Future<void> removeCliente(int index) async {
+    await _clientesBox.remove(index);
   }
 
   ///---------------------------------------------------------
@@ -435,5 +441,19 @@ class ObjectBoxDatabase {
   Future<void> removeAllTransactions() async {
     await _transactionsBox.removeAll();
   }
+  ///---------------------------------------------------------
+  // Funções para manipular as TemplateOBJ
+  Future<void> addTemplate(TemplateOBJ template) async {
+    await _templateOBJBox.put(template);
+  }
+
+  Future<void> removeAllTemplate() async {
+    await _templateOBJBox.removeAll();
+  }
+
+  List<TemplateOBJ> getAllTemplates() {
+    return _templateOBJBox.getAll();
+  }
+
 
 }

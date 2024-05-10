@@ -3,6 +3,7 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
+  charset_converter
   objectbox_flutter_libs
   url_launcher_linux
 )

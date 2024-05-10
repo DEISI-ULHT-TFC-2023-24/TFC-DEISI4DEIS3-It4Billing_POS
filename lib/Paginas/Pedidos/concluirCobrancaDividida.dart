@@ -56,20 +56,7 @@ class _ConcluirCobrancaDivididaPage
       appBar: AppBar(
         title: Text(widget.pedido.nome),
         backgroundColor: const Color(0xff00afe9),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.person_add_outlined),
-            tooltip: 'Open client',
-            onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => AdicionarClientePage(
-                      pedido: widget.pedido,
-                      pedidos: database.getAllPedidos(),
-                      artigos: database.getAllArtigos())
-              ));
-            },
-          ),
-        ],
+        actions: const [],
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -89,7 +76,7 @@ class _ConcluirCobrancaDivididaPage
                         )),
                     const SizedBox(height: 10),
                     Text(
-                        '${widget.valorCobrar} €',
+                        '${(widget.valorCobrar).toStringAsFixed(2)} €',
                         style: const TextStyle(
                           color: Colors.black,
                           fontSize: 22,
@@ -111,45 +98,6 @@ class _ConcluirCobrancaDivididaPage
                         )
                     ),
                     const SizedBox(height: 20),
-                    if (widget.pedido.clienteID != 0 && widget.pedido.clienteID != database.getAllClientes()[0].id)
-                      Row(
-                        children: [
-                          Checkbox(
-                            value: widget.setup.email,
-                            onChanged: (value) {
-                              setState(() {
-                                widget.setup.email = value!;
-                                _showEmailField = value;
-                              });
-                            },
-                          ),
-                          const Text('Enviar por email'),
-                        ],
-                      ),
-                    if (_showEmailField)
-                      TextField(
-                        controller: _emailController,
-                        keyboardType: TextInputType.emailAddress,
-                        decoration: const InputDecoration(
-                          labelText: 'Email',
-                          hintText: 'Digite seu email',
-                        ),
-                      ),
-                    const SizedBox(height: 5),
-                    Row(
-                      children: [
-                        Checkbox(
-                          value: widget.setup.imprimir,
-                          onChanged: (value) {
-                            setState(() {
-                              widget.setup.imprimir = value!;
-                            });
-                          },
-                        ),
-                        const Text('Imprimir documento'),
-                      ],
-                    ),
-
                   ],
                 ),
               ),
@@ -165,11 +113,8 @@ class _ConcluirCobrancaDivididaPage
           child: ElevatedButton(
             onPressed: () {
               // acrescentar a lógica de pagamento, impressora, enviar e-mail, etc.
-
-
               Navigator.pop(context);
               Navigator.pop(context, MeusArgumentos(true, widget.idMetudoUsado));
-
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xff00afe9),
@@ -181,7 +126,7 @@ class _ConcluirCobrancaDivididaPage
             child: const Padding(
               padding: EdgeInsets.symmetric(vertical: 15.0),
               child: Text(
-                'CONCLUIR VENDA',
+                'CONCLUIR PAGAMENTO',
                 style: TextStyle(color: Colors.white, fontSize: 18),
               ),
             ),

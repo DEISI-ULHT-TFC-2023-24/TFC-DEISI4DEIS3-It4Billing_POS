@@ -3,7 +3,9 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
+  charset_converter
   objectbox_flutter_libs
+  permission_handler_windows
   url_launcher_windows
 )
 

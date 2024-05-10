@@ -24,6 +24,7 @@ import '../objetos/localObj.dart';
 import '../objetos/metodoPagamentoObj.dart';
 import '../objetos/pedidoObj.dart';
 import '../objetos/setupObj.dart';
+import '../objetos/templateOBJ.dart';
 import '../objetos/transacoesObj.dart';
 import '../objetos/turnoObj.dart';
 import '../objetos/utilizadorObj.dart';
@@ -658,6 +659,25 @@ final _entities = <obx_int.ModelEntity>[
             flags: 0)
       ],
       relations: <obx_int.ModelRelation>[],
+      backlinks: <obx_int.ModelBacklink>[]),
+  obx_int.ModelEntity(
+      id: const obx_int.IdUid(16, 6903469998170742650),
+      name: 'TemplateOBJ',
+      lastPropertyId: const obx_int.IdUid(2, 8437412139730176818),
+      flags: 0,
+      properties: <obx_int.ModelProperty>[
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(1, 4845019854415990572),
+            name: 'id',
+            type: 6,
+            flags: 129),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(2, 8437412139730176818),
+            name: 'content',
+            type: 9,
+            flags: 0)
+      ],
+      relations: <obx_int.ModelRelation>[],
       backlinks: <obx_int.ModelBacklink>[])
 ];
 
@@ -696,7 +716,7 @@ Future<obx.Store> openStore(
 obx_int.ModelDefinition getObjectBoxModel() {
   final model = obx_int.ModelInfo(
       entities: _entities,
-      lastEntityId: const obx_int.IdUid(15, 3569101965829348778),
+      lastEntityId: const obx_int.IdUid(16, 6903469998170742650),
       lastIndexId: const obx_int.IdUid(1, 2709143836952813707),
       lastRelationId: const obx_int.IdUid(2, 764650263908402594),
       lastSequenceId: const obx_int.IdUid(0, 0),
@@ -1382,6 +1402,32 @@ obx_int.ModelDefinition getObjectBoxModel() {
             ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
 
           return object;
+        }),
+    TemplateOBJ: obx_int.EntityDefinition<TemplateOBJ>(
+        model: _entities[12],
+        toOneRelations: (TemplateOBJ object) => [],
+        toManyRelations: (TemplateOBJ object) => {},
+        getId: (TemplateOBJ object) => object.id,
+        setId: (TemplateOBJ object, int id) {
+          object.id = id;
+        },
+        objectToFB: (TemplateOBJ object, fb.Builder fbb) {
+          final contentOffset = fbb.writeString(object.content);
+          fbb.startTable(3);
+          fbb.addInt64(0, object.id);
+          fbb.addOffset(1, contentOffset);
+          fbb.finish(fbb.endTable());
+          return object.id;
+        },
+        objectFromFB: (obx.Store store, ByteData fbData) {
+          final buffer = fb.BufferContext(fbData);
+          final rootOffset = buffer.derefObject(0);
+          final contentParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGet(buffer, rootOffset, 6, '');
+          final object = TemplateOBJ(contentParam)
+            ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
+
+          return object;
         })
   };
 
@@ -1838,4 +1884,15 @@ class TransactionObj_ {
   /// see [TransactionObj.amount]
   static final amount =
       obx.QueryStringProperty<TransactionObj>(_entities[11].properties[3]);
+}
+
+/// [TemplateOBJ] entity fields to define ObjectBox queries.
+class TemplateOBJ_ {
+  /// see [TemplateOBJ.id]
+  static final id =
+      obx.QueryIntegerProperty<TemplateOBJ>(_entities[12].properties[0]);
+
+  /// see [TemplateOBJ.content]
+  static final content =
+      obx.QueryStringProperty<TemplateOBJ>(_entities[12].properties[1]);
 }
