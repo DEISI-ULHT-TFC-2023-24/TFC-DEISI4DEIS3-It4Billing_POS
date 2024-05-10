@@ -663,7 +663,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
       id: const obx_int.IdUid(16, 6903469998170742650),
       name: 'TemplateOBJ',
-      lastPropertyId: const obx_int.IdUid(2, 8437412139730176818),
+      lastPropertyId: const obx_int.IdUid(3, 221718661006825373),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
@@ -675,6 +675,11 @@ final _entities = <obx_int.ModelEntity>[
             id: const obx_int.IdUid(2, 8437412139730176818),
             name: 'content',
             type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(3, 221718661006825373),
+            name: 'hora',
+            type: 10,
             flags: 0)
       ],
       relations: <obx_int.ModelRelation>[],
@@ -1413,9 +1418,10 @@ obx_int.ModelDefinition getObjectBoxModel() {
         },
         objectToFB: (TemplateOBJ object, fb.Builder fbb) {
           final contentOffset = fbb.writeString(object.content);
-          fbb.startTable(3);
+          fbb.startTable(4);
           fbb.addInt64(0, object.id);
           fbb.addOffset(1, contentOffset);
+          fbb.addInt64(2, object.hora.millisecondsSinceEpoch);
           fbb.finish(fbb.endTable());
           return object.id;
         },
@@ -1424,7 +1430,9 @@ obx_int.ModelDefinition getObjectBoxModel() {
           final rootOffset = buffer.derefObject(0);
           final contentParam = const fb.StringReader(asciiOptimization: true)
               .vTableGet(buffer, rootOffset, 6, '');
-          final object = TemplateOBJ(contentParam)
+          final horaParam = DateTime.fromMillisecondsSinceEpoch(
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 8, 0));
+          final object = TemplateOBJ(contentParam, horaParam)
             ..id = const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
 
           return object;
@@ -1895,4 +1903,8 @@ class TemplateOBJ_ {
   /// see [TemplateOBJ.content]
   static final content =
       obx.QueryStringProperty<TemplateOBJ>(_entities[12].properties[1]);
+
+  /// see [TemplateOBJ.hora]
+  static final hora =
+      obx.QueryDateProperty<TemplateOBJ>(_entities[12].properties[2]);
 }

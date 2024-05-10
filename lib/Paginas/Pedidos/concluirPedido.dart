@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:esc_pos_printer/esc_pos_printer.dart';
+import 'package:esc_pos_utils/esc_pos_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:it4billing_pos/main.dart';
@@ -114,182 +116,119 @@ class _ConcluirPedidoState extends State<ConcluirPedido> {
     // Dados demo da empresa
     final String nomeEmpresa = "It4Billing";
     final String moradaEmpresa = "Rua da Empresa, 123";
-    final String cidadeEstadoCodigoPostalEmpresa =
-        "1234-678 - Cidade da Emprresa";
+    final String cidadeEstadoCodigoPostalEmpresa = "1234-678 - Cidade da Emprresa";
     final String telefoneEmpresa = "219876543";
     final String nifEmpresa = '502123456';
 
-    try {
-      // Conectando à impressora
 
-      Socket socket = await Socket.connect(impressora.iP, impressora.port);
+    final templates = database.getAllTemplates();
+    String templateContent = templates.isNotEmpty ? templates[0].content : '';
 
-      // Comando para centralizar o texto
-      final centralizarTexto = [0x1B, 0x61, 0x01];
+    // Define um mapa com o valor de todas as variáveis
+    Map<String, dynamic> variaveis = {
+      'nomeEmpresa': nomeEmpresa,
+      'moradaEmpresa': moradaEmpresa,
+      'cidadeEstadoCodigoPostalEmpresa': cidadeEstadoCodigoPostalEmpresa,
+      'telefoneEmpresa': telefoneEmpresa,
+      'nifEmpresa': nifEmpresa,
 
-      // Comando para ativar negrito
-      final ativarNegrito = [0x1B, 0x45, 0x01];
+      'nomeCliente': database.getCliente(widget.pedido.clienteID)!.nome,
+      'morada': database.getCliente(widget.pedido.clienteID)!.address,
+      'codPostal': database.getCliente(widget.pedido.clienteID)!.postcode,
+      'nifCliente': database.getCliente(widget.pedido.clienteID)!.NIF,
+      'tel': database.getCliente(widget.pedido.clienteID)!.phone,
 
-      // Comando para desativar negrito
-      final desativarNegrito = [0x1B, 0x45, 0x00];
+      'dataEmissao': DateFormat('dd/MM/yyyy HH:mm').format(DateTime.now()),
+      'vendador': database.getFuncionario(widget.setup.funcionarioId)!.nome,
+      'fatura': 'FT XPTO/158',
 
-      // Comando para aumentar o tamanho da fonte
-      final aumentarFonte = [0x1B, 0x21, 0x20];
+      'total': widget.pedido.calcularValorTotal().toStringAsFixed(2),
+      'ATCUD': 'JDFTW25-96552'
+      // Adicionar mais variáveis conforme necessário
+    };
 
-      // Define o tamanho da fonte para o padrão
-      final tamanhoFonte = [0x1B, 0x21, 0x00];
-
-      // Comando para descentralizar o texto (definir alinhamento padrão)
-      final alinhamentoPadrao = [0x1B, 0x61, 0x00];
-
-      // Texto a ser enviado
-      final texto = '\n$nomeEmpresa\n\n';
-      // Concatenando os comandos e o texto
-      final tituloCentrado = [
-        ...ativarNegrito,
-        ...centralizarTexto,
-        ...utf8.encode(texto),
-        ...alinhamentoPadrao,
-        ...desativarNegrito
-      ];
-
-      // Cabeçalho
-      String cabecalho = '';
-
-      // Informações da empresa
-      cabecalho += '$moradaEmpresa\n';
-      cabecalho += '$cidadeEstadoCodigoPostalEmpresa\n';
-      cabecalho += 'Tel: $telefoneEmpresa\n';
-      cabecalho += 'NIF: $nifEmpresa\n\n';
-
-      // Informações do cliente
-      cabecalho +=
-          'Cliente: ${database.getCliente(widget.pedido.clienteID)!.nome}\n';
-      cabecalho += '${database.getCliente(widget.pedido.clienteID)!.address}\n';
-      cabecalho +=
-          'Cod. Postal: ${database.getCliente(widget.pedido.clienteID)!.postcode}\n';
-      cabecalho +=
-          'NIF: ${database.getCliente(widget.pedido.clienteID)!.NIF}\n';
-      cabecalho +=
-          'Tel: ${database.getCliente(widget.pedido.clienteID)!.phone}\n\n';
-      cabecalho +=
-          'Data de Emissao: ${DateFormat('dd/MM/yyyy HH:mm').format(DateTime.now())}\n';
-      cabecalho +=
-          'Vendador: ${database.getFuncionario(widget.setup.funcionarioId)!.nome}\n';
-
-      // Comando para imprimir separador de linha de traços
-      final separador = '------------------------------------------------\n';
-
-      // Comandos para imprimir a frase "Fatura-recibo de teste"
-      const fatura = 'FT XPTO/158\n';
-      // Concatenando os comandos e o texto
-      final faturaN = [
-        ...ativarNegrito,
-        ...utf8.encode(fatura),
-        ...desativarNegrito
-      ];
-
-      final indice = 'Qtd.---IVA%-----Preco-------Desc.-------Total\n';
-      // Convertendo o texto para UTF-8
-      List<int> indiceUtf8Bytes = utf8.encode(indice);
-
-      String pordutos = '';
-      //                        id       Qtd
-      artigosAgrupados.forEach((chave, valor) {
-        // Verifica se o artigo está presente na lista
-        for (Artigo artigoLista in widget.pedido.artigosPedido) {
-          if (artigoLista.nome == database.getArtigo(chave)!.nome) {
-            String nomeArtigo = artigoLista.nome.length > 40
-                ? artigoLista.nome.substring(0, 40)
-                : artigoLista.nome;
-            //Valor representa a quantidade do produto
-            pordutos +=
-                '$valor     ${artigoLista.taxPrecentage}%      ${artigoLista.price.toStringAsFixed(2)}EUR     ${artigoLista.discount.toStringAsFixed(2)}EUR    ${(artigoLista.price * valor).toStringAsFixed(2)}EUR\n'
-                '$nomeArtigo\n';
-            break;
-          }
-        }
+    // Função para substituir todas as ocorrências das variáveis no texto
+    String substituirVariaveis(String texto, Map<String, dynamic> variaveis) {
+      variaveis.forEach((chave, valor) {
+        texto = texto.replaceAll('\${$chave}', valor.toString());
       });
-      // Convertendo o texto para UTF-8
-      List<int> pordutosUtf8Bytes = utf8.encode(pordutos);
+      return texto;
+    }
 
-      String totalImp = '---------------Impostos Incluidos---------------\n\n';
-      final totalImpE = [
-        ...centralizarTexto,
-        ...utf8.encode(totalImp),
-      ];
-      String total =
-          'Total EURO ${widget.pedido.calcularValorTotal().toStringAsFixed(2)}\n\n';
+    // Função para substituir todas as ocorrências das variáveis no texto
+    templateContent = substituirVariaveis(templateContent, variaveis);
 
-      final totalCentrado = [
-        ...ativarNegrito,
-        ...aumentarFonte,
-        ...utf8.encode(total),
-        ...tamanhoFonte,
-        ...alinhamentoPadrao,
-        ...desativarNegrito
-      ];
+    String pordutos = '';
+    //                        id       Qtd
+    artigosAgrupados.forEach((chave, valor) {
+      // Verifica se o artigo está presente na lista
+      for (Artigo artigoLista in widget.pedido.artigosPedido) {
+        if (artigoLista.nome == database.getArtigo(chave)!.nome) {
+          String nomeArtigo = artigoLista.nome.length > 40
+              ? artigoLista.nome.substring(0, 40)
+              : artigoLista.nome;
+          //Valor representa a quantidade do produto
+          pordutos +=
+          '$valor     ${artigoLista.taxPrecentage}%      ${artigoLista.price.toStringAsFixed(2)}EUR     ${artigoLista.discount.toStringAsFixed(2)}EUR    ${(artigoLista.price * valor).toStringAsFixed(2)}EUR\n'
+              '$nomeArtigo\n';
+          break;
+        }
+      }
+    });
 
-      final indiceImp = 'Detalhes do IVA\n\n'
-          'Taxa  x  Incidencia   = Total Impto.\n';
-      List<int> indiceImpUtf8Bytes = utf8.encode(indiceImp);
-
-      Map<int, double> taxPercentageSumMap = {};
-
+    Map<int, double> taxPercentageSumMap = {};
 // Agrupando os artigos com base no valor de taxPercentage e calculando a soma de unitPrice para cada grupo
-      artigosAgrupados.forEach((chave, valor) {
-        // Verifica se o artigo está presente na lista
-        for (Artigo artigoLista in widget.pedido.artigosPedido) {
-          if (artigoLista.nome == database.getArtigo(chave)!.nome) {
-            int taxPercentage = artigoLista.taxPrecentage;
-            double unitPrice = artigoLista.unitPrice;
+    artigosAgrupados.forEach((chave, valor) {
+      // Verifica se o artigo está presente na lista
+      for (Artigo artigoLista in widget.pedido.artigosPedido) {
+        if (artigoLista.nome == database.getArtigo(chave)!.nome) {
+          int taxPercentage = artigoLista.taxPrecentage;
+          double unitPrice = artigoLista.unitPrice;
 
-            if (taxPercentageSumMap.containsKey(taxPercentage)) {
-              taxPercentageSumMap[taxPercentage] = taxPercentageSumMap[taxPercentage]! + (unitPrice * valor);
-            } else {
-              taxPercentageSumMap[taxPercentage] = unitPrice * valor;
-            }
+          if (taxPercentageSumMap.containsKey(taxPercentage)) {
+            taxPercentageSumMap[taxPercentage] = taxPercentageSumMap[taxPercentage]! + (unitPrice * valor);
+          } else {
+            taxPercentageSumMap[taxPercentage] = unitPrice * valor;
           }
         }
-      });
+      }
+    });
 
 // Construindo a string com os valores agrupados
-      String IVA = '';
+    String IVA = '';
+    taxPercentageSumMap.forEach((taxPercentage, sum) {
+      IVA += '$taxPercentage%      ${sum.toStringAsFixed(2)}EUR       ${(sum * taxPercentage / 100).toStringAsFixed(2)}EUR\n';
+    });
 
-      taxPercentageSumMap.forEach((taxPercentage, sum) {
-        IVA +=
-            '$taxPercentage%      ${sum.toStringAsFixed(2)}EUR       ${(sum * taxPercentage / 100).toStringAsFixed(2)}EUR\n';
-      });
+    // Connect to printer
+    const PaperSize paper = PaperSize.mm80;
+    final profile = await CapabilityProfile.load();
+    final printer = NetworkPrinter(paper, profile);
 
+    final PosPrintResult res = await printer.connect(impressora.iP, port: impressora.port);
+    List<String> template = templateContent.split(';');
 
-      // Convertendo o texto para UTF-8
-      List<int> IVAUtf8Bytes = utf8.encode(IVA);
+    if (res == PosPrintResult.success) {
+      printer.text(template[0], styles: const PosStyles(align: PosAlign.center, bold: true));
+      printer.text(template[1], styles: const PosStyles(align: PosAlign.left));
+      printer.text(pordutos, styles: const PosStyles(align: PosAlign.left));
+      printer.text(template[2], styles: const PosStyles(align: PosAlign.left));
+      printer.text(template[3], styles: const PosStyles(align: PosAlign.center,height: PosTextSize.size2, width: PosTextSize.size2));
+      printer.text(template[4], styles: const PosStyles(align: PosAlign.left));
+      printer.text(IVA, styles: const PosStyles(align: PosAlign.left));
+      printer.text(template[5], styles: const PosStyles(align: PosAlign.left));
 
-      // Enviar comandos para a impressora
-      socket.add(tituloCentrado);
-      socket.write(cabecalho);
-      socket.add(faturaN);
-      socket.write(separador);
-      socket.add(indiceUtf8Bytes);
-      socket.add(pordutosUtf8Bytes);
-      socket.add(totalImpE);
-      socket.add(totalCentrado);
-      socket.write(separador);
-      socket.add(indiceImpUtf8Bytes);
-      socket.add(IVAUtf8Bytes);
+      //printer.text('\nFatura-recibo de teste\n',
+      //    styles: const PosStyles(height: PosTextSize.size2, width: PosTextSize.size2,align: PosAlign.center
+      //    ));
 
-      // Enviando dados de impressão
-      socket.write('\n\n\n\n\n\n\n');
-
-      // Enviando comando de corte
-      List<int> cutCommand = [0x1D, 0x56, 0x01];
-      socket.add(cutCommand);
-
-      await socket.flush();
-      await socket.close();
-    } catch (e) {
-      print('Erro ao imprimir: $e');
+      printer.qrcode('A:$nifEmpresa*B:${database.getCliente(widget.pedido.clienteID)!.NIF}'
+          '*C:PT*D:FR*E:N*F:20240408*G:FR U003/87441*H:JDFTW25-96552*I1:PT*I3:10.19*I4:0.61*N:0.61*O:${widget.pedido.calcularValorTotal().toStringAsFixed(2)}*Q:GgPN*R:432', size: QRSize.Size8);
+      printer.feed(2);
+      printer.cut();
+      printer.disconnect();
     }
+
   }
 
   @override

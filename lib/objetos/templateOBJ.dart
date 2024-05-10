@@ -6,5 +6,8 @@ class TemplateOBJ {
   int id = 0;
   String content;
 
-  TemplateOBJ(this.content);
+  @Property(type: PropertyType.date)
+  DateTime hora;
+
+  TemplateOBJ(this.content, this.hora);
 }

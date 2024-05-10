@@ -160,6 +160,13 @@ class _ImpressoraPageState extends State<ImpressoraPage> {
                   printer.disconnect();
                 }
               },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xff00afe9),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  side: const BorderSide(color: Colors.black),
+                ),
+              ),
               child: const Text('Testar Impressão'),
             ),
             const SizedBox(height: 20),

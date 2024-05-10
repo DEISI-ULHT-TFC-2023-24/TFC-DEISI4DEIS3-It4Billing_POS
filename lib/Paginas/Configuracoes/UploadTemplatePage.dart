@@ -1,14 +1,22 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_document_picker/flutter_document_picker.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:intl/intl.dart';
 
 import '../../main.dart';
 import '../../objetos/templateOBJ.dart';
-import 'DisplayTESTE.dart';
 
-class UploadPage extends StatelessWidget {
+class UploadPage extends StatefulWidget {
+  @override
+  _UploadPageState createState() => _UploadPageState();
+}
+
+class _UploadPageState extends State<UploadPage> {
+  //String lastUploadTime = database.getAllTemplates().isEmpty
+  //    ? 'Nunca'
+  //    : DateFormat('dd/MM/yyyy HH:mm')
+  //        .format(database.getAllTemplates()[0].hora);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,72 +28,50 @@ class UploadPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            const Icon(
+              Icons.upload_file_outlined,
+              size: 100,
+            ),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () async {
-                // Verifica se a permissão de leitura de armazenamento externo está concedida
-                var status = await Permission.storage.status;
-                if (status.isGranted) {
-                  // A permissão está concedida, abre o seletor de arquivos
-                  openFilePicker(context);
-                } else {
-                  // A permissão não está concedida, solicita-a ao usuário
-                  if (status.isPermanentlyDenied) {
-                    // Se a permissão foi negada permanentemente, abre as configurações do aplicativo
-                    openAppSettings();
-                  } else {
-                    // Solicita a permissão de leitura de armazenamento externo
-                    var result = await Permission.storage.request();
-                    if (result.isGranted) {
-                      // A permissão foi concedida, abre o seletor de arquivos
-                      openFilePicker(context);
-                    }
-                  }
-                }
+                await handleUploadButtonPressed();
               },
-              child: Text('Fazer Upload de Arquivo'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xff00afe9),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  side: const BorderSide(color: Colors.black),
+                ),
+              ),
+              child: const Text('Fazer Upload de Arquivo',style: TextStyle(fontSize: 18)),
             ),
             SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                // Navega para a página de exibição
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => DisplayPage(),
-                  ),
-                );
-              },
-              child: Text('Ver Arquivo Salvo'),
-            ),
+            database.getAllTemplates().isEmpty
+                ? const Text('Último Upload: Nunca')
+                : Text('Último Upload:  ${DateFormat('dd/MM/yyyy HH:mm')
+                .format(database.getAllTemplates()[0].hora)}')
           ],
         ),
       ),
     );
   }
 
-  void openFilePicker(BuildContext context) async {
+  Future<void> handleUploadButtonPressed() async {
     try {
-      // Faz o upload do arquivo .txt
       final result = await FlutterDocumentPicker.openDocument();
       if (result != null) {
-        // Verifica se o arquivo é do tipo .txt pelo nome do arquivo
         if (result.endsWith('.txt')) {
-          // Lê o conteúdo do arquivo
           final fileContent = await File(result).readAsString();
-
-          // Salva o conteúdo do arquivo no banco de dados
-          final template = TemplateOBJ(fileContent);
+          final template = TemplateOBJ(fileContent, DateTime.now());
           database.removeAllTemplate();
           database.addTemplate(template);
-
-          // Mostra mensagem de sucesso
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text('Arquivo salvo com sucesso!'),
             ),
           );
         } else {
-          // Se o arquivo selecionado não for .txt
           showDialog(
             context: context,
             builder: (context) => AlertDialog(
@@ -101,7 +87,6 @@ class UploadPage extends StatelessWidget {
           );
         }
       } else {
-        // Se o usuário cancelou a seleção
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
@@ -117,7 +102,6 @@ class UploadPage extends StatelessWidget {
         );
       }
     } catch (e) {
-      // Em caso de erro, mostra uma mensagem de erro
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
