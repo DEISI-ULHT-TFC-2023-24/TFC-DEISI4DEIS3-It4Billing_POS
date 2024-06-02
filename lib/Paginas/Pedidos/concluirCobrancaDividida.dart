@@ -4,7 +4,6 @@ import '../../main.dart';
 import '../../objetos/meusArgumentos.dart';
 import '../../objetos/pedidoObj.dart';
 import '../../objetos/setupObj.dart';
-import '../Cliente/addClientePage.dart';
 
 class ConcluirCobrancaDivididaPage extends StatefulWidget {
   late PedidoObj pedido;
