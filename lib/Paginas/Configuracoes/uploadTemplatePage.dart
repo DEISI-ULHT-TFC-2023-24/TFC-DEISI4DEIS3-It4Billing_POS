@@ -12,16 +12,12 @@ class UploadPage extends StatefulWidget {
 }
 
 class _UploadPageState extends State<UploadPage> {
-  //String lastUploadTime = database.getAllTemplates().isEmpty
-  //    ? 'Nunca'
-  //    : DateFormat('dd/MM/yyyy HH:mm')
-  //        .format(database.getAllTemplates()[0].hora);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Upload de Arquivo'),
+        title: const Text('Upload de Arquivo'),
         backgroundColor: const Color(0xff00afe9),
       ),
       body: Center(
@@ -66,6 +62,8 @@ class _UploadPageState extends State<UploadPage> {
           final template = TemplateOBJ(fileContent, DateTime.now());
           database.removeAllTemplate();
           database.addTemplate(template);
+          // Atualize o estado para reconstruir o widget com a nova data
+          setState(() {});
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text('Arquivo salvo com sucesso!'),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:it4billing_pos/Paginas/Configuracoes/UploadTemplatePage.dart';
+import 'package:it4billing_pos/Paginas/Configuracoes/uploadTemplatePage.dart';
 import 'package:it4billing_pos/Paginas/Configuracoes/configuracoes.dart';
 import 'package:it4billing_pos/Paginas/Login/loginPage.dart';
 import 'package:it4billing_pos/Paginas/Turnos/turnoFechado.dart';

@@ -10,7 +10,7 @@ import '../../objetos/turnoObj.dart';
 import '../Pedidos/pedidos.dart';
 import '../Turnos/turnoFechado.dart';
 import '../categorias.dart';
-import 'UploadTemplatePage.dart';
+import 'uploadTemplatePage.dart';
 import 'exposocaoCliente.dart';
 import 'geral.dart';
 import 'Impressoras/impressoras.dart';
