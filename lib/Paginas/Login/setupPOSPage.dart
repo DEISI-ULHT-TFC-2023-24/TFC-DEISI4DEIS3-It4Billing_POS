@@ -230,7 +230,6 @@ class __FormContentState extends State<_FormContent> {
                       _selectedDocCurrentAccount != null &&
                       _selectedDocCurrentAccount !=
                           'Documento da conta corrente') {
-                    // Lógica para confirmar seleção os docs.
 
                     /// tem de guardar o tipo de doc na bd local
                     widget.setup.faturacao = _selectedDocInvoice!;

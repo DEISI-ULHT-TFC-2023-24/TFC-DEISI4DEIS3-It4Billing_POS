@@ -62,9 +62,7 @@ class _PedidoPage extends State<PedidoPage> with TickerProviderStateMixin {
   }
 
   void checkDeviceType() {
-    // Getting the screen size
     final screenSize = MediaQuery.of(context).size;
-    // Arbitrarily defining screen size greater than 600 width and height as tablet
     setState(() {
       isTablet = screenSize.width > 600 && screenSize.height > 600;
     });
@@ -119,16 +117,12 @@ class _PedidoPage extends State<PedidoPage> with TickerProviderStateMixin {
         true,
         ScanMode.BARCODE,
       );
-
       print("Código de barras lido: $barcode");
     } catch (e) {
-      // Lidar com erros ao ler o código de barras
       print("Erro ao ler o código de barras: $e");
     }
   }
 
-  // aqui é criado o objeto venda para enviar para o carrinho
-  // mudar o nome do pedido para que seja incrementado por exemplo
   PedidoObj pedido = PedidoObj(
       nome: "Pedido 01",
       hora: DateTime.now(),
@@ -147,9 +141,7 @@ class _PedidoPage extends State<PedidoPage> with TickerProviderStateMixin {
   }
 
   Future<void> addUserAoPedido() async {
-    /// isto vai ser alterrado porque tenho de ter o utilizador da seção
     pedido.funcionarioID = database.getAllFuncionarios()[0].id;
-    ///este zer0 tera de ser mudado ele escolhe qual é o utilizador
   }
 
   @override
@@ -164,7 +156,6 @@ class _PedidoPage extends State<PedidoPage> with TickerProviderStateMixin {
               actions: [
                 PopupMenuButton<String>(
                   onSelected: (value) {
-                    //print('Opção selecionada: ${pedido.nome}');
                   },
                   itemBuilder: (BuildContext context) =>
                       <PopupMenuEntry<String>>[
@@ -278,11 +269,9 @@ class _PedidoPage extends State<PedidoPage> with TickerProviderStateMixin {
                                           side: MaterialStateProperty.all(
                                               const BorderSide(
                                                   color: Colors.white12)),
-                                          // Linha de borda preta
                                           backgroundColor:
                                               MaterialStateProperty.all(
                                                   Colors.white),
-                                          // Fundo white
                                           fixedSize: MaterialStateProperty.all(
                                               const Size(50, 60)),
                                         ),
@@ -348,7 +337,6 @@ class _PedidoPage extends State<PedidoPage> with TickerProviderStateMixin {
                                   left: 20, right: 20, bottom: 10.0),
                               child: ElevatedButton(
                                 onPressed: () {
-                                  //entrar no artigo e quantidades e tal
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
@@ -487,7 +475,7 @@ class _PedidoPage extends State<PedidoPage> with TickerProviderStateMixin {
                               ),
                             ),
                           ),
-                          const SizedBox(width: 20), // Espaço entre os botões
+                          const SizedBox(width: 20),
                           Expanded(
                             child: Padding(
                               padding: const EdgeInsets.only(
@@ -497,8 +485,6 @@ class _PedidoPage extends State<PedidoPage> with TickerProviderStateMixin {
                                 child: ElevatedButton(
                                   onPressed: () {
                                     if (pedido.artigosPedidoIds.isNotEmpty) {
-                                      // fazer a navegação para a proxima pag a de cobrança.
-
                                       Navigator.push(
                                           context,
                                           MaterialPageRoute(
@@ -625,8 +611,7 @@ class _PedidoPage extends State<PedidoPage> with TickerProviderStateMixin {
                 ),
                 PopupMenuButton<String>(
                   onSelected: (value) {
-                    // Aqui você pode adicionar a lógica para lidar com as opções selecionadas
-                    //print('Opção selecionada: ${pedido.nome}');
+
                   },
                   itemBuilder: (BuildContext context) =>
                       <PopupMenuEntry<String>>[
@@ -732,10 +717,8 @@ class _PedidoPage extends State<PedidoPage> with TickerProviderStateMixin {
                                     side: MaterialStateProperty.all(
                                         const BorderSide(
                                             color: Colors.white12)),
-                                    // Linha de borda preta
                                     backgroundColor:
                                         MaterialStateProperty.all(Colors.white),
-                                    // Fundo white
                                     fixedSize: MaterialStateProperty.all(
                                         const Size(50, 60)),
                                   ),

@@ -147,7 +147,7 @@ class CategoriasPage extends StatelessWidget {
       // Aumentando o espaçamento externo
       decoration: BoxDecoration(
         border: Border.all(color: Colors.grey),
-        borderRadius: BorderRadius.circular(12), // Aumentando o raio da borda
+        borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
         children: [

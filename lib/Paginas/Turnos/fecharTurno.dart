@@ -23,7 +23,7 @@ class _FecharTurnoState extends State<FecharTurno> {
   void initState() {
     super.initState();
     _textEditingController.text = turno.dinheiroEsperado.toStringAsFixed(2);
-    calcularDiferenca(); // Calcular a diferença logo após o carregamento da página
+    calcularDiferenca(); // Calcular a diferença logo após a página carregar
     _focusNode.addListener(_onFocusChange);
   }
 
@@ -47,7 +47,7 @@ class _FecharTurnoState extends State<FecharTurno> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        FocusScope.of(context).unfocus(); // Remover o foco do campo de texto quando houver um clique em outra parte do ecra
+        FocusScope.of(context).unfocus();
       },
       child: Scaffold(
         backgroundColor: Colors.white,
@@ -60,7 +60,7 @@ class _FecharTurnoState extends State<FecharTurno> {
             },
           ),
           title: const Text('Fechar Turno', style: TextStyle(color: Colors.black)),
-          elevation: 0, // Remover a sombra da AppBar
+          elevation: 0,
         ),
         body: Padding(
           padding: const EdgeInsets.all(20.0),
@@ -142,7 +142,6 @@ class _FecharTurnoState extends State<FecharTurno> {
             height: 50.0,
             child: ElevatedButton(
               onPressed: () async {
-                // Ação ao pressionar o botão de fechar turno
                 if (database.getAllPedidos().isEmpty){
                   turno.turnoAberto = false;
                   await database.removeAllTurno();

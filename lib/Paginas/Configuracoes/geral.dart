@@ -55,9 +55,7 @@ class _GeralPageState extends State<GeralPage> {
   }
 
   void checkDeviceType() {
-    // Getting the screen size
     final screenSize = MediaQuery.of(context).size;
-    // Arbitrarily defining screen size greater than 600 width and height as tablet
     setState(() {
       isTablet = screenSize.width > 600 && screenSize.height > 600;
     });
@@ -69,7 +67,6 @@ class _GeralPageState extends State<GeralPage> {
     urlController.text = setup.url;
     passwordController.text = setup.password;
 
-    // Controladores para monitorar as alterações nos campos de texto
     urlController.addListener(updateButtonState);
     passwordController.addListener(updateButtonState);
 
@@ -81,7 +78,6 @@ class _GeralPageState extends State<GeralPage> {
     _selectedDocCurrentAccount = setup.contaCorrente;
   }
 
-  // Função para iniciar o temporizador
   void startTimer() {
     const duration = Duration(seconds: 5);
     Timer(duration, () {
@@ -91,7 +87,6 @@ class _GeralPageState extends State<GeralPage> {
     });
   }
 
-  // Função para atualizar o estado com base no texto dos campos de entrada
   void updateButtonState() {
     setState(() {
       ischanged = passwordController.text.length >= 6 &&
@@ -117,7 +112,6 @@ class _GeralPageState extends State<GeralPage> {
 
   @override
   Widget build(BuildContext context) {
-    //isTablet ? TabletLayout() : PhoneLayout(),
     return isTablet
         ? Scaffold(
             body: SingleChildScrollView(

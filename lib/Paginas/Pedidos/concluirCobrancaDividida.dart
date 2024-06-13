@@ -111,7 +111,6 @@ class _ConcluirCobrancaDivididaPage
           width: double.infinity, // Largura total da tela
           child: ElevatedButton(
             onPressed: () {
-              // acrescentar a lógica de pagamento, impressora, enviar e-mail, etc.
               Navigator.pop(context);
               Navigator.pop(context, MeusArgumentos(true, widget.idMetudoUsado));
             },

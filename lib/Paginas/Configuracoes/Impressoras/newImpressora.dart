@@ -31,9 +31,7 @@ class _CriarImpressoraPageState extends State<CriarImpressoraPage> {
   }
 
   void checkDeviceType() {
-    // Getting the screen size
     final screenSize = MediaQuery.of(context).size;
-    // Arbitrarily defining screen size greater than 600 width and height as tablet
     setState(() {
       isTablet = screenSize.width > 600 && screenSize.height > 600;
     });
@@ -76,11 +74,9 @@ class _CriarImpressoraPageState extends State<CriarImpressoraPage> {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () async {
-                // Ação para testar a impressão
                 final ip = ipController.text;
                 final int port = int.parse(portController.text);
 
-                // Connect to printer and print QR code
                 const PaperSize paper = PaperSize.mm80;
                 final profile = await CapabilityProfile.load();
                 final printer = NetworkPrinter(paper, profile);
@@ -115,7 +111,6 @@ class _CriarImpressoraPageState extends State<CriarImpressoraPage> {
               height: 50.0,
               child: ElevatedButton(
                 onPressed: () {
-                  // Adicionar ação para guardar a impressora
                   String nome = nomeController.text;
                   String ip = ipController.text;
                   int port = int.parse(portController.text);
@@ -160,7 +155,6 @@ class _CriarImpressoraPageState extends State<CriarImpressoraPage> {
 
   @override
   void dispose() {
-    // Clean up the controller when the widget is disposed.
     nomeController.dispose();
     ipController.dispose();
     super.dispose();

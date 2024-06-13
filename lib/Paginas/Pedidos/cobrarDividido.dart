@@ -78,9 +78,8 @@ class _CobrarDivididoPage extends State<CobrarDivididoPage> {
           title: Text(widget.pedido.nome),
           backgroundColor: const Color(0xff00afe9),
           leading: IconButton(
-            icon: Icon(Icons.arrow_back), // Ícone padrão de voltar
+            icon: Icon(Icons.arrow_back),
             onPressed: () {
-              // Navegar para a página anterior
               Navigator.pop(context, false);
             },
           ),
@@ -164,8 +163,6 @@ class _CobrarDivididoPage extends State<CobrarDivididoPage> {
                               height: 50,
                               child: ElevatedButton(
                                 onPressed: () {
-                                  // Entrar no final da compra
-
                                   double dinheiroRecebido = double.parse(_dinheiroRecebidoController.text);
                                   double troco = double.parse(_trocoController.text);
                                   metodos[index].valor += dinheiroRecebido - troco;
@@ -208,7 +205,7 @@ class _CobrarDivididoPage extends State<CobrarDivididoPage> {
                           );
                         },
                       ),
-                    ), //METODOS DE PAGAMENTO
+                    ),
                     const SizedBox(height: 30)
                   ],
                 ),

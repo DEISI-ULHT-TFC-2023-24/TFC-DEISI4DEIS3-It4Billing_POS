@@ -147,7 +147,7 @@ class ArtigosPage extends StatelessWidget {
       // Aumentando o espaçamento externo
       decoration: BoxDecoration(
         border: Border.all(color: Colors.grey),
-        borderRadius: BorderRadius.circular(12), // Aumentando o raio da borda
+        borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
         children: [
@@ -173,7 +173,6 @@ class ArtigosPage extends StatelessWidget {
           ),
           SizedBox(
             width: 200,
-            // Definindo uma largura fixa para o bloco de informações de estoque e preço
             child: Row(
               children: [
                 const SizedBox(width: 15),

@@ -34,22 +34,21 @@ class _ConfiguracoesPageState extends State<ConfiguracoesPage> {
   }
 
   void checkDeviceType() {
-    // Getting the screen size
     final screenSize = MediaQuery.of(context).size;
-    // Arbitrarily defining screen size greater than 600 width and height as tablet
     setState(() {
       isTablet = screenSize.width > 600 && screenSize.height > 600;
     });
   }
 
-// Variável para rastrear o índice do item selecionado
+// Variável para reiniciar o índice do item selecionado
   int selectedIndex = 0;
 
   List<String> definitions = [
     'Geral',
     'Impressoras',
     'Exposição do Cliente',
-    'Preferencias'
+    'Preferencias',
+    'Upload template'
   ];
 
   @override
@@ -70,11 +69,9 @@ class _ConfiguracoesPageState extends State<ConfiguracoesPage> {
         title: const Text('Configurações'),
         backgroundColor: const Color(0xff00afe9),
       ),
-      //isTablet ? TabletLayout() : PhoneLayout(),
       body: isTablet
           ? Row(
               children: [
-                // Lista de definições
                 Expanded(
                   flex: 1,
                   child: ListView.builder(
@@ -95,9 +92,8 @@ class _ConfiguracoesPageState extends State<ConfiguracoesPage> {
                 // Linha vertical
                 Container(
                   width: 1.0,
-                  color: Colors.black, // Cor da linha vertical
+                  color: Colors.black,
                 ),
-                // Conteúdo da definição selecionada
                 Expanded(
                   flex: 3,
                   child: Center(
@@ -126,7 +122,7 @@ class _ConfiguracoesPageState extends State<ConfiguracoesPage> {
                               builder: (context) => GeralPage()));
                         },
                       ),
-                      const Divider(), // Linha divisória
+                      const Divider(),
                       ListTile(
                         leading: const Icon(Icons.local_print_shop_outlined),
                         title: const Text('Impressoras'),
@@ -135,7 +131,7 @@ class _ConfiguracoesPageState extends State<ConfiguracoesPage> {
                               builder: (context) => ImpressorasPage()));
                         },
                       ),
-                      const Divider(), // Linha divisória
+                      const Divider(),
                       ListTile(
                         leading: const Icon(Icons.display_settings_outlined),
                         title: const Text('Exposição do Cliente'),
@@ -163,7 +159,7 @@ class _ConfiguracoesPageState extends State<ConfiguracoesPage> {
                               builder: (context) => UploadPage()));
                         },
                       ),
-                      const Divider(), // Linha divisória
+                      const Divider(),
                     ],
                   ),
                 ],

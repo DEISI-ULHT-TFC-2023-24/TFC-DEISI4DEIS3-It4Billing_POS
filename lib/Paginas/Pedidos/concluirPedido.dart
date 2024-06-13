@@ -107,7 +107,7 @@ class _ConcluirPedidoState extends State<ConcluirPedido> {
       MaterialPageRoute(
         builder: (context) => PedidosPage(),
       ),
-      (route) => false, // Remove todas as rotas anteriores
+      (route) => false,
     );
   }
 
@@ -144,7 +144,6 @@ class _ConcluirPedidoState extends State<ConcluirPedido> {
 
       'total': widget.pedido.calcularValorTotal().toStringAsFixed(2),
       'ATCUD': 'JDFTW25-96552'
-      // Adicionar mais variáveis conforme necessário
     };
 
     // Função para substituir todas as ocorrências das variáveis no texto
@@ -154,8 +153,6 @@ class _ConcluirPedidoState extends State<ConcluirPedido> {
       });
       return texto;
     }
-
-    // Função para substituir todas as ocorrências das variáveis no texto
     templateContent = substituirVariaveis(templateContent, variaveis);
 
     String pordutos = '';
@@ -167,7 +164,7 @@ class _ConcluirPedidoState extends State<ConcluirPedido> {
           String nomeArtigo = artigoLista.nome.length > 40
               ? artigoLista.nome.substring(0, 40)
               : artigoLista.nome;
-          //Valor representa a quantidade do produto
+          //'valor' representa a quantidade do produto
           pordutos +=
           '$valor     ${artigoLista.taxPrecentage}%      ${artigoLista.price.toStringAsFixed(2)}EUR     ${artigoLista.discount.toStringAsFixed(2)}EUR    ${(artigoLista.price * valor).toStringAsFixed(2)}EUR\n'
               '$nomeArtigo\n';
@@ -177,7 +174,7 @@ class _ConcluirPedidoState extends State<ConcluirPedido> {
     });
 
     Map<int, double> taxPercentageSumMap = {};
-// Agrupando os artigos com base no valor de taxPercentage e calculando a soma de unitPrice para cada grupo
+// Agrupar os artigos com base no valor de taxPercentage e calculando a soma de unitPrice para cada grupo
     artigosAgrupados.forEach((chave, valor) {
       // Verifica se o artigo está presente na lista
       for (Artigo artigoLista in widget.pedido.artigosPedido) {
@@ -194,13 +191,13 @@ class _ConcluirPedidoState extends State<ConcluirPedido> {
       }
     });
 
-// Construindo a string com os valores agrupados
+// Constroi a string com os valores agrupados
     String IVA = '';
     taxPercentageSumMap.forEach((taxPercentage, sum) {
       IVA += '$taxPercentage%      ${sum.toStringAsFixed(2)}EUR       ${(sum * taxPercentage / 100).toStringAsFixed(2)}EUR\n';
     });
 
-    // Connect to printer
+    // Conectar com a impressora
     const PaperSize paper = PaperSize.mm80;
     final profile = await CapabilityProfile.load();
     final printer = NetworkPrinter(paper, profile);
@@ -218,10 +215,6 @@ class _ConcluirPedidoState extends State<ConcluirPedido> {
       printer.text(IVA, styles: const PosStyles(align: PosAlign.left));
       printer.text(template[5], styles: const PosStyles(align: PosAlign.left));
 
-      //printer.text('\nFatura-recibo de teste\n',
-      //    styles: const PosStyles(height: PosTextSize.size2, width: PosTextSize.size2,align: PosAlign.center
-      //    ));
-
       printer.qrcode('A:$nifEmpresa*B:${database.getCliente(widget.pedido.clienteID)!.NIF}'
           '*C:PT*D:FR*E:N*F:20240408*G:FR U003/87441*H:JDFTW25-96552*I1:PT*I3:10.19*I4:0.61*N:0.61*O:${widget.pedido.calcularValorTotal().toStringAsFixed(2)}*Q:GgPN*R:432', size: QRSize.Size8);
       printer.feed(2);
@@ -235,7 +228,7 @@ class _ConcluirPedidoState extends State<ConcluirPedido> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        // Impede que o utilizador volte usando o botão de voltar do dispositivo
+        // Impede que o utilizador volte a utilizado o botão de voltar do dispositivo
         return false;
       },
       child: Scaffold(
@@ -255,9 +248,7 @@ class _ConcluirPedidoState extends State<ConcluirPedido> {
                         artigos: database.getAllArtigos())
                 )).then((value) {
                   if (value == true) {
-                    // Atualize a página aqui
                     setState(() {
-                      // Execute qualquer lógica de atualização necessária
                       _emailController.text = database.getCliente(widget.pedido.clienteID)!.email;
                     });
                   }
@@ -312,7 +303,7 @@ class _ConcluirPedidoState extends State<ConcluirPedido> {
                         ),
                       ),
                       const SizedBox(height: 20),
-                      //verifica se tem algum clente ou se é o cliente predefenido
+                      //verifica se tem algum cliente ou se é o cliente predefenido
                       if (widget.pedido.clienteID != 0 && widget.pedido.clienteID != database.getAllClientes()[0].id)
                         Row(
                           children: [

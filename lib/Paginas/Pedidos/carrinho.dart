@@ -28,10 +28,8 @@ class CarrinhoPage extends StatefulWidget {
 
 class _CarrinhoPageState extends State<CarrinhoPage> {
   late Map<int, int> artigosAgrupados;
-
   Map<int, int> groupItems(List<int> listaIds) {
     Map<int, int> frequenciaIds = {};
-
     for (int id in listaIds) {
       if (frequenciaIds.containsKey(id)) {
         frequenciaIds[id] = (frequenciaIds[id] ?? 0) + 1;
@@ -39,7 +37,6 @@ class _CarrinhoPageState extends State<CarrinhoPage> {
         frequenciaIds[id] = 1;
       }
     }
-
     return frequenciaIds;
   }
 
@@ -76,7 +73,6 @@ class _CarrinhoPageState extends State<CarrinhoPage> {
                       database.removePedido(widget.pedido.id);
                     }
                   });
-
                   Navigator.of(context).push(
                       MaterialPageRoute(builder: (context) => PedidosPage()));
                 }
@@ -148,9 +144,7 @@ class _CarrinhoPageState extends State<CarrinhoPage> {
                       },
                       style: ButtonStyle(
                         side: MaterialStateProperty.all(const BorderSide(color: Colors.white12)),
-                        // Linha de borda preta
                         backgroundColor: MaterialStateProperty.all(Colors.white),
-                        // Fundo white
                         fixedSize: MaterialStateProperty.all(const Size(50, 60)),
                       ),
                       child: Row(
@@ -218,7 +212,6 @@ class _CarrinhoPageState extends State<CarrinhoPage> {
                             if (widget.pedido.localId == -1) {
                               database.getAllLocal().forEach((element) {
                               });
-
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -261,7 +254,7 @@ class _CarrinhoPageState extends State<CarrinhoPage> {
                     ),
                   ),
                 ),
-                const SizedBox(width: 20), // Espaço entre os botões
+                const SizedBox(width: 20),
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.only(right: 20.0, bottom: 30),
@@ -270,8 +263,6 @@ class _CarrinhoPageState extends State<CarrinhoPage> {
                       child: ElevatedButton(
                         onPressed: () {
                           if (widget.pedido.artigosPedidoIds.isNotEmpty) {
-                            // fazer a navegação para a proxima pag a de cobrança.
-
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(

@@ -134,7 +134,6 @@ class TurnoFechado extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // Chamando unfocus para perder o foco do campo de entrada
         FocusScope.of(context).unfocus();
       },
       child: Scaffold(
@@ -167,7 +166,7 @@ class TurnoFechado extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 60.0),
               child: TextFormField(
-                controller: valorInicialController, // Controlador adicionado aqui
+                controller: valorInicialController,
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 textAlign: TextAlign.center,
                 inputFormatters: [
@@ -190,7 +189,6 @@ class TurnoFechado extends StatelessWidget {
                     height: 50.0,
                     child: ElevatedButton(
                       onPressed: () async {
-                        // Lógica para abrir o turno aqui
 
                         turno.turnoAberto = true;
                         if (valorInicialController.text == ''){

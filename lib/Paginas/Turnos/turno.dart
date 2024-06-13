@@ -174,12 +174,11 @@ class _TurnosPageState extends State<TurnosPage> {
             const SizedBox(height: 20),
             Padding(
               padding: EdgeInsets.symmetric(
-                  horizontal: isHorizontal ? 40.0 : 20.0), // Alteração aqui
+                  horizontal: isHorizontal ? 40.0 : 20.0),
               child: SizedBox(
-                height: isHorizontal ? 45 : 40, // Altura fixa do botão
+                height: isHorizontal ? 45 : 40,
                 child: ElevatedButton(
                   onPressed: () {
-                    // Ação do botão "GESTÃO DO DINHEIRO NA GAVETA"
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => GestaoDinheiro()),
@@ -209,12 +208,11 @@ class _TurnosPageState extends State<TurnosPage> {
             const SizedBox(height: 20),
             Padding(
               padding: EdgeInsets.symmetric(
-                  horizontal: isHorizontal ? 40.0 : 20.0), // Alteração aqui
+                  horizontal: isHorizontal ? 40.0 : 20.0),
               child: SizedBox(
-                height: isHorizontal ? 45 : 40, // Altura fixa do botão
+                height: isHorizontal ? 45 : 40,
                 child: ElevatedButton(
                   onPressed: () {
-                    // Ação do botão "Fechar turno"
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) => FecharTurno()));
                   },
@@ -236,7 +234,7 @@ class _TurnosPageState extends State<TurnosPage> {
             const SizedBox(height: 20),
             Padding(
               padding: EdgeInsets.symmetric(
-                  horizontal: isHorizontal ? 40.0 : 20.0), // Alteração aqui
+                  horizontal: isHorizontal ? 40.0 : 20.0),
               child: Row(
                 children: [
                   Expanded(
@@ -247,7 +245,6 @@ class _TurnosPageState extends State<TurnosPage> {
                     ),
                   ),
                   SizedBox(width: MediaQuery.of(context).size.width * 0.1),
-                  // Espaço vazio proporcional ao tamanho da tela
                   Expanded(
                     flex: 1,
                     child: Text(

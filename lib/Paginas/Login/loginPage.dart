@@ -83,9 +83,6 @@ class _Logo extends StatelessWidget {
           padding: const EdgeInsets.all(16.0),
           child: Text(
             "Bem-vindo à\n${setup.nomeLoja} !\n${setup.pos}",
-
-            /// colocar a loja e o Nº do POS
-
             textAlign: TextAlign.center,
             style: isSmallScreen
                 ? Theme.of(context).textTheme.headline5
@@ -188,7 +185,7 @@ class __FormContentState extends State<_FormContent> {
                       _showConfirmation = true;
                     });
 
-                    bool pinFound = false; // Variável para verificar se o PIN foi encontrado
+                    bool pinFound = false;
 
                     for (int i = 0; i < database.getAllFuncionarios().length; i++) {
                       if (database.getAllFuncionarios()[i].pin == int.parse(_pinController.text)) {
@@ -196,25 +193,10 @@ class __FormContentState extends State<_FormContent> {
                         await database.addSetup(widget.setup);
                         await criarTurno();
                         Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => PedidosPage(),),(route) => false,);
-                        pinFound = true; // Define como true se o PIN for encontrado
+                        pinFound = true;
                         break;
                       }
                     }
-
-                    ///PORQUÊ???
-
-                    //widget.setup.funcionarioId =
-                    //    database.getAllUtilizadores()[0].id;
-                    //await database.addSetup(widget.setup);
-                    //await criarTurno();
-                    //Navigator.of(context).pushAndRemoveUntil(
-                    //  MaterialPageRoute(
-                    //    builder: (BuildContext context) => PedidosPage(),
-                    //  ),
-                    //  (route) => false,
-                    //);
-                    //pinFound = true; // Define como true se o PIN for encontrado
-
                     if (!pinFound) {
                       // Se o PIN não for encontrado, mostra o SnackBar
                       ScaffoldMessenger.of(context).showSnackBar(

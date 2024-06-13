@@ -30,16 +30,12 @@ class Cobrar extends StatefulWidget {
 class _Cobrar extends State<Cobrar> {
   List<MetodoPagamentoObj> metodos = database.getAllMetodosPagamento();
   final FocusNode _focusNode = FocusNode();
-
-  // Controladores dos campos de texto
   TextEditingController _dinheiroRecebidoController = TextEditingController();
   TextEditingController _trocoController = TextEditingController();
   bool isTablet = false;
   late Map<int, int> artigosAgrupados;
-
   Map<int, int> groupItems(List<int> listaIds) {
     Map<int, int> frequenciaIds = {};
-
     for (int id in listaIds) {
       if (frequenciaIds.containsKey(id)) {
         frequenciaIds[id] = (frequenciaIds[id] ?? 0) + 1;
@@ -47,7 +43,6 @@ class _Cobrar extends State<Cobrar> {
         frequenciaIds[id] = 1;
       }
     }
-
     return frequenciaIds;
   }
 
@@ -58,9 +53,7 @@ class _Cobrar extends State<Cobrar> {
   }
 
   void checkDeviceType() {
-    // Getting the screen size
     final screenSize = MediaQuery.of(context).size;
-    // Arbitrarily defining screen size greater than 600 width and height as tablet
     setState(() {
       isTablet = screenSize.width > 600 && screenSize.height > 600;
     });
@@ -135,7 +128,6 @@ class _Cobrar extends State<Cobrar> {
         body: isTablet
             ? Row(
                 children: [
-                  // Lista de definições
                   Expanded(
                     flex: 3,
                     child: Column(
@@ -159,13 +151,11 @@ class _Cobrar extends State<Cobrar> {
                               }
                               valor = artigo?.price;
 
-                              /// isto vai dar problemas no editar carrinho??
                               return Padding(
                                 padding: const EdgeInsets.only(
                                     left: 20, right: 20, bottom: 10.0),
                                 child: ElevatedButton(
                                   onPressed: () {
-                                    //entrar no artigo e quantidades e tal
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -180,10 +170,8 @@ class _Cobrar extends State<Cobrar> {
                                   style: ButtonStyle(
                                     side: MaterialStateProperty.all(
                                         const BorderSide(color: Colors.white12)),
-                                    // Linha de borda preta
                                     backgroundColor:
                                     MaterialStateProperty.all(Colors.white),
-                                    // Fundo white
                                     fixedSize:
                                     MaterialStateProperty.all(const Size(50, 60)),
                                   ),
@@ -240,7 +228,7 @@ class _Cobrar extends State<Cobrar> {
                         const SizedBox(height: 30),
                       ],
                     ),
-                  ), // Conteúdo da definição selecionada
+                  ),
                   Expanded(
                     flex: 4,
                     child: SingleChildScrollView(
@@ -292,8 +280,6 @@ class _Cobrar extends State<Cobrar> {
                                     height: 50,
                                     child: ElevatedButton(
                                       onPressed: () {
-                                        // fazer a navegação para a DIVIDIR CONTA.
-
                                         Navigator.push(
                                             context,
                                             MaterialPageRoute(
@@ -324,7 +310,7 @@ class _Cobrar extends State<Cobrar> {
                                       ),
                                     ),
                                   ),
-                                ), //DIVIDIR CONTA
+                                ),
                                 const SizedBox(height: 30),
                                 const Center(
                                   child: Text(
@@ -345,18 +331,14 @@ class _Cobrar extends State<Cobrar> {
                                           height: 50,
                                           child: ElevatedButton(
                                             onPressed: () async {
-                                              // Entrar no final da compra
-
                                               double dinheiroRecebido = double.parse(_dinheiroRecebidoController.text);
                                               double troco = double.parse(_trocoController.text);metodos[index].valor += dinheiroRecebido - troco;
                                               if (metodos[index].nome.toLowerCase() == 'dinheiro') {
                                                 widget.turno.setPagamentosDinheiro = metodos[index].valor;
                                               }
-
                                               widget.turno.setMetudo=0;
                                               database.addTurno(widget.turno);
                                               database.addMetodoPagamento(metodos[index]);
-
                                               Navigator.push(
                                                   context,
                                                   MaterialPageRoute(
@@ -391,16 +373,16 @@ class _Cobrar extends State<Cobrar> {
                                       );
                                     },
                                   ),
-                                ), //METODOS DE PAGAMENTO
+                                ),
                                 const SizedBox(height: 30)
                               ],
                             ),
                           )
                               : const Center(
-                            child: Text(
-                              'Dinheiro insuficiente!',
-                              style: TextStyle(fontSize: 20),
-                            ),
+                                child: Text(
+                                  'Dinheiro insuficiente!',
+                                  style: TextStyle(fontSize: 20),
+                                ),
                           )
                         ],
                       ),
@@ -479,8 +461,6 @@ class _Cobrar extends State<Cobrar> {
                                     height: 50,
                                     child: ElevatedButton(
                                       onPressed: () {
-                                        // fazer a navegação para a DIVIDIR CONTA.
-
                                         Navigator.push(
                                             context,
                                             MaterialPageRoute(
@@ -579,7 +559,7 @@ class _Cobrar extends State<Cobrar> {
                                       );
                                     },
                                   ),
-                                ), //METODOS DE PAGAMENTO
+                                ),
                                 const SizedBox(height: 30)
                               ],
                             ),

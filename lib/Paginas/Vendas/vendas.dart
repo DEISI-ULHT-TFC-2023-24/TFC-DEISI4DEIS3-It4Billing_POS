@@ -68,9 +68,7 @@ class _VendasPage extends State<VendasPage> {
   }
 
   void checkDeviceType() {
-    // Getting the screen size
     final screenSize = MediaQuery.of(context).size;
-    // Arbitrarily defining screen size greater than 600 width and height as tablet
     setState(() {
       isTablet = screenSize.width > 600 && screenSize.height > 600;
     });
@@ -194,7 +192,7 @@ class _VendasPage extends State<VendasPage> {
     }
   }
 
-  // Variável para rastrear o índice do item selecionado
+  // Variável para reiniciar o índice do item selecionado
   int selectedIndex = 0;
 
   @override
@@ -222,13 +220,12 @@ class _VendasPage extends State<VendasPage> {
                   child: Text(
                     'Não existem vendas concluídas',
                     style: TextStyle(
-                      fontSize: 28, // Tamanho da fonte
-                      fontWeight: FontWeight.bold, // Negrito
-                      fontStyle: FontStyle.italic, // Itálico
-                      color: Colors.grey, // Cor do texto
-                      // Adicione mais estilos conforme necessário
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                      fontStyle: FontStyle.italic,
+                      color: Colors.grey,
                     ),
-                    textAlign: TextAlign.center, // Alinhamento do texto
+                    textAlign: TextAlign.center,
                   ),
                 )
               : Row(
@@ -260,14 +257,11 @@ class _VendasPage extends State<VendasPage> {
                                           side: MaterialStateProperty.all(
                                               const BorderSide(
                                                   color: Colors.black)),
-                                          // Linha de borda preta
                                           backgroundColor:
                                               MaterialStateProperty.all(
                                                   Colors.white),
-                                          // Fundo white
                                           fixedSize: MaterialStateProperty.all(
                                               const Size(300, 80)),
-                                          // Tamanho fixo de 270x80
                                           shape: MaterialStateProperty.all<
                                               RoundedRectangleBorder>(
                                             RoundedRectangleBorder(
@@ -287,14 +281,11 @@ class _VendasPage extends State<VendasPage> {
                                                 mainAxisAlignment:
                                                     MainAxisAlignment
                                                         .spaceBetween,
-                                                // Alinha a Row horizontalmente ao centro
                                                 children: [
-                                                  Text(
-                                                    DateFormat(
+                                                  Text(DateFormat(
                                                             'dd/MM/yyyy HH:mm')
                                                         .format(
                                                             vendas[index].hora),
-                                                    // Convertendo DateTime para string formatada
                                                     style: const TextStyle(
                                                       color: Colors.black,
                                                       fontSize: 18,
@@ -317,7 +308,6 @@ class _VendasPage extends State<VendasPage> {
                                                 mainAxisAlignment:
                                                     MainAxisAlignment
                                                         .spaceBetween,
-                                                // Alinha a Row horizontalmente ao centro
                                                 children: [
                                                   const Text(
                                                     'FT XPTO/158',
@@ -368,17 +358,14 @@ class _VendasPage extends State<VendasPage> {
                                       left: 20, right: 20, bottom: 10.0),
                                   child: ElevatedButton(
                                     onPressed: () {
-                                      //entrar no artigo e quantidades e tal
                                     },
                                     style: ButtonStyle(
                                       side: MaterialStateProperty.all(
                                           const BorderSide(
                                               color: Colors.white12)),
-                                      // Linha de borda preta
                                       backgroundColor:
                                           MaterialStateProperty.all(
                                               Colors.white),
-                                      // Fundo white
                                       fixedSize: MaterialStateProperty.all(
                                           const Size(50, 60)),
                                     ),
@@ -448,10 +435,8 @@ class _VendasPage extends State<VendasPage> {
                                     height: 50,
                                     child: ElevatedButton(
                                       onPressed: null,
-                                      // Definir onPressed como null tornará o botão inativo
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: Colors.grey,
-                                        // Altere a cor de fundo para cinza
                                         shape: RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(12),
@@ -521,13 +506,12 @@ class _VendasPage extends State<VendasPage> {
                         child: Text(
                           'Não existem vendas concluídas',
                           style: TextStyle(
-                            fontSize: 18, // Tamanho da fonte
-                            fontWeight: FontWeight.bold, // Negrito
-                            fontStyle: FontStyle.italic, // Itálico
-                            color: Colors.grey, // Cor do texto
-                            // Adicione mais estilos conforme necessário
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            fontStyle: FontStyle.italic,
+                            color: Colors.grey,
                           ),
-                          textAlign: TextAlign.center, // Alinhamento do texto
+                          textAlign: TextAlign.center,
                         ),
                       ))
                     : Expanded(
@@ -550,13 +534,10 @@ class _VendasPage extends State<VendasPage> {
                                   style: ButtonStyle(
                                     side: MaterialStateProperty.all(
                                         const BorderSide(color: Colors.black)),
-                                    // Linha de borda preta
                                     backgroundColor:
                                         MaterialStateProperty.all(Colors.white),
-                                    // Fundo white
                                     fixedSize: MaterialStateProperty.all(
                                         const Size(300, 80)),
-                                    // Tamanho fixo de 270x80
                                     shape: MaterialStateProperty.all<
                                         RoundedRectangleBorder>(
                                       RoundedRectangleBorder(
@@ -574,12 +555,10 @@ class _VendasPage extends State<VendasPage> {
                                         Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
-                                          // Alinha a Row horizontalmente ao centro
                                           children: [
                                             Text(
                                               DateFormat('dd/MM/yyyy HH:mm')
                                                   .format(vendas[index].hora),
-                                              // Convertendo DateTime para string formatada
                                               style: const TextStyle(
                                                 color: Colors.black,
                                                 fontSize: 18,
@@ -601,7 +580,6 @@ class _VendasPage extends State<VendasPage> {
                                         Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
-                                          // Alinha a Row horizontalmente ao centro
                                           children: [
                                             Text(
                                               'FT XPTO/158',
@@ -641,7 +619,6 @@ class _VendasPage extends State<VendasPage> {
             title: const Text('Anular venda'),
             content: Column(
               mainAxisSize: MainAxisSize.min,
-              // Para ajustar o tamanho do conteúdo
               children: <Widget>[
                 const Text('Tem certeza que deseja anular?'),
                 Row(
@@ -662,30 +639,29 @@ class _VendasPage extends State<VendasPage> {
             actions: <Widget>[
               TextButton(
                 onPressed: () {
-                  Navigator.of(context).pop(); // Fechar o diálogo
+                  Navigator.of(context).pop();
                 },
                 style: ButtonStyle(
                   foregroundColor: MaterialStateProperty.all<Color>(
-                      Colors.red), // Cor do texto
+                      Colors.red),
                 ),
                 child: const Text('Não'),
               ),
               TextButton(
                 onPressed: () {
-                  // Adicione aqui a lógica para anular
                   vendas[selectedIndex].anulada = true;
                   database.addVenda(vendas[selectedIndex]);
                   // Atualizar o estado da propriedade notaCredito do objeto setup
                   setup.notaCredito = emitirNotaCredito;
                   // Salvar o objeto setup atualizado na BD
                   database.addSetup(setup);
-                  Navigator.of(context).pop(); // Fechar o diálogo
+                  Navigator.of(context).pop();
                   Navigator.of(context).push(
                       MaterialPageRoute(builder: (context) => VendasPage()));
                 },
                 style: ButtonStyle(
                   foregroundColor: MaterialStateProperty.all<Color>(
-                      Colors.green), // Cor do texto
+                      Colors.green),
                 ),
                 child: const Text('Sim'),
               ),

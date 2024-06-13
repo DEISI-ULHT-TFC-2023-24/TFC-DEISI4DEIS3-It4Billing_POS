@@ -44,9 +44,7 @@ class _EditCarrinhoState extends State<EditCarrinho> {
   }
 
   void checkDeviceType() {
-    // Getting the screen size
     final screenSize = MediaQuery.of(context).size;
-    // Arbitrarily defining screen size greater than 600 width and height as tablet
     setState(() {
       isTablet = screenSize.width > 600 && screenSize.height > 600;
     });
@@ -62,14 +60,12 @@ class _EditCarrinhoState extends State<EditCarrinho> {
 
   @override
   void dispose() {
-    // Lembre-se de descartar o TextEditingController quando não for mais necessário para evitar vazamentos de memória.
     _observacoesController.dispose();
     super.dispose();
   }
 
   void _increment() {
     setState(() {
-      // adicionar alguma verificação para não passar o stock existente+
       widget.quantidade++;
     });
   }
@@ -185,7 +181,6 @@ class _EditCarrinhoState extends State<EditCarrinho> {
                         ),
                       ),
                       const SizedBox(width: 20),
-// Espaçamento entre os elementos
                       SizedBox(
                         width: 110,
                         child: ElevatedButton(
@@ -215,8 +210,7 @@ class _EditCarrinhoState extends State<EditCarrinho> {
                               labelText: 'Desconto', hintText: '0.00'),
                         ),
                       ),
-                      SizedBox(width: 20),
-// Espaçamento entre os elementos
+                      const SizedBox(width: 20),
                       SizedBox(
                         width: 110,
                         child: ElevatedButton(
@@ -259,7 +253,7 @@ class _EditCarrinhoState extends State<EditCarrinho> {
                       hintText: 'Digite as suas observações...\n\n\n\n\n\n',
                       border: OutlineInputBorder(),
                     ),
-                    maxLines: null, // ou qualquer valor maior que 1
+                    maxLines: null,
                     onChanged: (value) {
                       setState(() {
                         widget.artigo.observacoes = value;
@@ -344,7 +338,7 @@ class _EditCarrinhoState extends State<EditCarrinho> {
                     ),
                   ),
                 ),
-                const SizedBox(width: 20), // Espaço entre os botões
+                const SizedBox(width: 20),
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.only(right: 20.0, bottom: 30),
@@ -352,8 +346,6 @@ class _EditCarrinhoState extends State<EditCarrinho> {
                       height: 50,
                       child: ElevatedButton(
                         onPressed: () {
-                          // adicionar o nomero de vezes a mais na lista dos artigos no carrinho ou retirar
-                          // meu deus que confusão...
                           gravar();
                           Navigator.of(context).pop();
                           isTablet

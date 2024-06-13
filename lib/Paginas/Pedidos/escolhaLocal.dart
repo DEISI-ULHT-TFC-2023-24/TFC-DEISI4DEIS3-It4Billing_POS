@@ -3,7 +3,6 @@ import 'package:it4billing_pos/main.dart';
 import 'package:it4billing_pos/objetos/localObj.dart';
 import 'package:it4billing_pos/Paginas/Pedidos/pedidos.dart';
 
-import '../../database/objectbox.g.dart';
 import '../../objetos/artigoObj.dart';
 import '../../objetos/pedidoObj.dart';
 
@@ -25,9 +24,9 @@ class LocalPage extends StatelessWidget {
         title: const Text('Salvar pedido', style: TextStyle(color: Colors.black),),
         backgroundColor: Colors.white,
         leading: IconButton(
-          icon: const Icon(Icons.close,color: Colors.black), // Ícone de fechar (x)
+          icon: const Icon(Icons.close,color: Colors.black),
           onPressed: () {
-            Navigator.of(context).pop(); // Fechar a página
+            Navigator.of(context).pop();
           },
         ),
       ),
@@ -63,13 +62,13 @@ class LocalPage extends StatelessWidget {
                           await database.addPedido(pedido);
                         }
                         Navigator.of(context).pop();
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => PedidosPage()));// Fechar a página
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => PedidosPage()));
                       },
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                        elevation: MaterialStateProperty.all<double>(0), // Remove a sombra
-                        padding: MaterialStateProperty.all<EdgeInsetsGeometry>(EdgeInsets.zero), // Remove o padding padrão
-                        tapTargetSize: MaterialTapTargetSize.shrinkWrap, // Reduz o tamanho do botão
+                        elevation: MaterialStateProperty.all<double>(0),
+                        padding: MaterialStateProperty.all<EdgeInsetsGeometry>(EdgeInsets.zero),
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                       ),
                       child: Padding(
                         padding: const EdgeInsets.only(top: 20.0,bottom: 20),
@@ -82,7 +81,7 @@ class LocalPage extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const Divider(height: 0, thickness: 1), // Linha separadora
+                    const Divider(height: 0, thickness: 1),
                   ],
                 );
               },

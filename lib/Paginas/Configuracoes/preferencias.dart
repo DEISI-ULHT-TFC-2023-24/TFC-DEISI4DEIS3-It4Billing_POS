@@ -19,9 +19,7 @@ class _PreferenciasPageState extends State<PreferenciasPage> {
   }
 
   void checkDeviceType() {
-    // Getting the screen size
     final screenSize = MediaQuery.of(context).size;
-    // Arbitrarily defining screen size greater than 600 width and height as tablet
     setState(() {
       isTablet = screenSize.width > 600 && screenSize.height > 600;
     });
@@ -29,7 +27,6 @@ class _PreferenciasPageState extends State<PreferenciasPage> {
 
   @override
   Widget build(BuildContext context) {
-    //isTablet ? TabletLayout() : PhoneLayout(),
     return isTablet
         ? Scaffold(
             body: SingleChildScrollView(

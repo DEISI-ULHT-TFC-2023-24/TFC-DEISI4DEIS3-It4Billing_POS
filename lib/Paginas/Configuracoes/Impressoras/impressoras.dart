@@ -21,9 +21,7 @@ class _ImpressorasPageState extends State<ImpressorasPage> {
   }
 
   void checkDeviceType() {
-    // Getting the screen size
     final screenSize = MediaQuery.of(context).size;
-    // Arbitrarily defining screen size greater than 600 width and height as tablet
     setState(() {
       isTablet = screenSize.width > 600 && screenSize.height > 600;
     });
@@ -31,7 +29,6 @@ class _ImpressorasPageState extends State<ImpressorasPage> {
 
   @override
   Widget build(BuildContext context) {
-    //isTablet ? TabletLayout() : PhoneLayout(),
     return isTablet
         ? Scaffold(
             body: impressoras.isNotEmpty

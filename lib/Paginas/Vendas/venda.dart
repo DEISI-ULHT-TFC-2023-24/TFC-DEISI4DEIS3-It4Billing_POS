@@ -91,17 +91,11 @@ class _VendaPageState extends State<VendaPage> {
                         left: 20, right: 20, bottom: 10.0),
                     child: ElevatedButton(
                       onPressed: () {
-                        //entrar no artigo e quantidades e tal
                       },
                       style: ButtonStyle(
-                        side: MaterialStateProperty.all(
-                            const BorderSide(color: Colors.white12)),
-                        // Linha de borda preta
-                        backgroundColor:
-                            MaterialStateProperty.all(Colors.white),
-                        // Fundo white
-                        fixedSize:
-                            MaterialStateProperty.all(const Size(50, 60)),
+                        side: MaterialStateProperty.all(const BorderSide(color: Colors.white12)),
+                        backgroundColor: MaterialStateProperty.all(Colors.white),
+                        fixedSize: MaterialStateProperty.all(const Size(50, 60)),
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -161,10 +155,8 @@ class _VendaPageState extends State<VendaPage> {
                       height: 50,
                       child: ElevatedButton(
                         onPressed: null,
-                        // Definir onPressed como null tornará o botão inativo
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.grey,
-                          // Altere a cor de fundo para cinza
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                             side: const BorderSide(color: Colors.black),
@@ -186,7 +178,6 @@ class _VendaPageState extends State<VendaPage> {
                       height: 50,
                       child: ElevatedButton(
                         onPressed: () {
-                          /// ter o pop
                           _mostrarDialogo(context);
                         },
                         style: ElevatedButton.styleFrom(
@@ -219,7 +210,6 @@ class _VendaPageState extends State<VendaPage> {
             title: const Text('Anular venda'),
             content: Column(
               mainAxisSize: MainAxisSize.min,
-              // Para ajustar o tamanho do conteúdo
               children: <Widget>[
                 const Text('Tem certeza que deseja anular?'),
                 Row(
@@ -240,17 +230,16 @@ class _VendaPageState extends State<VendaPage> {
             actions: <Widget>[
               TextButton(
                 onPressed: () {
-                  Navigator.of(context).pop(); // Fechar o diálogo
+                  Navigator.of(context).pop();
                 },
                 style: ButtonStyle(
                   foregroundColor: MaterialStateProperty.all<Color>(
-                      Colors.red), // Cor do texto
+                      Colors.red),
                 ),
                 child: const Text('Não'),
               ),
               TextButton(
                 onPressed: () {
-                  // Adicione aqui a lógica para anular
                   widget.venda.anulada = true;
                   database.addVenda(widget.venda);
                   // Atualizar o estado da propriedade notaCredito do objeto setup
@@ -263,7 +252,7 @@ class _VendaPageState extends State<VendaPage> {
                 },
                 style: ButtonStyle(
                   foregroundColor: MaterialStateProperty.all<Color>(
-                      Colors.green), // Cor do texto
+                      Colors.green),
                 ),
                 child: const Text('Sim'),
               ),

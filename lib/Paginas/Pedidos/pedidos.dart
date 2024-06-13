@@ -33,8 +33,6 @@ class PedidosPage extends StatefulWidget {
 }
 
 class _PedidosPage extends State<PedidosPage> {
-  // contruir ainda a forma como tratar a info da base de dados e perceber como vou receber API's e etc..
-  // ainda a data para a base de dados
 
   Widget buildHeader(BuildContext context) => Container(
         color: const Color(0xff00afe9),
@@ -252,18 +250,6 @@ class _PedidosPage extends State<PedidosPage> {
         body: widget.turno.turnoAberto
             ? Column(
                 children: [
-                  //ElevatedButton(
-                  //    onPressed: () {
-                  //      setState(() {
-                  //        database.removeAllPedidos();
-                  //        carregarPedidos();
-                  //        database.removeAllVendas();
-                  //        //database.removeAllArtigos();
-                  //        //database.removeAllCategorias();
-                  //      });
-                  //    },
-                  //    child: const Text('Limpar a lista para testes-')
-                  //),
                   Padding(
                     padding: EdgeInsets.only(
                       top: 20 + MediaQuery.of(context).padding.top,
@@ -282,18 +268,14 @@ class _PedidosPage extends State<PedidosPage> {
                                               database.getAllCategorias(),
                                           pedidos: widget.pedidos,
                                         )));
-                            // Adiciona um novo objeto à lista quando o botão é pressionado
                           },
                           style: ButtonStyle(
                             side: MaterialStateProperty.all(
                                 const BorderSide(color: Colors.black)),
-                            // Linha de borda preta
                             backgroundColor:
                                 MaterialStateProperty.all(Colors.white),
-                            // Fundo transparente
                             fixedSize:
                                 MaterialStateProperty.all(const Size(800, 80)),
-                            // Tamanho fixo de 270x80
                             shape: MaterialStateProperty.all<
                                 RoundedRectangleBorder>(
                               RoundedRectangleBorder(
@@ -323,7 +305,6 @@ class _PedidosPage extends State<PedidosPage> {
                                       vertical: 10, horizontal: 50),
                                   child: ElevatedButton(
                                     onPressed: () {
-                                      // entrar dentro do pedido ainda aberto
                                       Navigator.push(
                                           context,
                                           MaterialPageRoute(
@@ -339,14 +320,11 @@ class _PedidosPage extends State<PedidosPage> {
                                       side: MaterialStateProperty.all(
                                           const BorderSide(
                                               color: Colors.black)),
-                                      // Linha de borda preta
                                       backgroundColor:
                                           MaterialStateProperty.all(
                                               Colors.white),
-                                      // Fundo white
                                       fixedSize: MaterialStateProperty.all(
                                           const Size(300, 80)),
-                                      // Tamanho fixo de 270x80
                                       shape: MaterialStateProperty.all<
                                           RoundedRectangleBorder>(
                                         RoundedRectangleBorder(
@@ -359,13 +337,10 @@ class _PedidosPage extends State<PedidosPage> {
                                       child: Column(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
-                                        // Centraliza verticalmente
-                                        //crossAxisAlignment: CrossAxisAlignment.center, // Centraliza horizontalmente
                                         children: [
                                           Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
-                                            // Alinha a Row horizontalmente ao centro
                                             children: [
                                               Text(
                                                 database

@@ -37,8 +37,8 @@ class DividirConta extends StatefulWidget {
 }
 
 class _DividirConta extends State<DividirConta> {
-  int numPessoas = 2; // Começa com dois
-  List<double> valoresIndividuais = []; // Valores individuais de cada pessoa
+  int numPessoas = 2;
+  List<double> valoresIndividuais = [];
   bool mostrarBotaoConcluir = false;
   List<MetudobotaoPressionado> botaoPressionado = [];
   late List<TextEditingController> controllers;
@@ -94,7 +94,6 @@ class _DividirConta extends State<DividirConta> {
 
   @override
   void dispose() {
-    // Dispose os controllers
     for (var controller in controllers) {
       controller.dispose();
     }
@@ -105,7 +104,7 @@ class _DividirConta extends State<DividirConta> {
     double totalPedido = widget.pedido.total;
     setState(() {
       valoresIndividuais.clear();
-      double valorIndividual = double.parse((totalPedido / numPessoas).toStringAsFixed(2)); // Arredondar para 2 casas decimais
+      double valorIndividual = double.parse((totalPedido / numPessoas).toStringAsFixed(2));
       double totalFixo = double.parse((valorIndividual * numPessoas).toStringAsFixed(2));
       double diferenca = totalPedido - totalFixo;
       double diferencaPorPessoa = (diferenca / 0.01).abs();
@@ -123,7 +122,7 @@ class _DividirConta extends State<DividirConta> {
           diferencaPorPessoa--;
         }
         valoresIndividuais.add(double.parse(
-            valor.toStringAsFixed(2))); // Garantir 2 casas decimais
+            valor.toStringAsFixed(2)));
       }
 
       // Ajuste para garantir que a soma seja igual ao total do pedido
@@ -137,8 +136,7 @@ class _DividirConta extends State<DividirConta> {
       numPessoas++;
       botaoPressionado
           .add(MetudobotaoPressionado(false, MetodoPagamentoObj('', 0)));
-      mostrarBotaoConcluir =
-      false; // Se aumentar o número de pessoas, o botão "Concluir Venda" deve desaparecer
+      mostrarBotaoConcluir = false; // Se aumentar o número de pessoas, o botão "Concluir Venda" deve desaparecer
       controllers.add(TextEditingController());
       valoresIndividuais.add(0.0);
       listaMetudoUsados.add(0);
@@ -253,7 +251,6 @@ class _DividirConta extends State<DividirConta> {
   }
 
   void concluirVenda() {
-    // Lógica para concluir a venda
     VendaObj venda = VendaObj(
         nome: widget.pedido.nome,
         hora: widget.pedido.hora,
@@ -263,12 +260,11 @@ class _DividirConta extends State<DividirConta> {
     venda.artigosPedidoIds = widget.pedido.artigosPedidoIds;
     venda.nrArtigos = widget.pedido.nrArtigos;
 
-    // Inclua a lógica para enviar por email e/ou imprimir com base nas escolhas do usuário
+    //Lógica para enviar por email e/ou imprimir com base nas escolhas do utilizador
     if (widget.setup.email && _showEmailField) {
       // Enviar por email para _emailController.text
     }
     if (widget.setup.imprimir && database.getAllImpressoras().isNotEmpty) {
-      // Chamar a função imprimir
       imprimir();
     }
 
@@ -309,7 +305,6 @@ class _DividirConta extends State<DividirConta> {
     final templates = database.getAllTemplates();
     String templateContent = templates.isNotEmpty ? templates[0].content : '';
 
-    // Define um mapa com o valor de todas as variáveis
     Map<String, dynamic> variaveis = {
       'nomeEmpresa': nomeEmpresa,
       'moradaEmpresa': moradaEmpresa,
@@ -329,7 +324,6 @@ class _DividirConta extends State<DividirConta> {
 
       'total': widget.pedido.calcularValorTotal().toStringAsFixed(2),
       'ATCUD': 'JDFTW25-96552'
-      // Adicionar mais variáveis conforme necessário
     };
 
     // Função para substituir todas as ocorrências das variáveis no texto
@@ -339,8 +333,6 @@ class _DividirConta extends State<DividirConta> {
       });
       return texto;
     }
-
-    // Função para substituir todas as ocorrências das variáveis no texto
     templateContent = substituirVariaveis(templateContent, variaveis);
 
     String pordutos = '';
@@ -379,13 +371,13 @@ class _DividirConta extends State<DividirConta> {
       }
     });
 
-// Construindo a string com os valores agrupados
+// Constroi a string com os valores agrupados
     String IVA = '';
     taxPercentageSumMap.forEach((taxPercentage, sum) {
       IVA += '$taxPercentage%      ${sum.toStringAsFixed(2)}EUR       ${(sum * taxPercentage / 100).toStringAsFixed(2)}EUR\n';
     });
 
-    // Connect to printer
+    // Conectar com a impressora
     const PaperSize paper = PaperSize.mm80;
     final profile = await CapabilityProfile.load();
     final printer = NetworkPrinter(paper, profile);
@@ -403,9 +395,6 @@ class _DividirConta extends State<DividirConta> {
       printer.text(IVA, styles: const PosStyles(align: PosAlign.left));
       printer.text(template[5], styles: const PosStyles(align: PosAlign.left));
 
-      //printer.text('\nFatura-recibo de teste\n',
-      //    styles: const PosStyles(height: PosTextSize.size2, width: PosTextSize.size2,align: PosAlign.center
-      //    ));
 
       printer.qrcode('A:$nifEmpresa*B:${database.getCliente(widget.pedido.clienteID)!.NIF}'
           '*C:PT*D:FR*E:N*F:20240408*G:FR U003/87441*H:JDFTW25-96552*I1:PT*I3:10.19*I4:0.61*N:0.61*O:${widget.pedido.calcularValorTotal().toStringAsFixed(2)}*Q:GgPN*R:432', size: QRSize.Size8);
@@ -444,9 +433,8 @@ class _DividirConta extends State<DividirConta> {
             visible: botaoPressionado.every((element) =>
             element.pressionado == false),
             child: IconButton(
-              icon: const Icon(Icons.arrow_back), // Ícone padrão de voltar
+              icon: const Icon(Icons.arrow_back),
               onPressed: () {
-                // Navegar para a página anterior
                 Navigator.pop(context, false);
               },
             ),
@@ -491,11 +479,11 @@ class _DividirConta extends State<DividirConta> {
                                 decimal: true),
                             controller: controllers[index],
                             onTap: () {
-                              // Limpe o campo quando ganhar foco
+                              // Limpa o campo quando ganhar foco
                               controllers[index].clear();
                             },
                             onEditingComplete: () {
-                              // Atualize a lista de valores quando a edição for concluída
+                              // Atualiza a lista de valores quando a edição for concluída
                               final text = controllers[index].text;
                               if (text.isNotEmpty) {
                                 valoresIndividuais[index] = double.parse(text);
@@ -509,7 +497,7 @@ class _DividirConta extends State<DividirConta> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         if (botaoPressionado[index]
-                            .pressionado) // Mostrar apenas quando o botão estiver cobrado
+                            .pressionado)
                           TextButton.icon(
                             onPressed: () {
                               setState(() {
@@ -599,7 +587,7 @@ class _DividirConta extends State<DividirConta> {
                             });
                           },
                         ),
-                        Text('Imprimir documento'),
+                        const Text('Imprimir documento'),
                       ],
                     ),
                   const SizedBox(height: 10),

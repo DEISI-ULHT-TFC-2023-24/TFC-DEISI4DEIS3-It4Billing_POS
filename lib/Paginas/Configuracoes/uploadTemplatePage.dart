@@ -12,10 +12,56 @@ class UploadPage extends StatefulWidget {
 }
 
 class _UploadPageState extends State<UploadPage> {
+  bool isTablet = false;
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    checkDeviceType();
+  }
+
+  void checkDeviceType() {
+    final screenSize = MediaQuery.of(context).size;
+    setState(() {
+      isTablet = screenSize.width > 600 && screenSize.height > 600;
+    });
+  }
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return isTablet
+      ? Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(
+              Icons.upload_file_outlined,
+              size: 100,
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () async {
+                await handleUploadButtonPressed();
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xff00afe9),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  side: const BorderSide(color: Colors.black),
+                ),
+              ),
+              child: const Text('Fazer Upload de Arquivo',style: TextStyle(fontSize: 18)),
+            ),
+            SizedBox(height: 20),
+            database.getAllTemplates().isEmpty
+                ? const Text('Último Upload: Nunca')
+                : Text('Último Upload:  ${DateFormat('dd/MM/yyyy HH:mm')
+                .format(database.getAllTemplates()[0].hora)}')
+          ],
+        ),
+      ),
+    )
+        : Scaffold(
       appBar: AppBar(
         title: const Text('Upload de Arquivo'),
         backgroundColor: const Color(0xff00afe9),
@@ -62,7 +108,6 @@ class _UploadPageState extends State<UploadPage> {
           final template = TemplateOBJ(fileContent, DateTime.now());
           database.removeAllTemplate();
           database.addTemplate(template);
-          // Atualize o estado para reconstruir o widget com a nova data
           setState(() {});
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(

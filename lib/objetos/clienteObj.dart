@@ -8,7 +8,7 @@ class ClienteObj {
   int NIF = 0;
   String country = '';
   String address = '';
-  String postcode = ''; // sera que deve ser int
+  String postcode = '';
   String city = '';
   String email = '';
   int phone = 0;

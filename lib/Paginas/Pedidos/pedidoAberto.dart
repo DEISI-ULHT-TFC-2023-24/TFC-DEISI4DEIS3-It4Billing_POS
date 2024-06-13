@@ -68,9 +68,7 @@ class _PedidoAbertoPage extends State<PedidoAbertoPage> with TickerProviderState
   }
 
   void checkDeviceType() {
-    // Getting the screen size
     final screenSize = MediaQuery.of(context).size;
-    // Arbitrarily defining screen size greater than 600 width and height as tablet
     setState(() {
       isTablet = screenSize.width > 600 && screenSize.height > 600;
     });
@@ -133,10 +131,6 @@ class _PedidoAbertoPage extends State<PedidoAbertoPage> with TickerProviderState
     }
   }
 
-  // estudar a parte de voltar a entrar dentro do pedido
-  // como vou carregar toda a info ??devo adicionar mais variaveis ao pedido por exemplo
-  // o numero de artigos dentro do carrinho para que eu possa logo carregar esse valor
-
   void updateNrArtigos() {
     setState(() {
       widget.pedido.nrArtigos = widget.pedido.artigosPedidoIds.length;
@@ -165,8 +159,6 @@ class _PedidoAbertoPage extends State<PedidoAbertoPage> with TickerProviderState
 
   @override
   Widget build(BuildContext context) {
-    // mudar o nome do pedido para que seja incrementado por exemplo
-
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         home: Scaffold(
@@ -252,7 +244,6 @@ class _PedidoAbertoPage extends State<PedidoAbertoPage> with TickerProviderState
                 ),
               PopupMenuButton<String>(
                 onSelected: (value) {
-                  // Aqui você pode adicionar a lógica para lidar com as opções selecionadas
 
                   if (value == 'Eliminar pedido') {
                     database.removePedido(widget.pedido.id);
@@ -382,11 +373,9 @@ class _PedidoAbertoPage extends State<PedidoAbertoPage> with TickerProviderState
                                         side: MaterialStateProperty.all(
                                             const BorderSide(
                                                 color: Colors.white12)),
-                                        // Linha de borda preta
                                         backgroundColor:
                                         MaterialStateProperty.all(
                                             Colors.white),
-                                        // Fundo white
                                         fixedSize: MaterialStateProperty.all(
                                             const Size(50, 60)),
                                       ),
@@ -448,13 +437,11 @@ class _PedidoAbertoPage extends State<PedidoAbertoPage> with TickerProviderState
                                 }
                                 valor = artigo?.price;
 
-                                /// isto vai dar problemas no editar carrinho
                                 return Padding(
                                   padding: const EdgeInsets.only(
                                       left: 20, right: 20, bottom: 10.0),
                                   child: ElevatedButton(
                                     onPressed: () {
-                                      //entrar no artigo e quantidades e tal
                                       Navigator.push(
                                           context,
                                           MaterialPageRoute(
@@ -592,7 +579,7 @@ class _PedidoAbertoPage extends State<PedidoAbertoPage> with TickerProviderState
                                   ),
                                 ),
                               ),
-                              const SizedBox(width: 20), // Espaço entre os botões
+                              const SizedBox(width: 20),
                               Expanded(
                                 child: Padding(
                                   padding: const EdgeInsets.only(
@@ -602,8 +589,6 @@ class _PedidoAbertoPage extends State<PedidoAbertoPage> with TickerProviderState
                                     child: ElevatedButton(
                                       onPressed: () {
                                         if (widget.pedido.artigosPedidoIds.isNotEmpty) {
-                                          // fazer a navegação para a proxima pag a de cobrança.
-
                                           Navigator.push(
                                               context,
                                               MaterialPageRoute(
@@ -744,9 +729,7 @@ class _PedidoAbertoPage extends State<PedidoAbertoPage> with TickerProviderState
                                       style: ButtonStyle(
                                         side: MaterialStateProperty.all(
                                             const BorderSide(color: Colors.white12)),
-                                        // Linha de borda preta
                                         backgroundColor: MaterialStateProperty.all(Colors.white),
-                                        // Fundo white
                                         fixedSize: MaterialStateProperty.all(const Size(50, 60)),
                                       ),
                                       child: Row(

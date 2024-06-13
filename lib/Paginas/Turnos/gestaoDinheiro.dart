@@ -41,7 +41,7 @@ class _GestaoDinheiroState extends State<GestaoDinheiro> {
   @override
   void initState() {
     super.initState();
-    turno = database.getAllTurno()[0]; // Inicializando turno aqui
+    turno = database.getAllTurno()[0]; // Inicializando turno
     _moneyController.addListener(_updateFormattedAmount);
   }
 
