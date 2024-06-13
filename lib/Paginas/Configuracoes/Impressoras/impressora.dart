@@ -36,9 +36,7 @@ class _ImpressoraPageState extends State<ImpressoraPage> {
   }
 
   void checkDeviceType() {
-    // Getting the screen size
     final screenSize = MediaQuery.of(context).size;
-    // Arbitrarily defining screen size greater than 600 width and height as tablet
     setState(() {
       isTablet = screenSize.width > 600 && screenSize.height > 600;
     });
@@ -47,12 +45,10 @@ class _ImpressoraPageState extends State<ImpressoraPage> {
   @override
   void initState() {
     super.initState();
-    // Definir os valores dos controladores quando a página é carregada
     nomeController.text = widget.impressora.nome;
     ipController.text = widget.impressora.iP;
     portController.text = widget.impressora.port.toString();
 
-    // Adicione listeners aos controladores para detectar alterações nos campos
     nomeController.addListener(() {
       if (nomeController.text != widget.impressora.nome ||
           ipController.text != widget.impressora.iP ||
@@ -132,14 +128,12 @@ class _ImpressoraPageState extends State<ImpressoraPage> {
                 labelText: 'Porta da Impressora',
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () async {
-                // Ação para testar a impressão
                 final ip = ipController.text;
                 final int port = int.parse(portController.text);
 
-                // Connect to printer and print QR code
                 const PaperSize paper = PaperSize.mm80;
                 final profile = await CapabilityProfile.load();
                 final printer = NetworkPrinter(paper, profile);
@@ -171,7 +165,7 @@ class _ImpressoraPageState extends State<ImpressoraPage> {
             ),
             const SizedBox(height: 20),
             const Spacer(),
-            Visibility( // Adicione a visibilidade com base em camposAlterados
+            Visibility(
               visible: camposAlterados,
               child: Column(
                 children: [
@@ -179,7 +173,6 @@ class _ImpressoraPageState extends State<ImpressoraPage> {
                     height: 50.0,
                     child: ElevatedButton(
                       onPressed: () {
-                        // Adicionar ação para guardar a impressora
                         String nome = nomeController.text;
                         String ip = ipController.text;
                         int port = int.parse(portController.text);
@@ -247,7 +240,7 @@ class _ImpressoraPageState extends State<ImpressoraPage> {
                 child: const Padding(
                   padding: EdgeInsets.all(10.0),
                   child: Text(
-                    'ELIMINAR', // Alterado de 'GUARDAR' para 'ELIMINAR'
+                    'ELIMINAR',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 16.0,
@@ -264,7 +257,6 @@ class _ImpressoraPageState extends State<ImpressoraPage> {
 
   @override
   void dispose() {
-    // Clean up the controller when the widget is disposed.
     nomeController.dispose();
     ipController.dispose();
     portController.dispose();

@@ -113,7 +113,6 @@ class EditarClientePage extends StatelessWidget {
                     ),
                   ),
                   onPressed: () async {
-                    // Implemente a lógica para excluir o cliente aqui
                     database.getAllClientes().forEach((cliente) {
                       if(cliente.id == this.cliente.id){
                         database.removeCliente(this.cliente.id);

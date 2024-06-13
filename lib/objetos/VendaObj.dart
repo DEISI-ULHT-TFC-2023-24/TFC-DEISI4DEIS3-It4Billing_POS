@@ -20,9 +20,6 @@ class VendaObj {
   double total = 0;
   int nrArtigos = 0;
 
-/// tem de ter um tipo de documento para apresentar na lista de vendas
-
-
   VendaObj({
     required this.nome,
     required this.hora,

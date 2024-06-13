@@ -1,4 +1,3 @@
-
 class MeusArgumentos {
   final bool meuBool;
   final int meuInt;

@@ -33,7 +33,6 @@ class _AdicionarClientePageState extends State<AdicionarClientePage> {
     widget.clienteSelecionado = database.getCliente(widget.pedido.clienteID)!;
   }
 
-  // Método para alterar o cliente selecionado
   void selecionarCliente(ClienteObj cliente) {
     setState(() {
       widget.clienteSelecionado = cliente;
@@ -83,7 +82,6 @@ class _AdicionarClientePageState extends State<AdicionarClientePage> {
                                     )))
                             .then((troca) {
                           setState(() {
-                            // Atualize o estado da página aqui
                             widget.clientes = database.getAllClientes();
                           });
                         });
@@ -132,11 +130,9 @@ class _AdicionarClientePageState extends State<AdicionarClientePage> {
             const Divider(),
             TextButton(
               onPressed: () {
-                // Implementar ação para adicionar novo cliente
                 Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) => NovoClientePage())).then((troca) {
                   setState(() {
-                    // Atualize o estado da página aqui
                     widget.clientes = database.getAllClientes();
                   });
                 });;
@@ -151,10 +147,6 @@ class _AdicionarClientePageState extends State<AdicionarClientePage> {
               child: ListView.builder(
                 itemCount: widget.clientes.length,
                 itemBuilder: (context, index) {
-                  // Ignorar o primeiro elemento
-                  //if (index == 0)
-                  //  return SizedBox.shrink(); // ou qualquer outro widget vazio
-
                   ClienteObj cliente = widget.clientes[index];
                   return ListTile(
                     onTap: () {

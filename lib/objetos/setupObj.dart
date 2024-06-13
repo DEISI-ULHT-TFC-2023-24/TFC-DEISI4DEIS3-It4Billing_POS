@@ -7,7 +7,7 @@ class SetupObj {
   String url = '';
   String password = '';
 
-  late int lojaID = 0;  //escolher um dos dois
+  late int lojaID = 0;
   late String nomeLoja = '';
 
   late bool imprimir = false;
@@ -20,15 +20,14 @@ class SetupObj {
 
   late int funcionarioId = 0;
 
-  late int faturacaoID = 0;//escolher um dos dois
+  late int faturacaoID = 0;
   late String faturacao = '';
 
-  late int reembolsoID = 0;//escolher um dos dois
+  late int reembolsoID = 0;
   late String reembolso = '';
 
-  late int contaCorrenteID = 0;//escolher um dos dois
+  late int contaCorrenteID = 0;
   late String contaCorrente = '';
-
 
   SetupObj();
 
