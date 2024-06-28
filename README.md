@@ -17,4 +17,4 @@
 
 ## Imagem do Projeto
 
-![Imagem do Projeto](/Imagem promocional.jpg)
+![Imagem do Projeto](imagem_promocional.jpg)
