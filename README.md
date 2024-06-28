@@ -15,4 +15,6 @@
 9. Quando concluído o setup, irá ser pedido um PIN, este deverá ser “1234” ou “4321”.
 10. A partir deste último passo já tem acesso à aplicação IT4Billing POS.
 
-![Texto alternativo](Imagem promocional.jpg)
+## Imagem do Projeto
+
+![Imagem do Projeto](/Imagem promocional.jpg)
